@@ -66,6 +66,19 @@
             box-shadow: 0 15px 35px -5px rgba(5, 150, 105, 0.9);
             filter: brightness(1.1);
         }
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+            color: #ffffff;
+            font-weight: 800;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.6);
+            border: 1px solid rgba(52, 211, 153, 0.4);
+        }
+        .whatsapp-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 15px 35px -5px rgba(5, 150, 105, 0.9);
+            filter: brightness(1.1);
+        }
         .input-glass {
             background: rgba(15, 23, 42, 0.7);
             border: 1px solid rgba(168, 85, 247, 0.35);
@@ -246,7 +259,7 @@
             </div>
         </header>
 
-        <!-- TAB NAVIGASI (DITAMBAHKAN MENU LAPORAN PENJUALAN) -->
+        <!-- TAB NAVIGASI -->
         <div class="grid grid-cols-4 gap-1.5 p-1.5 glass-tab rounded-2xl shadow-xl">
             <button onclick="switchAdminTab('setting')" id="tab-btn-setting" class="py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer bg-purple-600 text-white shadow-lg flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-gears"></i> Setting
@@ -379,7 +392,7 @@
             </button>
         </div>
 
-        <!-- TAB 4: LAPORAN PENJUALAN (MENU UTAMA MENUJU GOOGLE SHEET MASING-MASING PEMILIK) -->
+        <!-- TAB 4: LAPORAN PENJUALAN -->
         <div id="tab-content-laporan" class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 hidden text-center shadow-2xl">
             <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 mx-auto flex items-center justify-center text-emerald-400 text-2xl shadow-inner">
                 <i class="fa-solid fa-chart-pie"></i>
