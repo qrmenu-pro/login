@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -17,17 +18,22 @@
             min-height: 100vh;
         }
         .glass-card { 
-            background: rgba(30, 27, 75, 0.45); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(168, 85, 247, 0.35); 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 35px rgba(168, 85, 247, 0.15), inset 0 0 20px rgba(168, 85, 247, 0.1);
+            background: rgba(30, 27, 75, 0.55); 
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(168, 85, 247, 0.4); 
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.2), inset 0 0 25px rgba(168, 85, 247, 0.15);
+        }
+        .glass-tab {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(168, 85, 247, 0.25);
         }
         .logo-box {
             background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
             color: #ffffff;
             border: 2px solid rgba(234, 179, 8, 0.6);
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.6);
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.7);
         }
         .purple-gold-text { 
             background: linear-gradient(135deg, #fef08a 0%, #e879f9 50%, #c084fc 100%);
@@ -39,74 +45,87 @@
             color: #ffffff; 
             font-weight: 800; 
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.5);
-            border: 1px solid rgba(234, 179, 8, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.6);
+            border: 1px solid rgba(234, 179, 8, 0.4);
         }
         .purple-gold-btn:hover { 
             transform: translateY(-2px) scale(1.01); 
-            box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.8); 
+            box-shadow: 0 18px 40px -5px rgba(168, 85, 247, 0.9); 
+            filter: brightness(1.15);
+        }
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+            color: #ffffff;
+            font-weight: 800;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.6);
+            border: 1px solid rgba(52, 211, 153, 0.4);
+        }
+        .whatsapp-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 15px 35px -5px rgba(5, 150, 105, 0.9);
             filter: brightness(1.1);
         }
         .input-glass {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(168, 85, 247, 0.3);
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(168, 85, 247, 0.35);
             color: #ffffff;
             transition: all 0.3s ease;
         }
         .input-glass:focus {
             border-color: #c084fc;
-            background: rgba(15, 23, 42, 0.85);
-            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.25);
             outline: none;
         }
-        @keyframes pulseOrange {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.8); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+        @keyframes pulseOrangeLarge {
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.9); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 16px rgba(249, 115, 22, 0); }
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
         }
-        .pulse-orange-dot {
-            width: 10px;
-            height: 10px;
+        .pulse-orange-dot-large {
+            width: 16px;
+            height: 16px;
             background-color: #f97316;
             border-radius: 50%;
             display: inline-block;
-            box-shadow: 0 0 12px #f97316;
-            animation: pulseOrange 1.5s infinite;
+            box-shadow: 0 0 18px #f97316;
+            animation: pulseOrangeLarge 1.6s infinite;
         }
         @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.96) translateY(12px); }
+            from { opacity: 0; transform: scale(0.97) translateY(15px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .animate-fade-in {
-            animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeInScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .glow-orb {
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, rgba(76, 29, 149, 0) 70%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.22) 0%, rgba(76, 29, 149, 0) 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
         }
     </style>
 </head>
-<body class="pb-16 pt-8 px-4 relative overflow-x-hidden">
+<body class="pb-20 pt-8 px-4 relative overflow-x-hidden">
 
-    <div class="glow-orb -top-20 -left-20"></div>
-    <div class="glow-orb top-1/2 -right-20"></div>
+    <div class="glow-orb -top-32 -left-32"></div>
+    <div class="glow-orb top-1/3 -right-32"></div>
 
-    <!-- VIEW 1: PORTAL LOGIN / REGISTER ADMIN -->
+    <!-- VIEW 1: AUTHENTICATION FLOW (DEFAULT: REGISTER) -->
     <div id="auth-view" class="max-w-md mx-auto space-y-6 animate-fade-in relative z-10">
         <div class="glass-card rounded-3xl p-8 space-y-6 relative overflow-hidden">
             
-            <div class="absolute top-6 right-6 flex items-center gap-2 bg-purple-950/70 border border-amber-500/30 px-3 py-1 rounded-full shadow-inner">
-                <span class="pulse-orange-dot"></span>
-                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">SaaS Online</span>
+            <div class="absolute top-6 right-6 flex items-center gap-2.5 bg-purple-950/70 border border-amber-500/30 px-3.5 py-1.5 rounded-full shadow-inner">
+                <span class="pulse-orange-dot-large"></span>
+                <span class="text-[11px] font-extrabold text-amber-400 uppercase tracking-widest">SaaS Live</span>
             </div>
 
             <div class="text-center space-y-3 pt-2">
-                <div class="w-16 h-16 rounded-2xl logo-box mx-auto flex items-center justify-center text-xl font-black tracking-tighter shadow-2xl">
+                <div class="w-18 h-18 rounded-2xl logo-box mx-auto flex items-center justify-center text-2xl font-black tracking-tighter shadow-2xl">
                     QRP
                 </div>
                 <div>
@@ -115,68 +134,99 @@
                 </div>
             </div>
 
-            <!-- FORM LOGIN UTAMA -->
-            <div id="form-login" class="space-y-4">
-                <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
+            <!-- LAYAR 1: FORM REGISTER (DEFAULT UTAMA) -->
+            <div id="form-register" class="space-y-4">
+                <div class="bg-purple-950/50 border border-amber-500/30 p-3.5 rounded-2xl text-center shadow-inner">
+                    <p class="text-[11px] text-amber-300 font-bold"><i class="fa-solid fa-user-plus mr-1"></i> Pendaftaran Akun & Dapatkan Token</p>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username Unik:</label>
+                    <input type="text" id="reg-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password Admin:</label>
+                    <input type="password" id="reg-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Toko / Resto:</label>
+                    <input type="text" id="reg-store" placeholder="Warung Siska" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Pemilik:</label>
+                    <input type="text" id="reg-owner" placeholder="Ibu Siska" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">No. WhatsApp Kasir:</label>
+                    <input type="text" id="reg-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Email Terdaftar:</label>
+                    <input type="email" id="reg-email" placeholder="tokoanda@gmail.com" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                </div>
+                <button onclick="registerAndRequestToken(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
+                    <i class="fa-solid fa-key mr-2 text-amber-300"></i> DAPATKAN TOKEN
+                </button>
+                <div class="text-center pt-2">
+                    <button type="button" onclick="switchAuthScreen('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition cursor-pointer">Sudah punya akun & token? Login disini</button>
+                </div>
+            </div>
+
+            <!-- LAYAR 2: KOLOM INPUT TOKEN & TOMBOL KONFIRMASI WA ADMIN -->
+            <div id="form-token-input" class="space-y-5 hidden text-center">
+                <div class="bg-purple-950/60 border border-emerald-500/40 p-4 rounded-2xl shadow-inner space-y-1">
+                    <p class="text-xs text-emerald-400 font-extrabold uppercase"><i class="fa-solid fa-circle-check mr-1"></i> Data Berhasil Dicatat!</p>
+                    <p class="text-[11px] text-purple-200/80">Masukkan Token Lisensi yang telah Anda terima dari Admin.</p>
+                </div>
+                
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-2 uppercase tracking-wider text-left">Masukkan Token Lisensi:</label>
+                    <input type="text" id="token-input-field" placeholder="QRP-XXXXXX" class="input-glass w-full rounded-xl px-4 py-4 text-sm text-center text-amber-300 font-mono font-black tracking-widest">
+                </div>
+
+                <button onclick="submitTokenAccess(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl cursor-pointer">
+                    <i class="fa-solid fa-lock-open mr-2 text-amber-300"></i> DAPATKAN AKSESNYA
+                </button>
+
+                <div class="border-t border-purple-500/20 pt-4 space-y-3">
+                    <p class="text-[11px] text-purple-300">Belum menerima Token Lisensi dari Admin?</p>
+                    <button onclick="openAdminWhatsApp()" class="whatsapp-btn w-full py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-emerald-300 text-base"></i> KONFIRMASI TOKEN VIA WHATSAPP ADMIN
+                    </button>
+                </div>
+
+                <div class="text-center pt-1">
+                    <button type="button" onclick="switchAuthScreen('register')" class="text-xs text-purple-400 hover:text-white underline font-semibold transition cursor-pointer">&larr; Kembali ke Pendaftaran</button>
+                </div>
+            </div>
+
+            <!-- LAYAR 3: FORM LOGIN (HANYA MUNCUL JIKA KLIK LOGOUT) -->
+            <div id="form-login" class="space-y-4 hidden">
+                <div class="bg-purple-950/50 border border-purple-500/30 p-3.5 rounded-2xl text-center shadow-inner">
                     <p class="text-xs font-extrabold purple-gold-text uppercase">Login Portal Admin Toko</p>
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username:</label>
-                    <input type="text" id="login-user" placeholder="Masukkan username toko anda" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <input type="text" id="login-user" placeholder="Masukkan username toko anda" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password:</label>
-                    <input type="password" id="login-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <input type="password" id="login-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                 </div>
                 <button onclick="loginStore(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl cursor-pointer">
                     <i class="fa-solid fa-right-to-bracket mr-2 text-amber-300"></i> MASUK KE DASHBOARD
                 </button>
                 <div class="text-center pt-2">
-                    <button type="button" onclick="toggleAuthMode('register')" class="text-xs text-amber-300 hover:text-white underline font-bold transition cursor-pointer">Sudah Bayar di Lynk.id? Buat Akun & Minta Token Disini</button>
+                    <button type="button" onclick="switchAuthScreen('register')" class="text-xs text-amber-300 hover:text-white underline font-bold transition cursor-pointer">&larr; Belum Punya Akun? Daftar Disini</button>
                 </div>
             </div>
 
-            <!-- FORM REGISTER / REQUEST TOKEN MANUAL -->
-            <div id="form-register" class="space-y-4 hidden">
-                <div class="bg-purple-950/50 border border-amber-500/30 p-3 rounded-2xl text-center shadow-inner">
-                    <p class="text-[11px] text-amber-300 font-bold"><i class="fa-solid fa-user-plus mr-1"></i> Pendaftaran Akun & Minta Token Admin</p>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username Unik:</label>
-                    <input type="text" id="reg-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password Admin:</label>
-                    <input type="password" id="reg-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Toko / Resto:</label>
-                    <input type="text" id="reg-store" placeholder="Warung Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Pemilik:</label>
-                    <input type="text" id="reg-owner" placeholder="Ibu Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">No. WhatsApp Kasir:</label>
-                    <input type="text" id="reg-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Email Terdaftar:</label>
-                    <input type="email" id="reg-email" placeholder="tokoanda@gmail.com" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <button onclick="registerAndRequestToken(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
-                    <i class="fa-brands fa-whatsapp text-lg text-emerald-400 mr-2"></i> KIRIM KONFIRMASI KE WA ADMIN
-                </button>
-                <div class="text-center pt-2">
-                    <button type="button" onclick="toggleAuthMode('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition cursor-pointer">&larr; Kembali ke Form Login</button>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- VIEW 2: DASHBOARD ADMIN UTAMA -->
+    <!-- VIEW 2: DASHBOARD ADMIN UTAMA DENGAN 3 TAB (SETTING, KATEGORI, MENU) -->
     <div id="admin-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
+        
+        <!-- HEADER ADMIN -->
         <header class="glass-card rounded-2xl px-6 py-4 flex justify-between items-center shadow-xl">
             <div class="space-y-0.5">
                 <div class="flex items-center gap-2">
@@ -187,106 +237,149 @@
             </div>
             
             <div class="flex items-center gap-3">
-                <div class="hidden sm:flex items-center gap-2 bg-orange-950/40 border border-orange-500/40 px-3 py-1.5 rounded-xl shadow-inner">
-                    <span class="pulse-orange-dot"></span>
-                    <span class="text-[11px] font-bold text-orange-300 uppercase tracking-wider">Live System</span>
+                <div class="hidden sm:flex items-center gap-2.5 bg-orange-950/40 border border-orange-500/40 px-3.5 py-2 rounded-xl shadow-inner">
+                    <span class="pulse-orange-dot-large"></span>
+                    <span class="text-[11px] font-extrabold text-orange-300 uppercase tracking-wider">Live System</span>
                 </div>
                 <button onclick="logoutDevice()" class="bg-red-950/60 hover:bg-red-900/80 text-red-300 text-xs px-4 py-2.5 rounded-xl border border-red-500/40 font-bold transition shadow-md cursor-pointer">
-                    <i class="fa-solid fa-power-off mr-1"></i> Keluar
+                    <i class="fa-solid fa-power-off mr-1"></i> Logout
                 </button>
             </div>
         </header>
 
-        <!-- PENGATURAN AKUN -->
-        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
-            <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                <i class="fa-solid fa-gears"></i> 1. Pengaturan Akun & Toko
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nama Toko:</label>
-                    <input type="text" id="setting-store-name" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Username:</label>
-                    <input type="text" id="setting-username" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Password Baru:</label>
-                    <input type="password" id="setting-password" placeholder="Kosongkan jika tidak diubah" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nomor WA Penerima Order:</label>
-                    <input type="text" id="setting-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-            </div>
-            <button onclick="updateAccountSettings(this)" class="purple-gold-btn w-full py-3.5 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
-                <i class="fa-solid fa-floppy-disk mr-1.5 text-amber-300"></i> SUBMIT PERUBAHAN KE GOOGLE SHEET
+        <!-- NAVIGASI TAB UTAMA (SETTING | KATEGORI | MENU) -->
+        <div class="grid grid-cols-3 gap-2 p-1.5 glass-tab rounded-2xl shadow-xl">
+            <button onclick="switchAdminTab('setting')" id="tab-btn-setting" class="py-3 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer bg-purple-600 text-white shadow-lg flex items-center justify-center gap-2">
+                <i class="fa-solid fa-gears"></i> Setting
+            </button>
+            <button onclick="switchAdminTab('kategori')" id="tab-btn-kategori" class="py-3 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer text-purple-300 hover:text-white flex items-center justify-center gap-2">
+                <i class="fa-solid fa-tags"></i> Kategori
+            </button>
+            <button onclick="switchAdminTab('menu')" id="tab-btn-menu" class="py-3 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer text-purple-300 hover:text-white flex items-center justify-center gap-2">
+                <i class="fa-solid fa-utensils"></i> Menu
             </button>
         </div>
 
-        <!-- BARCODE & LINK MEJA -->
-        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 text-center relative overflow-hidden shadow-2xl">
-            <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center justify-center gap-2">
-                <i class="fa-solid fa-qrcode"></i> Barcode & Link Pemesan Meja Pelanggan
-            </h3>
-            <div class="bg-white p-4 rounded-2xl inline-block mx-auto shadow-2xl border-4 border-purple-500/30 transform hover:scale-105 transition duration-300">
-                <div id="qrcode"></div>
+        <!-- KONTEN TAB 1: SETTING & BARCODE PDF -->
+        <div id="tab-content-setting" class="space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+                <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-gears"></i> Konfigurasi Toko & Keamanan
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nama Toko:</label>
+                        <input type="text" id="setting-store-name" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Username:</label>
+                        <input type="text" id="setting-username" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Password Baru:</label>
+                        <input type="password" id="setting-password" placeholder="Kosongkan jika tidak diubah" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nomor WA Penerima Order:</label>
+                        <input type="text" id="setting-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                    </div>
+                </div>
+                <button onclick="updateAccountSettings(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
+                    <i class="fa-solid fa-floppy-disk mr-1.5 text-amber-300"></i> SIMPAN PERUBAHAN KE GOOGLE SHEET
+                </button>
             </div>
-            <div class="space-y-1.5 text-left max-w-lg mx-auto">
-                <label class="block text-[11px] font-bold text-purple-200 uppercase tracking-wider">Link Akses Menu Toko Anda:</label>
-                <div class="flex gap-2">
-                    <input type="text" id="store-link-input" readonly class="input-glass w-full rounded-xl px-4 py-3 text-xs text-amber-300 text-center select-all font-mono font-bold">
-                    <button onclick="copyStoreLink()" class="purple-gold-btn px-5 py-3 rounded-xl text-xs font-extrabold shrink-0 transition shadow-lg cursor-pointer">
-                        <i class="fa-regular fa-copy mr-1"></i> Salin
+
+            <!-- BARCODE & DOWNLOAD PDF (PERMANEN DAN STABIL) -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 text-center relative overflow-hidden shadow-2xl">
+                <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-qrcode"></i> Barcode QR Meja Pelanggan
+                </h3>
+                
+                <div id="pdf-barcode-card" class="bg-white p-6 rounded-3xl inline-block mx-auto shadow-2xl border-4 border-purple-500/30 text-slate-900 space-y-3">
+                    <div class="font-black text-sm tracking-widest text-purple-900 uppercase">QRMENU.PRO SYSTEM</div>
+                    <div id="qrcode" class="flex justify-center"></div>
+                    <div id="barcode-store-label" class="text-xs font-bold text-slate-700">Scan untuk Pesan Menu</div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                    <button onclick="downloadBarcodePDF()" class="purple-gold-btn px-6 py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-pdf text-amber-300 text-sm"></i> Download Barcode (PDF)
                     </button>
+                </div>
+
+                <div class="space-y-1.5 text-left max-w-lg mx-auto pt-2">
+                    <label class="block text-[11px] font-bold text-purple-200 uppercase tracking-wider">Link Akses Permanen Toko Anda:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="store-link-input" readonly class="input-glass w-full rounded-xl px-4 py-3.5 text-xs text-amber-300 text-center select-all font-mono font-bold">
+                        <button onclick="copyStoreLink()" class="purple-gold-btn px-5 py-3.5 rounded-xl text-xs font-extrabold shrink-0 transition shadow-lg cursor-pointer">
+                            <i class="fa-regular fa-copy mr-1"></i> Salin
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- MANAJEMEN MENU -->
-        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+        <!-- KONTEN TAB 2: KATEGORI -->
+        <div id="tab-content-kategori" class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 hidden shadow-2xl">
             <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                <i class="fa-solid fa-utensils"></i> 2. Tambah Kategori, Nama Menu & Harga
+                <i class="fa-solid fa-tags"></i> Manajemen Kategori Menu Toko
+            </h3>
+            <p class="text-xs text-purple-200/70 leading-relaxed">
+                Kategori berfungsi untuk mengelompokkan menu Anda (contoh: <span class="text-amber-300 font-bold">Makanan Berat</span>, <span class="text-amber-300 font-bold">Minuman</span>). Kategori baru otomatis terbentuk saat Anda menambahkan menu dengan kategori baru.
+            </p>
+            <div class="bg-purple-950/40 border border-purple-500/30 p-4 rounded-2xl space-y-2">
+                <div class="text-xs font-bold text-amber-300"><i class="fa-solid fa-circle-info mr-1"></i> Daftar Kategori Aktif di Toko Anda:</div>
+                <div id="active-categories-list" class="flex flex-wrap gap-2 pt-2">
+                    <span class="text-xs bg-purple-900/60 text-purple-200 px-3 py-1.5 rounded-xl border border-purple-500/30">Makanan Berat</span>
+                    <span class="text-xs bg-purple-900/60 text-purple-200 px-3 py-1.5 rounded-xl border border-purple-500/30">Minuman</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONTEN TAB 3: MENU -->
+        <div id="tab-content-menu" class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 hidden shadow-2xl">
+            <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
+                <i class="fa-solid fa-utensils"></i> Tambah & Kelola Menu Makanan/Minuman
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                     <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nama Menu:</label>
-                    <input type="text" id="new-name" placeholder="Contoh: Nasi Goreng Spesial" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <input type="text" id="new-name" placeholder="Contoh: Nasi Goreng Spesial" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Kategori:</label>
-                    <input type="text" id="new-category" placeholder="Contoh: Makanan Berat / Minuman" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <input type="text" id="new-category" placeholder="Contoh: Makanan Berat" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                     <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Harga (Rp tanpa titik):</label>
-                    <input type="number" id="new-price" placeholder="25000" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <input type="number" id="new-price" placeholder="25000" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">URL Foto Makanan (Opsional):</label>
-                    <input type="text" id="new-image" placeholder="https://..." class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <input type="text" id="new-image" placeholder="https://..." class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                 </div>
             </div>
-            <button onclick="addNewMenu(this)" class="purple-gold-btn w-full py-3.5 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
+            <button onclick="addNewMenu(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
                 <i class="fa-solid fa-plus mr-1.5 text-amber-300"></i> SIMPAN MENU KE DATABASE CLOUD
             </button>
         </div>
+
     </div>
 
     <!-- VIEW 3: KONSUMEN -->
     <div id="customer-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
-        <header class="glass-card rounded-2xl px-6 py-4 text-center shadow-xl relative">
-            <div class="absolute top-4 right-4 flex items-center gap-1.5 bg-purple-950/70 border border-amber-500/30 px-2.5 py-1 rounded-full shadow-inner">
-                <span class="pulse-orange-dot"></span>
-                <span class="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Buka</span>
+        <header class="glass-card rounded-2xl px-6 py-5 text-center shadow-xl relative">
+            <div class="absolute top-4 right-4 flex items-center gap-2 bg-purple-950/70 border border-amber-500/30 px-3 py-1 rounded-full shadow-inner">
+                <span class="pulse-orange-dot-large"></span>
+                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Buka</span>
             </div>
-            <span class="text-[9px] bg-purple-900/60 text-purple-300 px-2.5 py-0.5 rounded font-black tracking-widest uppercase border border-purple-500/40">QRP DIGITAL CATALOG</span>
-            <h2 id="cust-store-name" class="font-black text-lg purple-gold-text tracking-wide mt-1">NAMA TOKO</h2>
-            <p class="text-xs text-purple-200/70 mt-0.5">Silakan pilih menu pesanan favorit Anda di bawah ini</p>
+            <span class="text-[10px] bg-purple-900/60 text-purple-300 px-3 py-0.5 rounded font-black tracking-widest uppercase border border-purple-500/40">QRP DIGITAL CATALOG</span>
+            <h2 id="cust-store-name" class="font-black text-xl purple-gold-text tracking-wide mt-1">NAMA TOKO</h2>
+            <p class="text-xs text-purple-200/70 mt-1">Silakan pilih menu pesanan favorit Anda di bawah ini</p>
         </header>
 
         <div class="space-y-4">
@@ -296,7 +389,7 @@
 
             <div class="space-y-3" id="menu-list-container"></div>
 
-            <div class="glass-card rounded-3xl p-5 sm:p-6 space-y-4 shadow-2xl mt-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl mt-6">
                 <h3 class="text-sm font-extrabold purple-gold-text uppercase tracking-wider flex items-center gap-2">
                     <i class="fa-solid fa-receipt"></i> Ringkasan Pesanan Anda
                 </h3>
@@ -308,18 +401,18 @@
                     <span id="cart-total" class="purple-gold-text text-lg">Rp 0</span>
                 </div>
 
-                <div class="space-y-3 pt-2">
+                <div class="space-y-3.5 pt-2">
                     <div>
                         <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Nama Pemesan:</label>
-                        <input type="text" id="customer-name" placeholder="Contoh: Bpk. Budi" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                        <input type="text" id="customer-name" placeholder="Contoh: Bpk. Budi" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Nomor Meja / Alamat Pengiriman:</label>
-                        <input type="text" id="customer-location" placeholder="Contoh: Meja No. 05" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                        <input type="text" id="customer-location" placeholder="Contoh: Meja No. 05" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Metode Pembayaran:</label>
-                        <select id="payment-method" onchange="togglePaymentProof()" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                        <select id="payment-method" onchange="togglePaymentProof()" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                             <option value="Transfer Bank / QRIS" class="bg-slate-900">Transfer Bank / QRIS / E-Wallet</option>
                             <option value="Cash (Bayar di Kasir)" class="bg-slate-900">Cash / Bayar di Tempat</option>
                         </select>
@@ -344,6 +437,7 @@
         let cart = {};
         let currentCategory = 'Semua';
         let currentStore = {};
+        let registeredUsernameTemp = "";
 
         function getDeviceId() {
             let deviceId = localStorage.getItem('app_device_id');
@@ -376,25 +470,44 @@
 
                     const storeLink = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
                     document.getElementById('store-link-input').value = storeLink;
+                    document.getElementById('barcode-store-label').innerText = currentStore.storeName;
 
                     new QRCode(document.getElementById("qrcode"), {
-                        text: storeLink, width: 140, height: 140
+                        text: storeLink, width: 160, height: 160,
+                        colorDark: "#0f0728", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
                     });
+                } else {
+                    // Default layar pertama adalah FORM REGISTER
+                    switchAuthScreen('register');
                 }
             }
         });
 
-        function toggleAuthMode(mode) {
-            const loginForm = document.getElementById('form-login');
-            const regForm = document.getElementById('form-register');
+        function switchAuthScreen(screen) {
+            document.getElementById('form-register').classList.add('hidden');
+            document.getElementById('form-token-input').classList.add('hidden');
+            document.getElementById('form-login').classList.add('hidden');
 
-            if (mode === 'register') {
-                loginForm.classList.add('hidden');
-                regForm.classList.remove('hidden');
-            } else {
-                regForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
+            if (screen === 'register') {
+                document.getElementById('form-register').classList.remove('hidden');
+            } else if (screen === 'token') {
+                document.getElementById('form-token-input').classList.remove('hidden');
+            } else if (screen === 'login') {
+                document.getElementById('form-login').classList.remove('hidden');
             }
+        }
+
+        function switchAdminTab(tabName) {
+            const tabs = ['setting', 'kategori', 'menu'];
+            tabs.forEach(t => {
+                document.getElementById('tab-content-' + t).classList.add('hidden');
+                const btn = document.getElementById('tab-btn-' + t);
+                btn.className = "py-3 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer text-purple-300 hover:text-white flex items-center justify-center gap-2";
+            });
+
+            document.getElementById('tab-content-' + tabName).classList.remove('hidden');
+            const activeBtn = document.getElementById('tab-btn-' + tabName);
+            activeBtn.className = "py-3 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer bg-purple-600 text-white shadow-lg flex items-center justify-center gap-2";
         }
 
         async function registerAndRequestToken(btn) {
@@ -423,25 +536,69 @@
                 let result = await response.json();
                 
                 if (result.status === "success") {
-                    localStorage.setItem('locked_store_data', JSON.stringify(result));
-                    
-                    let waMessage = `Permisi Admin, saya sudah melakukan pembayaran di Lynk.id.\n\n` +
-                                    `*DETAIL AKUN SAYA:*\n` +
-                                    `• Nama Toko: ${storeName}\n` +
-                                    `• Pemilik: ${ownerName}\n` +
-                                    `• Username: ${username}\n` +
-                                    `• No WA: ${wa}\n` +
-                                    `• Token Lisensi / StoreKey: ${result.token} / ${result.storeKey}\n\n` +
-                                    `Mohon verifikasi dan kirimkan token aktivasi/konfirmasi ke nomor ini. Terima kasih!`;
-                    
-                    let devPhone = "6285222952220";
-                    let waUrl = `https://wa.me/${devPhone}?text=${encodeURIComponent(waMessage)}`;
-                    
-                    alert("Data akun berhasil disimpan ke Google Sheet! Anda akan dialihkan ke WhatsApp Admin untuk konfirmasi.");
-                    window.open(waUrl, '_blank');
-                    location.reload();
+                    registeredUsernameTemp = username;
+                    // Berpindah ke layar input token sesuai permintaan
+                    switchAuthScreen('token');
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
                 } else {
                     alert("Gagal: " + (result.message || "Username sudah terdaftar."));
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert("Kesalahan koneksi server.");
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            }
+        }
+
+        function openAdminWhatsApp() {
+            let storeName = document.getElementById('reg-store').value.trim() || "Toko Baru";
+            let ownerName = document.getElementById('reg-owner').value.trim() || "Pemilik";
+            let username = registeredUsernameTemp || document.getElementById('reg-user').value.trim() || "-";
+            let wa = document.getElementById('reg-wa').value.trim() || "-";
+
+            let waMessage = `Permisi Admin, saya sudah melakukan pembayaran di Lynk.id.\n\n` +
+                            `*DETAIL AKUN SAYA:*\n` +
+                            `• Nama Toko: ${storeName}\n` +
+                            `• Pemilik: ${ownerName}\n` +
+                            `• Username: ${username}\n` +
+                            `• No WA: ${wa}\n\n` +
+                            `Mohon verifikasi pembayaran saya dan kirimkan Token Lisensinya ke nomor ini ya. Terima kasih!`;
+            
+            let devPhone = "6285222952220";
+            let waUrl = `https://wa.me/${devPhone}?text=${encodeURIComponent(waMessage)}`;
+            window.open(waUrl, '_blank');
+        }
+
+        async function submitTokenAccess(btn) {
+            const token = document.getElementById('token-input-field').value.trim();
+            const username = registeredUsernameTemp || document.getElementById('reg-user').value.trim();
+            const deviceId = getDeviceId();
+
+            if (!token) {
+                alert("Masukkan Token Lisensi yang Anda terima dari Admin!");
+                return;
+            }
+
+            const oldText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEMVALIDASI TOKEN...`;
+            btn.disabled = true;
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "activateAccount", username, token, deviceId })
+                });
+                let result = await response.json();
+
+                if (result.status === "success") {
+                    localStorage.setItem('locked_store_data', JSON.stringify(result));
+                    alert("Aktivasi Sukses! Selamat datang di Dashboard Admin.");
+                    location.reload();
+                } else {
+                    alert("Gagal: " + (result.message || "Token tidak valid."));
                     btn.innerHTML = oldText;
                     btn.disabled = false;
                 }
@@ -474,7 +631,7 @@
                     alert("Login Berhasil!");
                     location.reload();
                 } else {
-                    alert("Gagal: " + (result.message || "Username/Password salah atau beda perangkat."));
+                    alert("Gagal: " + (result.message || "Akun belum aktif atau salah password."));
                     btn.innerHTML = oldText;
                     btn.disabled = false;
                 }
@@ -553,6 +710,18 @@
                 btn.innerHTML = oldText;
                 btn.disabled = false;
             }
+        }
+
+        function downloadBarcodePDF() {
+            const element = document.getElementById('pdf-barcode-card');
+            const opt = {
+                margin:       10,
+                filename:     `Barcode-${currentStore.storeName.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
         }
 
         async function fetchCustomerMenu(storeKey) {
@@ -689,7 +858,7 @@
         }
 
         function logoutDevice() {
-            if (confirm("Keluar dari perangkat ini?")) {
+            if (confirm("Logout dari panel admin? Anda harus memasukkan password atau token kembali jika ingin masuk.")) {
                 localStorage.removeItem('locked_store_data');
                 location.reload();
             }
