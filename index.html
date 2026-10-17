@@ -29,6 +29,17 @@
             backdrop-filter: blur(15px);
             border: 1px solid rgba(168, 85, 247, 0.25);
         }
+        .app-card-btn {
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.8) 0%, rgba(76, 29, 149, 0.4) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .app-card-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            border-color: rgba(234, 179, 8, 0.6);
+            box-shadow: 0 12px 30px -5px rgba(168, 85, 247, 0.5);
+            filter: brightness(1.15);
+        }
         .logo-box {
             background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
             color: #ffffff;
@@ -265,10 +276,10 @@
                 <i class="fa-solid fa-gears"></i> Setting
             </button>
             <button onclick="switchAdminTab('kategori')" id="tab-btn-kategori" class="py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer text-purple-300 hover:text-white flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-tags"></i> Kategori
+                <i class="fa-solid fa-tags"></i> Kategori & Menu
             </button>
             <button onclick="switchAdminTab('menu')" id="tab-btn-menu" class="py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer text-purple-300 hover:text-white flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-utensils"></i> Menu
+                <i class="fa-solid fa-utensils"></i> Tambah Menu
             </button>
             <button onclick="switchAdminTab('laporan')" id="tab-btn-laporan" class="py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer text-emerald-300 hover:text-white flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-chart-line"></i> Laporan
@@ -352,20 +363,30 @@
             </div>
         </div>
 
-        <!-- TAB 2: KATEGORI -->
+        <!-- TAB 2: KATEGORI & DAFTAR MENU (DILENGKAPI DATA REAL-TIME & TOMBOL EDIT/HAPUS) -->
         <div id="tab-content-kategori" class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 hidden shadow-2xl">
-            <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                <i class="fa-solid fa-tags"></i> Manajemen Kategori Menu Toko
-            </h3>
+            <div class="flex justify-between items-center">
+                <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-tags"></i> Daftar Menu & Kategori Toko
+                </h3>
+                <button onclick="loadAdminMenuList()" class="bg-purple-900/60 hover:bg-purple-800 text-purple-200 text-[10px] px-3 py-1.5 rounded-xl border border-purple-500/40 font-bold transition cursor-pointer">
+                    <i class="fa-solid fa-rotate mr-1"></i> Refresh Data
+                </button>
+            </div>
+            
             <p class="text-xs text-purple-200/75 leading-relaxed">
-                Kategori berfungsi untuk mengelompokkan menu Anda (contoh: Makanan Berat, Minuman).
+                Berikut adalah daftar seluruh menu yang telah Anda masukkan. Anda dapat langsung mengubah harga atau menghapus menu di sini.
             </p>
+
+            <div id="admin-menu-list-container" class="space-y-3 pt-2">
+                <p class="text-center text-xs text-purple-300/60 py-6">Memuat daftar menu...</p>
+            </div>
         </div>
 
-        <!-- TAB 3: MENU -->
+        <!-- TAB 3: TAMBAH MENU -->
         <div id="tab-content-menu" class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 hidden shadow-2xl">
             <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                <i class="fa-solid fa-utensils"></i> Tambah & Kelola Menu Makanan/Minuman
+                <i class="fa-solid fa-utensils"></i> Tambah Menu Makanan / Minuman Baru
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
@@ -393,94 +414,61 @@
         </div>
 
         <!-- TAB 4: LAPORAN PENJUALAN -->
-        <div id="tab-content-laporan" class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 hidden text-center shadow-2xl">
-            <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 mx-auto flex items-center justify-center text-emerald-400 text-2xl shadow-inner">
-                <i class="fa-solid fa-chart-pie"></i>
-            </div>
-            <div class="space-y-2">
-                <h3 class="text-sm font-black purple-gold-text uppercase tracking-widest">Laporan Penjualan & Rekap Harian/Bulanan</h3>
-                <p class="text-xs text-purple-200/80 leading-relaxed max-w-md mx-auto">
-                    Seluruh rekap transaksi orderan masuk dari pelanggan terekam otomatis secara real-time. Klik tombol di bawah untuk membuka Google Sheet laporan Anda.
-                </p>
-            </div>
-            <button onclick="openAdminSalesReport()" class="report-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl cursor-pointer flex items-center justify-center gap-2">
-                <i class="fa-solid fa-file-excel text-emerald-200 text-base"></i> BUKA LAPORAN GOOGLE SHEET SAYA
-            </button>
-        </div>
-
-    </div>
-
-    <!-- VIEW 3: KONSUMEN -->
-    <div id="customer-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
-        <header class="glass-card rounded-2xl px-6 py-5 text-center shadow-xl relative">
-            <div class="absolute top-4 right-4 flex items-center gap-2 bg-purple-950/70 border border-amber-500/30 px-3 py-1 rounded-full shadow-inner">
-                <span class="pulse-orange-dot-large"></span>
-                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Buka</span>
-            </div>
-            <span class="text-[10px] bg-purple-900/60 text-purple-300 px-3 py-0.5 rounded font-black tracking-widest uppercase border border-purple-500/40">QRP DIGITAL CATALOG</span>
-            <h2 id="cust-store-name" class="font-black text-xl purple-gold-text tracking-wide mt-1">NAMA TOKO</h2>
-            <p class="text-xs text-purple-200/70 mt-1">Silakan pilih menu pesanan favorit Anda di bawah ini</p>
-        </header>
-
-        <div class="space-y-4">
-            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-none" id="category-filters">
-                <button onclick="filterCategory('Semua')" class="category-btn px-4 py-2 rounded-full text-xs font-bold bg-purple-600 text-white shrink-0 shadow-md">Semua</button>
+        <div id="tab-content-laporan" class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 hidden shadow-2xl">
+            <div class="text-center space-y-1.5">
+                <h3 class="text-sm font-black purple-gold-text uppercase tracking-widest">Pusat Laporan & Rekap Penjualan</h3>
+                <p class="text-xs text-purple-200/80">Pilih jenis laporan yang ingin Anda buka secara real-time:</p>
             </div>
 
-            <div class="space-y-3" id="menu-list-container"></div>
-
-            <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl mt-6">
-                <h3 class="text-sm font-extrabold purple-gold-text uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-receipt"></i> Ringkasan Pesanan Anda
-                </h3>
-                <div id="cart-items" class="text-xs space-y-2 max-h-48 overflow-y-auto divide-y divide-purple-500/20 pr-1 text-purple-100">
-                    <p class="text-purple-300/65 text-center py-3">Belum ada menu yang dipilih.</p>
-                </div>
-                <div class="border-t border-purple-500/30 pt-3 flex justify-between items-center text-sm font-black">
-                    <span class="text-purple-200">Total Pembayaran:</span>
-                    <span id="cart-total" class="purple-gold-text text-lg">Rp 0</span>
-                </div>
-
-                <div id="store-payment-info" class="bg-purple-950/50 border border-purple-500/30 p-4 rounded-2xl space-y-1.5 hidden">
-                    <p class="text-[11px] font-black text-amber-300 uppercase"><i class="fa-solid fa-wallet mr-1"></i> Informasi Pembayaran Toko:</p>
-                    <div id="payment-methods-text" class="text-[11px] text-purple-200 whitespace-pre-line font-mono"></div>
-                </div>
-
-                <div class="space-y-3.5 pt-2">
-                    <div>
-                        <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Nama Pemesan:</label>
-                        <input type="text" id="customer-name" placeholder="Contoh: Bpk. Budi" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <button onclick="openAdminSalesReport()" class="app-card-btn p-5 rounded-2xl text-left space-y-3 cursor-pointer group flex flex-col justify-between">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-lg shadow-inner group-hover:scale-110 transition">
+                        <i class="fa-solid fa-file-excel"></i>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Nomor Meja / Alamat Pengiriman:</label>
-                        <input type="text" id="customer-location" placeholder="Contoh: Meja No. 05" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
+                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Sheet Rekap Utama</h4>
+                        <p class="text-[11px] text-purple-200/70 mt-0.5">Buka Google Sheet database rekap transaksi toko.</p>
+                    </div>
+                </button>
+
+                <button onclick="openReportFilter()" class="app-card-btn p-5 rounded-2xl text-left space-y-3 cursor-pointer group flex flex-col justify-between">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg shadow-inner group-hover:scale-110 transition">
+                        <i class="fa-solid fa-calendar-day"></i>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Metode Pembayaran:</label>
-                        <select id="payment-method" onchange="togglePaymentProof()" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                            <option value="Transfer Bank / E-Wallet" class="bg-slate-900">Transfer Bank / E-Wallet</option>
-                            <option value="Cash (Bayar di Kasir)" class="bg-slate-900">Cash / Bayar di Tempat</option>
-                        </select>
+                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Laporan Harian</h4>
+                        <p class="text-[11px] text-purple-200/70 mt-0.5">Pantau omzet dan transaksi penjualan hari ini.</p>
                     </div>
-                    <div id="proof-container" class="space-y-1">
-                        <label class="block text-[11px] font-bold text-amber-300 mb-1 uppercase">Upload Bukti Transfer:</label>
-                        <input type="file" id="payment-proof" accept="image/*" class="w-full text-xs text-purple-300 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:bg-purple-600 file:text-white font-bold cursor-pointer">
-                    </div>
-                </div>
+                </button>
 
-                <button onclick="sendOrderToWhatsApp()" class="purple-gold-btn w-full py-4 rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-2xl cursor-pointer mt-2">
-                    <i class="fa-brands fa-whatsapp text-lg text-emerald-400"></i> KIRIM PESANAN KE WHATSAPP KASIR
+                <button onclick="openReportFilter()" class="app-card-btn p-5 rounded-2xl text-left space-y-3 cursor-pointer group flex flex-col justify-between">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 text-lg shadow-inner group-hover:scale-110 transition">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Rekap Bulanan</h4>
+                        <p class="text-[11px] text-purple-200/70 mt-0.5">Analisis performa bisnis selama sebulan penuh.</p>
+                    </div>
+                </button>
+
+                <button onclick="openReportFilter()" class="app-card-btn p-5 rounded-2xl text-left space-y-3 cursor-pointer group flex flex-col justify-between">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 text-lg shadow-inner group-hover:scale-110 transition">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Backup / Download CSV</h4>
+                        <p class="text-[11px] text-purple-200/70 mt-0.5">Unduh data laporan ke perangkat lokal Anda.</p>
+                    </div>
                 </button>
             </div>
         </div>
+
     </div>
 
     <!-- SCRIPT UTAMA -->
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbw6MttZqj53DwJ8ilEDTV_fDatmhjIBBCCCZIujTT_lXVvg2vbXybl1SbJ9ri7CrHJJ0w/exec";
-        let menuItems = [];
-        let cart = {};
-        let currentCategory = 'Semua';
+        let adminMenuList = [];
         let currentStore = {};
         let registeredUsernameTemp = "";
 
@@ -494,40 +482,31 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const targetStoreKey = urlParams.get('store');
-
-            if (targetStoreKey) {
+            const savedStore = localStorage.getItem('locked_store_data');
+            if (savedStore) {
+                currentStore = JSON.parse(savedStore);
                 document.getElementById('auth-view').classList.add('hidden');
-                document.getElementById('customer-view').classList.remove('hidden');
-                fetchCustomerMenu(targetStoreKey);
+                document.getElementById('admin-view').classList.remove('hidden');
+                document.getElementById('admin-store-name').innerText = currentStore.storeName;
+                
+                document.getElementById('setting-store-name').value = currentStore.storeName || '';
+                document.getElementById('setting-username').value = currentStore.username || '';
+                document.getElementById('setting-wa').value = currentStore.wa || '';
+                document.getElementById('setting-payment-methods').value = currentStore.paymentMethods || '';
+                document.getElementById('setting-admin-gmail').value = currentStore.adminGmail || '';
+
+                const storeLink = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
+                document.getElementById('store-link-input').value = storeLink;
+                document.getElementById('barcode-store-label').innerText = currentStore.storeName;
+
+                new QRCode(document.getElementById("qrcode"), {
+                    text: storeLink, width: 160, height: 160,
+                    colorDark: "#0f0728", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
+                });
+
+                switchAdminTab('setting');
             } else {
-                const savedStore = localStorage.getItem('locked_store_data');
-                if (savedStore) {
-                    currentStore = JSON.parse(savedStore);
-                    document.getElementById('auth-view').classList.add('hidden');
-                    document.getElementById('admin-view').classList.remove('hidden');
-                    document.getElementById('admin-store-name').innerText = currentStore.storeName;
-                    
-                    document.getElementById('setting-store-name').value = currentStore.storeName || '';
-                    document.getElementById('setting-username').value = currentStore.username || '';
-                    document.getElementById('setting-wa').value = currentStore.wa || '';
-                    document.getElementById('setting-payment-methods').value = currentStore.paymentMethods || '';
-                    document.getElementById('setting-admin-gmail').value = currentStore.adminGmail || '';
-
-                    const storeLink = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
-                    document.getElementById('store-link-input').value = storeLink;
-                    document.getElementById('barcode-store-label').innerText = currentStore.storeName;
-
-                    new QRCode(document.getElementById("qrcode"), {
-                        text: storeLink, width: 160, height: 160,
-                        colorDark: "#0f0728", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
-                    });
-
-                    switchAdminTab('setting');
-                } else {
-                    switchAuthScreen('register');
-                }
+                switchAuthScreen('register');
             }
         });
 
@@ -536,13 +515,9 @@
             document.getElementById('form-token-input').classList.add('hidden');
             document.getElementById('form-login').classList.add('hidden');
 
-            if (screen === 'register') {
-                document.getElementById('form-register').classList.remove('hidden');
-            } else if (screen === 'token') {
-                document.getElementById('form-token-input').classList.remove('hidden');
-            } else if (screen === 'login') {
-                document.getElementById('form-login').classList.remove('hidden');
-            }
+            if (screen === 'register') document.getElementById('form-register').classList.remove('hidden');
+            else if (screen === 'token') document.getElementById('form-token-input').classList.remove('hidden');
+            else if (screen === 'login') document.getElementById('form-login').classList.remove('hidden');
         }
 
         function switchAdminTab(tabName) {
@@ -558,15 +533,144 @@
             if(targetContent) targetContent.classList.remove('hidden');
             const activeBtn = document.getElementById('tab-btn-' + tabName);
             if(activeBtn) activeBtn.className = "py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer bg-purple-600 text-white shadow-lg flex items-center justify-center gap-1.5";
+
+            if (tabName === 'kategori') {
+                loadAdminMenuList();
+            }
+        }
+
+        async function loadAdminMenuList() {
+            const container = document.getElementById('admin-menu-list-container');
+            container.innerHTML = `<p class="text-center text-xs text-purple-300/60 py-6"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Memuat daftar menu...</p>`;
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "getMenu", storeKey: currentStore.storeKey })
+                });
+                let data = await response.json();
+                adminMenuList = data.menu || [];
+
+                if (adminMenuList.length === 0) {
+                    container.innerHTML = `<p class="text-center text-xs text-purple-300/60 py-6">Belum ada menu yang di-input.</p>`;
+                    return;
+                }
+
+                container.innerHTML = adminMenuList.map(item => `
+                    <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-lg">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150'}" class="w-14 h-14 object-cover rounded-xl border border-purple-500/30">
+                            <div>
+                                <span class="text-[9px] bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded font-bold uppercase border border-purple-500/40">${item.category}</span>
+                                <h4 class="font-bold text-white text-sm mt-0.5">${item.name}</h4>
+                                <p class="purple-gold-text text-xs font-extrabold">Rp ${parseInt(item.price).toLocaleString('id-ID')}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="editMenuPrompt('${item.id}', '${item.name}', '${item.category}', '${item.price}')" class="bg-blue-600/80 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-xl font-bold transition shadow cursor-pointer">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="deleteMenuAction('${item.id}')" class="bg-red-600/80 hover:bg-red-500 text-white text-xs px-3 py-2 rounded-xl font-bold transition shadow cursor-pointer">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<p class="text-center text-xs text-red-400 py-6">Gagal memuat data menu.</p>`;
+            }
+        }
+
+        async function editMenuPrompt(id, currentName, currentCategory, currentPrice) {
+            const newName = prompt("Ubah Nama Menu:", currentName);
+            if (newName === null) return;
+            const newCategory = prompt("Ubah Kategori:", currentCategory);
+            if (newCategory === null) return;
+            const newPrice = prompt("Ubah Harga (angka saja):", currentPrice);
+            if (newPrice === null) return;
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "updateMenu", id: id, name: newName, category: newCategory, price: newPrice })
+                });
+                let result = await response.json();
+                if (result.status === "success") {
+                    alert("Menu berhasil diperbarui!");
+                    loadAdminMenuList();
+                } else {
+                    alert("Gagal memperbarui menu.");
+                }
+            } catch (err) {
+                alert("Kesalahan koneksi.");
+            }
+        }
+
+        async function deleteMenuAction(id) {
+            if (!confirm("Yakin ingin menghapus menu ini dari daftar?")) return;
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "deleteMenu", id: id })
+                });
+                let result = await response.json();
+                if (result.status === "success") {
+                    alert("Menu berhasil dihapus!");
+                    loadAdminMenuList();
+                } else {
+                    alert("Gagal menghapus menu.");
+                }
+            } catch (err) {
+                alert("Kesalahan koneksi.");
+            }
+        }
+
+        async function addNewMenu(btn) {
+            const name = document.getElementById('new-name').value.trim();
+            const category = document.getElementById('new-category').value.trim();
+            const price = document.getElementById('new-price').value;
+            const image = document.getElementById('new-image').value.trim();
+
+            if (!name || !category || !price) { alert("Nama menu, kategori, dan harga wajib diisi!"); return; }
+
+            const oldText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN MENU...`;
+            btn.disabled = true;
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "saveMenu", storeKey: currentStore.storeKey, name, category, price, image })
+                });
+                let result = await response.json();
+                if (result.status === "success") {
+                    alert("Menu baru berhasil disimpan ke Database Cloud!");
+                    document.getElementById('new-name').value = '';
+                    document.getElementById('new-category').value = '';
+                    document.getElementById('new-price').value = '';
+                    document.getElementById('new-image').value = '';
+                    switchAdminTab('kategori');
+                } else {
+                    alert("Gagal menyimpan menu.");
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert("Kesalahan koneksi.");
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            }
         }
 
         function openAdminSalesReport() {
-            if (!currentStore.spreadsheetId) {
-                alert("ID Google Sheet belum tersinkronisasi. Silakan simpan ulang pengaturan akun Anda terlebih dahulu.");
-                return;
-            }
-            let sheetUrl = `https://docs.google.com/spreadsheets/d/${currentStore.spreadsheetId}/edit#gid=0`;
-            window.open(sheetUrl, '_blank');
+            if (!currentStore.spreadsheetId) { alert("ID Google Sheet belum tersinkronisasi."); return; }
+            window.open(`https://docs.google.com/spreadsheets/d/${currentStore.spreadsheetId}/edit#gid=0`, '_blank');
+        }
+
+        function openReportFilter() {
+            if (!currentStore.spreadsheetId) { alert("ID Google Sheet belum tersinkronisasi."); return; }
+            window.open(`https://docs.google.com/spreadsheets/d/${currentStore.spreadsheetId}/edit#gid=0`, '_blank');
         }
 
         async function registerAndRequestToken(btn) {
@@ -625,9 +729,7 @@
                             `• No WA: ${wa}\n\n` +
                             `Mohon verifikasi pembayaran saya dan kirimkan Token Lisensinya ke nomor ini ya. Terima kasih!`;
             
-            let devPhone = "6285222952220";
-            let waUrl = `https://wa.me/${devPhone}?text=${encodeURIComponent(waMessage)}`;
-            window.open(waUrl, '_blank');
+            window.open(`https://wa.me/6285222952220?text=${encodeURIComponent(waMessage)}`, '_blank');
         }
 
         async function submitTokenAccess(btn) {
@@ -635,10 +737,7 @@
             const username = registeredUsernameTemp || document.getElementById('reg-user').value.trim();
             const deviceId = getDeviceId();
 
-            if (!token) {
-                alert("Masukkan Token Lisensi yang Anda terima dari Admin!");
-                return;
-            }
+            if (!token) { alert("Masukkan Token Lisensi!"); return; }
 
             const oldText = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEMVALIDASI TOKEN...`;
@@ -728,43 +827,10 @@
                     currentStore.adminGmail = adminGmail;
                     currentStore.spreadsheetId = result.spreadsheetId;
                     localStorage.setItem('locked_store_data', JSON.stringify(currentStore));
-                    alert("Pengaturan akun & database Gmail berhasil disinkronkan ke Google Sheet!");
+                    alert("Pengaturan akun berhasil disinkronkan!");
                     location.reload();
                 } else {
-                    alert("Gagal memperbarui: " + (result.message || "Kesalahan server."));
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                alert("Kesalahan koneksi.");
-                btn.innerHTML = oldText;
-                btn.disabled = false;
-            }
-        }
-
-        async function addNewMenu(btn) {
-            const name = document.getElementById('new-name').value.trim();
-            const category = document.getElementById('new-category').value.trim();
-            const price = document.getElementById('new-price').value;
-            const image = document.getElementById('new-image').value.trim();
-
-            if (!name || !category || !price) { alert("Nama menu, kategori, dan harga wajib diisi!"); return; }
-
-            const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN MENU...`;
-            btn.disabled = true;
-
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "saveMenu", storeKey: currentStore.storeKey, name, category, price, image })
-                });
-                let result = await response.json();
-                if (result.status === "success") {
-                    alert("Menu baru berhasil disimpan ke Database Cloud!");
-                    location.reload();
-                } else {
-                    alert("Gagal menyimpan menu.");
+                    alert("Gagal memperbarui.");
                     btn.innerHTML = oldText;
                     btn.disabled = false;
                 }
@@ -778,162 +844,13 @@
         function downloadBarcodePDF() {
             const element = document.getElementById('pdf-barcode-card');
             const opt = {
-                margin:       10,
-                filename:     `Barcode-${currentStore.storeName.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
+                margin: 10,
+                filename: `Barcode-${currentStore.storeName.replace(/\s+/g, '_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
             };
             html2pdf().from(element).set(opt).save();
-        }
-
-        let fetchedStoreKey = "";
-        async function fetchCustomerMenu(storeKey) {
-            fetchedStoreKey = storeKey;
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "getMenu", storeKey: storeKey })
-                });
-                let data = await response.json();
-                menuItems = data.menu || [];
-                currentStore = { wa: data.wa || "", paymentMethods: data.paymentMethods || "" };
-                document.getElementById('cust-store-name').innerText = data.storeName || "MENU TOKO";
-                
-                if (data.paymentMethods) {
-                    document.getElementById('payment-methods-text').innerText = data.paymentMethods;
-                    document.getElementById('store-payment-info').classList.remove('hidden');
-                }
-
-                renderCategories();
-                renderMenuList();
-            } catch (err) { console.error("Gagal memuat menu"); }
-        }
-
-        function togglePaymentProof() {
-            const method = document.getElementById('payment-method').value;
-            const proofContainer = document.getElementById('proof-container');
-            if (method.includes('Cash')) { proofContainer.classList.add('hidden'); } 
-            else { proofContainer.classList.remove('hidden'); }
-        }
-
-        function renderCategories() {
-            const categories = ['Semua', ...new Set(menuItems.map(item => item.category))];
-            const container = document.getElementById('category-filters');
-            container.innerHTML = categories.map(cat => `
-                <button onclick="filterCategory('${cat}')" class="category-btn px-4 py-2 rounded-full text-xs font-bold ${currentCategory === cat ? 'bg-purple-600 text-white shadow-md' : 'bg-purple-950/60 text-purple-200 border border-purple-500/30'} shrink-0 transition">
-                    ${cat}
-                </button>
-            `).join('');
-        }
-
-        function filterCategory(cat) {
-            currentCategory = cat;
-            renderCategories();
-            renderMenuList();
-        }
-
-        function renderMenuList() {
-            const container = document.getElementById('menu-list-container');
-            const filtered = currentCategory === 'Semua' ? menuItems : menuItems.filter(i => i.category === currentCategory);
-            if (filtered.length === 0) { container.innerHTML = `<p class="text-center text-xs text-purple-300/60 py-6">Belum ada menu tersedia.</p>`; return; }
-
-            container.innerHTML = filtered.map(item => {
-                const qty = cart[item.id] ? cart[item.id].qty : 0;
-                return `
-                    <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-lg">
-                        <div class="flex items-center gap-3">
-                            <img src="${item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150'}" class="w-14 h-14 object-cover rounded-xl border border-purple-500/30">
-                            <div>
-                                <span class="text-[9px] bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded font-bold uppercase border border-purple-500/40">${item.category}</span>
-                                <h3 class="font-bold text-white text-sm mt-0.5">${item.name}</h3>
-                                <p class="purple-gold-text text-xs font-extrabold">Rp ${parseInt(item.price).toLocaleString('id-ID')}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            ${qty > 0 ? `<button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold text-xs shadow transition">-</button><span class="text-xs font-bold w-6 text-center text-white">${qty}</span>` : ''}
-                            <button onclick="updateCart(${item.id}, 1)" class="purple-gold-btn w-9 h-9 rounded-xl text-xs flex items-center justify-center shadow"><i class="fa-solid fa-plus"></i></button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function updateCart(id, change) {
-            const item = menuItems.find(i => i.id == id);
-            if (!cart[id]) cart[id] = { ...item, qty: 0 };
-            cart[id].qty += change;
-            if (cart[id].qty <= 0) delete cart[id];
-            renderMenuList();
-            renderCartSummary();
-        }
-
-        function renderCartSummary() {
-            const container = document.getElementById('cart-items');
-            const totalEl = document.getElementById('cart-total');
-            const keys = Object.keys(cart);
-            if (keys.length === 0) { container.innerHTML = `<p class="text-purple-300/65 text-center py-3">Belum ada menu yang dipilih.</p>`; totalEl.innerText = `Rp 0`; return; }
-
-            let total = 0;
-            container.innerHTML = keys.map(k => {
-                const sub = cart[k].price * cart[k].qty;
-                total += sub;
-                return `<div class="py-2 flex justify-between items-center text-xs"><span>${cart[k].name} <span class="text-amber-400 font-bold">(${cart[k].qty}x)</span></span><span class="font-bold text-white">Rp ${sub.toLocaleString('id-ID')}</span></div>`;
-            }).join('');
-            totalEl.innerText = `Rp ${total.toLocaleString('id-ID')}`;
-        }
-
-        async function sendOrderToWhatsApp() {
-            const keys = Object.keys(cart);
-            if (keys.length === 0) { alert("Pilih menu pesanan dulu!"); return; }
-            const customerName = document.getElementById('customer-name').value.trim();
-            const customerLocation = document.getElementById('customer-location').value.trim();
-            if (!customerName || !customerLocation) { alert("Mohon isi Nama dan Nomor Meja / Alamat!"); return; }
-
-            const paymentMethod = document.getElementById('payment-method').value;
-            let total = 0;
-            let itemsText = "";
-            let orderDetailsStr = "";
-
-            keys.forEach((k, index) => {
-                const sub = cart[k].price * cart[k].qty;
-                total += sub;
-                itemsText += ` ${index + 1} | ${cart[k].name.padEnd(12, ' ')} | ${cart[k].qty} | Rp ${sub.toLocaleString('id-ID')}\n`;
-                orderDetailsStr += `${cart[k].name} (${cart[k].qty}x), `;
-            });
-
-            try {
-                await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: "saveOrder",
-                        storeKey: fetchedStoreKey,
-                        customerName: customerName,
-                        location: customerLocation,
-                        total: "Rp " + total.toLocaleString('id-ID'),
-                        paymentMethod: paymentMethod,
-                        orderDetails: orderDetailsStr
-                    })
-                });
-            } catch (err) {
-                console.error("Gagal mencatat order ke cloud");
-            }
-
-            let message = `══════════════════════════\n`;
-            message += `      *NOTA PESANAN* 🧾\n`;
-            message += `══════════════════════════\n`;
-            message += `👤 *Pemesan:* ${customerName}\n`;
-            message += `📍 *Meja/Alamat:* ${customerLocation}\n`;
-            message += `------------------------------------------\n`;
-            message += `*NO | MENU        | QTY | SUB-TOTAL*\n`;
-            message += `------------------------------------------\n`;
-            message += itemsText;
-            message += `------------------------------------------\n`;
-            message += `💰 *TOTAL:*             *Rp ${total.toLocaleString('id-ID')}*\n`;
-            message += `💳 *Metode:* ${paymentMethod}\n`;
-            message += `══════════════════════════`;
-
-            window.open(`https://wa.me/${currentStore.wa}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
         function copyStoreLink() {
