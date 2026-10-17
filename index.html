@@ -63,7 +63,6 @@
             box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2);
             outline: none;
         }
-        /* Animasi Indikator Oranye Berkedip Menyala */
         @keyframes pulseOrange {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.8); }
             70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
@@ -78,7 +77,6 @@
             box-shadow: 0 0 12px #f97316;
             animation: pulseOrange 1.5s infinite;
         }
-        /* Animasi Masuk Halus Berkelas */
         @keyframes fadeInScale {
             from { opacity: 0; transform: scale(0.96) translateY(12px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
@@ -99,15 +97,13 @@
 </head>
 <body class="pb-16 pt-8 px-4 relative overflow-x-hidden">
 
-    <!-- Background Ambient Glow Orbs -->
     <div class="glow-orb -top-20 -left-20"></div>
     <div class="glow-orb top-1/2 -right-20"></div>
 
-    <!-- VIEW 1: PORTAL LOGIN / AUTH ADMIN -->
+    <!-- VIEW 1: PORTAL LOGIN / REGISTER ADMIN -->
     <div id="auth-view" class="max-w-md mx-auto space-y-6 animate-fade-in relative z-10">
         <div class="glass-card rounded-3xl p-8 space-y-6 relative overflow-hidden">
             
-            <!-- Indikator Oranye Berkedip -->
             <div class="absolute top-6 right-6 flex items-center gap-2 bg-purple-950/70 border border-amber-500/30 px-3 py-1 rounded-full shadow-inner">
                 <span class="pulse-orange-dot"></span>
                 <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">SaaS Online</span>
@@ -123,10 +119,10 @@
                 </div>
             </div>
 
-            <!-- FORM LOGIN UTAMA (DEFAULT) -->
+            <!-- FORM LOGIN UTAMA -->
             <div id="form-login" class="space-y-4 transition-all duration-300">
                 <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
-                    <p class="text-xs font-extrabold purple-gold-text uppercase">Login Portal Admin</p>
+                    <p class="text-xs font-extrabold purple-gold-text uppercase">Login Portal Admin Toko</p>
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username:</label>
@@ -140,17 +136,17 @@
                     <i class="fa-solid fa-right-to-bracket mr-2 text-amber-300"></i> MASUK KE DASHBOARD
                 </button>
                 <div class="text-center pt-2">
-                    <button onclick="toggleAuthMode('register')" class="text-xs text-purple-300 hover:text-white underline transition">Belum punya akun? Aktivasi token baru</button>
+                    <button onclick="toggleAuthMode('register')" class="text-xs text-amber-300 hover:text-white underline font-bold transition">Belum punya akun? Buat Akun Baru (Register)</button>
                 </div>
             </div>
 
-            <!-- FORM AKTIVASI TOKEN / REGISTER -->
+            <!-- FORM REGISTER ADMIN / BUAT AKUN BARU MANDIRI -->
             <div id="form-register" class="space-y-4 hidden transition-all duration-300">
-                <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
-                    <p class="text-[11px] text-purple-200 font-bold"><i class="fa-solid fa-shield-halved mr-1 text-amber-400"></i> Aktivasi Lisensi Eksklusif 1 Tahun</p>
+                <div class="bg-purple-950/50 border border-amber-500/30 p-3 rounded-2xl text-center shadow-inner">
+                    <p class="text-[11px] text-amber-300 font-bold"><i class="fa-solid fa-user-plus mr-1"></i> Pendaftaran Akun & Toko Baru</p>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username Unik (Tanpa Spasi):</label>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username Unik:</label>
                     <input type="text" id="reg-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
@@ -166,15 +162,15 @@
                     <input type="text" id="reg-owner" placeholder="Ibu Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">No. WhatsApp Penerima Order:</label>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">No. WhatsApp Kasir:</label>
                     <input type="text" id="reg-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Email Terdaftar:</label>
                     <input type="email" id="reg-email" placeholder="tokoanda@gmail.com" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
-                <button onclick="generateTokenAndLogin(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
-                    <i class="fa-solid fa-key mr-2 text-amber-300"></i> GENERATE TOKEN & AKTIFKAN DASHBOARD
+                <button onclick="registerNewStore(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
+                    <i class="fa-solid fa-check-circle mr-2 text-amber-300"></i> DAFTAR & MASUK DASHBOARD
                 </button>
                 <div class="text-center pt-2">
                     <button onclick="toggleAuthMode('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition">&larr; Kembali ke Form Login</button>
@@ -205,7 +201,7 @@
             </div>
         </header>
 
-        <!-- MENU 1: PENGATURAN AKUN (TERHUBUNG KE SHEET) -->
+        <!-- MENU 1: PENGATURAN AKUN -->
         <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
             <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
                 <i class="fa-solid fa-gears"></i> 1. Pengaturan Akun & Toko
@@ -256,7 +252,7 @@
             </div>
         </div>
 
-        <!-- MANAJEMEN MENU: KATEGORI, NAMA MENU, & HARGA -->
+        <!-- MANAJEMEN MENU -->
         <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
             <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
                 <i class="fa-solid fa-utensils"></i> 2. Tambah Kategori, Nama Menu & Harga
@@ -267,13 +263,13 @@
                     <input type="text" id="new-name" placeholder="Contoh: Nasi Goreng Spesial" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Tambah / Pilih Kategori:</label>
-                    <input type="text" id="new-category" placeholder="Contoh: Makanan Berat / Minuman / Cemilan" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Kategori:</label>
+                    <input type="text" id="new-category" placeholder="Contoh: Makanan Berat / Minuman" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Tambah Harga (Rp tanpa titik):</label>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Harga (Rp tanpa titik):</label>
                     <input type="number" id="new-price" placeholder="25000" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
@@ -287,10 +283,9 @@
         </div>
     </div>
 
-    <!-- VIEW 3: KONSUMEN (TAMPILAN MENU PESANAN DENGAN PLUS MINUS) -->
+    <!-- VIEW 3: KONSUMEN -->
     <div id="customer-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
         <header class="glass-card rounded-2xl px-6 py-4 text-center shadow-xl relative">
-            <!-- Indikator Oranye Berkedip di View Konsumen -->
             <div class="absolute top-4 right-4 flex items-center gap-1.5 bg-purple-950/70 border border-amber-500/30 px-2.5 py-1 rounded-full shadow-inner">
                 <span class="pulse-orange-dot"></span>
                 <span class="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Buka</span>
@@ -348,7 +343,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT UTAMA KONTROL SISTEM -->
+    <!-- SCRIPT UTAMA -->
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbw6MttZqj53DwJ8ilEDTV_fDatmhjIBBCCCZIujTT_lXVvg2vbXybl1SbJ9ri7CrHJJ0w/exec";
         let menuItems = [];
@@ -381,7 +376,6 @@
                     document.getElementById('admin-view').classList.remove('hidden');
                     document.getElementById('admin-store-name').innerText = currentStore.storeName;
                     
-                    // Isi form pengaturan akun
                     document.getElementById('setting-store-name').value = currentStore.storeName || '';
                     document.getElementById('setting-username').value = currentStore.username || '';
                     document.getElementById('setting-wa').value = currentStore.wa || '';
@@ -397,18 +391,20 @@
         });
 
         function toggleAuthMode(mode) {
-            const regForm = document.getElementById('form-register');
             const loginForm = document.getElementById('form-login');
+            const regForm = document.getElementById('form-register');
+
+            loginForm.classList.add('hidden');
+            regForm.classList.add('hidden');
+
             if (mode === 'register') {
-                loginForm.classList.add('hidden');
                 regForm.classList.remove('hidden');
             } else {
-                regForm.classList.add('hidden');
                 loginForm.classList.remove('hidden');
             }
         }
 
-        async function generateTokenAndLogin(btn) {
+        async function registerNewStore(btn) {
             const username = document.getElementById('reg-user').value.trim();
             const password = document.getElementById('reg-pass').value.trim();
             const storeName = document.getElementById('reg-store').value.trim();
@@ -423,7 +419,7 @@
             }
 
             const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEN-GENERATE TOKEN...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENDAFTARKAN AKUN...`;
             btn.disabled = true;
 
             try {
@@ -434,10 +430,10 @@
                 let result = await response.json();
                 if (result.status === "success") {
                     localStorage.setItem('locked_store_data', JSON.stringify(result));
-                    alert("Token Berhasil Dibuat & Perangkat Terkunci 1 Tahun!");
+                    alert("Registrasi Sukses! Akun dan Toko Anda siap digunakan.");
                     location.reload();
                 } else {
-                    alert("Gagal: " + (result.message || "Terjadi kesalahan."));
+                    alert("Gagal: " + (result.message || "Username sudah terdaftar."));
                     btn.innerHTML = oldText;
                     btn.disabled = false;
                 }
@@ -490,20 +486,13 @@
             if (!storeName || !username || !wa) { alert("Nama Toko, Username, dan No. WA wajib diisi!"); return; }
 
             const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN KE SHEET...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN...`;
             btn.disabled = true;
 
             try {
                 let response = await fetch(GAS_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ 
-                        action: "updateAccount", 
-                        storeKey: currentStore.storeKey, 
-                        storeName, 
-                        username, 
-                        password, 
-                        wa 
-                    })
+                    body: JSON.stringify({ action: "updateAccount", storeKey: currentStore.storeKey, storeName, username, password, wa })
                 });
                 let result = await response.json();
                 if (result.status === "success") {
@@ -511,7 +500,7 @@
                     currentStore.username = username;
                     currentStore.wa = wa;
                     localStorage.setItem('locked_store_data', JSON.stringify(currentStore));
-                    alert("Pengaturan akun berhasil diubah dan disinkronkan ke Google Sheet!");
+                    alert("Pengaturan akun berhasil disinkronkan ke Google Sheet!");
                     location.reload();
                 } else {
                     alert("Gagal memperbarui: " + (result.message || "Kesalahan server."));
@@ -534,7 +523,7 @@
             if (!name || !category || !price) { alert("Nama menu, kategori, dan harga wajib diisi!"); return; }
 
             const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN MENU...`;
             btn.disabled = true;
 
             try {
@@ -544,10 +533,10 @@
                 });
                 let result = await response.json();
                 if (result.status === "success") {
-                    alert("Menu baru berhasil disimpan ke Google Sheet!");
+                    alert("Menu baru berhasil disimpan ke Database Cloud!");
                     location.reload();
                 } else {
-                    alert("Gagal menyimpan.");
+                    alert("Gagal menyimpan menu.");
                     btn.innerHTML = oldText;
                     btn.disabled = false;
                 }
@@ -675,7 +664,7 @@
             message += `------------------------------------------\n`;
             message += itemsText;
             message += `------------------------------------------\n`;
-            message += `💰 *TOTAL:*            *Rp ${total.toLocaleString('id-ID')}*\n`;
+            message += `💰 *TOTAL:*             *Rp ${total.toLocaleString('id-ID')}*\n`;
             message += `💳 *Metode:* ${paymentMethod}\n`;
             message += `📌 *Status:* *${statusPembayaran}*\n`;
             if(hasProof) message += `📷 *Bukti Transfer:* Terlampir\n`;
