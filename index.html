@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRMENU.PRO | Admin Dashboard & Cloud SaaS Enterprise</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Library QR Code Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            background: radial-gradient(circle at 50% 0%, #2e1065 0%, #0f0728 50%, #030014 100%); 
+            color: #f8fafc; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            min-height: 100vh;
+        }
+        .glass-card { 
+            background: rgba(30, 27, 75, 0.45); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(168, 85, 247, 0.35); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 35px rgba(168, 85, 247, 0.15), inset 0 0 20px rgba(168, 85, 247, 0.1);
+        }
+        .logo-box {
+            background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+            color: #ffffff;
+            border: 2px solid rgba(234, 179, 8, 0.6);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.6);
+        }
+        .purple-gold-text { 
+            background: linear-gradient(135deg, #fef08a 0%, #e879f9 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .purple-gold-btn { 
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6d28d9 100%); 
+            color: #ffffff; 
+            font-weight: 800; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.5);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+        .purple-gold-btn:hover { 
+            transform: translateY(-2px) scale(1.01); 
+            box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.8); 
+            filter: brightness(1.1);
+        }
+        .input-glass {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+        .input-glass:focus {
+            border-color: #c084fc;
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2);
+            outline: none;
+        }
+        /* Animasi Indikator Oranye Berkedip Menyala */
+        @keyframes pulseOrange {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.8); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+        }
+        .pulse-orange-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #f97316;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 12px #f97316;
+            animation: pulseOrange 1.5s infinite;
+        }
+        /* Animasi Masuk Halus Berkelas */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.96) translateY(12px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        /* Glow Background Orb */
+        .glow-orb {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, rgba(76, 29, 149, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="pb-16 pt-8 px-4 relative overflow-x-hidden">
+
+    <!-- Background Ambient Glow Orbs -->
+    <div class="glow-orb -top-20 -left-20"></div>
+    <div class="glow-orb top-1/2 -right-20"></div>
+
+    <!-- VIEW 1: PORTAL ADMIN & AKTIVASI TOKEN QRMENU.PRO -->
+    <div id="auth-view" class="max-w-md mx-auto space-y-6 animate-fade-in relative z-10">
+        <div class="glass-card rounded-3xl p-8 space-y-6 relative overflow-hidden">
+            
+            <!-- Indikator Status Oranye Menyala di Kanan Atas Card Portal -->
+            <div class="absolute top-6 right-6 flex items-center gap-2 bg-purple-950/70 border border-amber-500/30 px-3 py-1 rounded-full shadow-inner">
+                <span class="pulse-orange-dot"></span>
+                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">SaaS Online</span>
+            </div>
+
+            <div class="text-center space-y-3 pt-2">
+                <!-- LOGO [ QRP ] -->
+                <div class="w-16 h-16 rounded-2xl logo-box mx-auto flex items-center justify-center text-xl font-black tracking-tighter shadow-2xl">
+                    QRP
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black purple-gold-text tracking-wider">QRMENU<span class="text-white">-PRO</span></h1>
+                    <p class="text-xs text-purple-300/70 font-medium mt-1">Enterprise Cloud SaaS & Management Suite</p>
+                </div>
+            </div>
+
+            <!-- FORM GENERATE TOKEN / REGISTER -->
+            <div id="form-register" class="space-y-4 transition-all duration-300">
+                <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
+                    <p class="text-[11px] text-purple-200 font-bold"><i class="fa-solid fa-shield-halved mr-1 text-amber-400"></i> Aktivasi Lisensi Eksklusif 1 Tahun</p>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username Unik (Tanpa Spasi):</label>
+                    <input type="text" id="reg-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password Admin:</label>
+                    <input type="password" id="reg-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Toko / Resto:</label>
+                    <input type="text" id="reg-store" placeholder="Warung Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Pemilik:</label>
+                    <input type="text" id="reg-owner" placeholder="Ibu Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">No. WhatsApp Penerima Order:</label>
+                    <input type="text" id="reg-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Email Terdaftar:</label>
+                    <input type="email" id="reg-email" placeholder="tokoanda@gmail.com" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <button onclick="generateTokenAndLogin(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
+                    <i class="fa-solid fa-key mr-2 text-amber-300"></i> GENERATE TOKEN & AKTIFKAN DASHBOARD
+                </button>
+                <div class="text-center pt-2">
+                    <button onclick="toggleAuthMode('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition">Sudah punya akun aktif? Login di sini</button>
+                </div>
+            </div>
+
+            <!-- FORM LOGIN -->
+            <div id="form-login" class="space-y-4 hidden transition-all duration-300">
+                <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
+                    <p class="text-xs font-extrabold purple-gold-text uppercase">Login Portal Admin QRMENU.PRO</p>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username:</label>
+                    <input type="text" id="login-user" placeholder="Username toko anda" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password:</label>
+                    <input type="password" id="login-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <button onclick="loginStore(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl cursor-pointer">
+                    <i class="fa-solid fa-right-to-bracket mr-2 text-amber-300"></i> MASUK KE DASHBOARD
+                </button>
+                <div class="text-center pt-2">
+                    <button onclick="toggleAuthMode('register')" class="text-xs text-purple-300 hover:text-white underline transition">&larr; Kembali ke Form Aktivasi Token</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 2: DASHBOARD ADMIN UTAMA -->
+    <div id="admin-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
+        <header class="glass-card rounded-2xl px-6 py-4 flex justify-between items-center shadow-xl">
+            <div class="space-y-0.5">
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] bg-purple-900/60 text-purple-300 px-2.5 py-0.5 rounded font-black tracking-widest uppercase border border-purple-500/40">QRP</span>
+                    <h2 id="admin-store-name" class="font-black text-base sm:text-lg purple-gold-text tracking-wide">NAMA TOKO</h2>
+                </div>
+                <p class="text-[11px] text-purple-300/70">Status Lisensi Cloud: <span id="license-status" class="text-emerald-400 font-bold">Aktif & Terlindungi (1 Tahun)</span></p>
+            </div>
+            
+            <!-- TOMBOL ORANYE BERKEDIP DI KANAN ATAS HEADER DASHBOARD UTAMA -->
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex items-center gap-2 bg-orange-950/40 border border-orange-500/40 px-3 py-1.5 rounded-xl shadow-inner">
+                    <span class="pulse-orange-dot"></span>
+                    <span class="text-[11px] font-bold text-orange-300 uppercase tracking-wider">Live System</span>
+                </div>
+                <button onclick="logoutDevice()" class="bg-red-950/60 hover:bg-red-900/80 text-red-300 text-xs px-4 py-2.5 rounded-xl border border-red-500/40 font-bold transition shadow-md cursor-pointer">
+                    <i class="fa-solid fa-power-off mr-1"></i> Keluar
+                </button>
+            </div>
+        </header>
+
+        <!-- BARCODE & LINK MEJA -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 text-center relative overflow-hidden shadow-2xl">
+            <div class="space-y-1">
+                <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-qrcode"></i> Barcode & Link Pemesan Meja Pelanggan
+                </h3>
+                <p class="text-xs text-purple-200/70">Cetak QR Code eksklusif ini dan pasang di setiap meja makan:</p>
+            </div>
+            
+            <div class="bg-white p-4 rounded-2xl inline-block mx-auto shadow-2xl border-4 border-purple-500/30 transform hover:scale-105 transition duration-300">
+                <div id="qrcode"></div>
+            </div>
+
+            <div class="space-y-1.5 text-left max-w-lg mx-auto">
+                <label class="block text-[11px] font-bold text-purple-200 uppercase tracking-wider">Link Akses Menu Toko Anda:</label>
+                <div class="flex gap-2">
+                    <input type="text" id="store-link-input" readonly class="input-glass w-full rounded-xl px-4 py-3 text-xs text-amber-300 text-center select-all font-mono font-bold">
+                    <button onclick="copyStoreLink()" class="purple-gold-btn px-5 py-3 rounded-xl text-xs font-extrabold shrink-0 transition shadow-lg cursor-pointer">
+                        <i class="fa-regular fa-copy mr-1"></i> Salin
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MANAJEMEN TAMBAH MENU -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+            <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
+                <i class="fa-solid fa-utensils"></i> Tambah Menu Baru ke Sistem Cloud
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nama Menu:</label>
+                    <input type="text" id="new-name" placeholder="Contoh: Nasi Goreng Spesial" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Kategori Menu:</label>
+                    <select id="new-category" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                        <option value="Makanan Berat" class="bg-slate-900">Makanan Berat</option>
+                        <option value="Minuman" class="bg-slate-900">Minuman</option>
+                        <option value="Cemilan" class="bg-slate-900">Cemilan</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Harga (Rp tanpa titik):</label>
+                    <input type="number" id="new-price" placeholder="25000" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">URL Foto Makanan (Opsional):</label>
+                    <input type="text" id="new-image" placeholder="https://..." class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+            </div>
+            <button onclick="addNewMenu(this)" class="purple-gold-btn w-full py-3.5 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
+                <i class="fa-solid fa-plus mr-1.5 text-amber-300"></i> SIMPAN MENU KE DATABASE CLOUD
+            </button>
+        </div>
+    </div>
+
+    <!-- VIEW 3: KONSUMEN (TAMPILAN MENU PESANAN) -->
+    <div id="customer-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
+        <header class="glass-card rounded-2xl px-6 py-4 text-center shadow-xl">
+            <span class="text-[9px] bg-purple-900/60 text-purple-300 px-2.5 py-0.5 rounded font-black tracking-widest uppercase border border-purple-500/40">QRP DIGITAL CATALOG</span>
+            <h2 id="cust-store-name" class="font-black text-lg purple-gold-text tracking-wide mt-1">NAMA TOKO</h2>
+            <p class="text-xs text-purple-200/70 mt-0.5">Silakan pilih menu pesanan favorit Anda di bawah ini</p>
+        </header>
+
+        <div class="space-y-4">
+            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-none" id="category-filters">
+                <button onclick="filterCategory('Semua')" class="category-btn px-4 py-2 rounded-full text-xs font-bold bg-purple-600 text-white shrink-0 shadow-md">Semua</button>
+            </div>
+
+            <div class="space-y-3" id="menu-list-container"></div>
+
+            <div class="glass-card rounded-3xl p-5 sm:p-6 space-y-4 shadow-2xl mt-6">
+                <h3 class="text-sm font-extrabold purple-gold-text uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-receipt"></i> Ringkasan Pesanan Anda
+                </h3>
+                <div id="cart-items" class="text-xs space-y-2 max-h-48 overflow-y-auto divide-y divide-purple-500/20 pr-1 text-purple-100">
+                    <p class="text-purple-300/65 text-center py-3">Belum ada menu yang dipilih.</p>
+                </div>
+                <div class="border-t border-purple-500/30 pt-3 flex justify-between items-center text-sm font-black">
+                    <span class="text-purple-200">Total Pembayaran:</span>
+                    <span id="cart-total" class="purple-gold-text text-lg">Rp 0</span>
+                </div>
+
+                <div class="space-y-3 pt-2">
+                    <div>
+                        <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Nama Pemesan:</label>
+                        <input type="text" id="customer-name" placeholder="Contoh: Bpk. Budi" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Nomor Meja / Alamat Pengiriman:</label>
+                        <input type="text" id="customer-location" placeholder="Contoh: Meja No. 05" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Metode Pembayaran:</label>
+                        <select id="payment-method" onchange="togglePaymentProof()" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                            <option value="Transfer Bank / QRIS" class="bg-slate-900">Transfer Bank / QRIS / E-Wallet</option>
+                            <option value="Cash (Bayar di Kasir)" class="bg-slate-900">Cash / Bayar di Tempat</option>
+                        </select>
+                    </div>
+                    <div id="proof-container" class="space-y-1">
+                        <label class="block text-[11px] font-bold text-amber-300 mb-1 uppercase">Upload Bukti Transfer:</label>
+                        <input type="file" id="payment-proof" accept="image/*" class="w-full text-xs text-purple-300 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:bg-purple-600 file:text-white font-bold cursor-pointer">
+                    </div>
+                </div>
+
+                <button onclick="sendOrderToWhatsApp()" class="purple-gold-btn w-full py-4 rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-2xl cursor-pointer mt-2">
+                    <i class="fa-brands fa-whatsapp text-lg text-emerald-400"></i> KIRIM PESANAN KE WHATSAPP KASIR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT UTAMA KONTROL SISTEM -->
+    <script>
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzXrYjHRJEXgPo6B9mV8oxA5bd3tMZnLlKfr3ncD8wPgOq1do2UQ6KB26Nrxg8q3kZeFA/exec";
+        let menuItems = [];
+        let cart = {};
+        let currentCategory = 'Semua';
+        let currentStore = {};
+
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('app_device_id');
+            if (!deviceId) {
+                deviceId = 'DEV-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                localStorage.setItem('app_device_id', deviceId);
+            }
+            return deviceId;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetStoreKey = urlParams.get('store');
+
+            if (targetStoreKey) {
+                document.getElementById('auth-view').classList.add('hidden');
+                document.getElementById('customer-view').classList.remove('hidden');
+                fetchCustomerMenu(targetStoreKey);
+            } else {
+                const savedStore = localStorage.getItem('locked_store_data');
+                if (savedStore) {
+                    currentStore = JSON.parse(savedStore);
+                    document.getElementById('auth-view').classList.add('hidden');
+                    document.getElementById('admin-view').classList.remove('hidden');
+                    document.getElementById('admin-store-name').innerText = currentStore.storeName;
+                    
+                    const storeLink = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
+                    document.getElementById('store-link-input').value = storeLink;
+
+                    new QRCode(document.getElementById("qrcode"), {
+                        text: storeLink, width: 140, height: 140
+                    });
+                }
+            }
+        });
+
+        function toggleAuthMode(mode) {
+            const regForm = document.getElementById('form-register');
+            const loginForm = document.getElementById('form-login');
+            if (mode === 'login') {
+                regForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+            } else {
+                loginForm.classList.add('hidden');
+                regForm.classList.remove('hidden');
+            }
+        }
+
+        async function generateTokenAndLogin(btn) {
+            const username = document.getElementById('reg-user').value.trim();
+            const password = document.getElementById('reg-pass').value.trim();
+            const storeName = document.getElementById('reg-store').value.trim();
+            const ownerName = document.getElementById('reg-owner').value.trim();
+            const wa = document.getElementById('reg-wa').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const deviceId = getDeviceId();
+
+            if (!username || !password || !storeName || !ownerName || !wa || !email) {
+                alert("Semua kolom wajib diisi, Boss!");
+                return;
+            }
+
+            const oldText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEN-GENERATE TOKEN...`;
+            btn.disabled = true;
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "generateToken", username, password, storeName, ownerName, wa, email, deviceId })
+                });
+                let result = await response.json();
+                if (result.status === "success") {
+                    localStorage.setItem('locked_store_data', JSON.stringify(result));
+                    alert("Token Berhasil Dibuat & Perangkat Terkunci 1 Tahun!");
+                    location.reload();
+                } else {
+                    alert("Gagal: " + (result.message || "Terjadi kesalahan."));
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert("Kesalahan koneksi server.");
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            }
+        }
+
+        async function loginStore(btn) {
+            const username = document.getElementById('login-user').value.trim();
+            const password = document.getElementById('login-pass').value.trim();
+            const deviceId = getDeviceId();
+
+            if (!username || !password) { alert("Masukkan username dan password!"); return; }
+
+            const oldText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENGECEK...`;
+            btn.disabled = true;
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "login", username, password, deviceId })
+                });
+                let result = await response.json();
+                if (result.status === "success") {
+                    localStorage.setItem('locked_store_data', JSON.stringify(result));
+                    alert("Login Berhasil!");
+                    location.reload();
+                } else {
+                    alert("Gagal: " + (result.message || "Username/Password salah atau beda perangkat."));
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert("Kesalahan koneksi server.");
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            }
+        }
+
+        async function fetchCustomerMenu(storeKey) {
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "getMenu", storeKey: storeKey })
+                });
+                let data = await response.json();
+                menuItems = data.menu || [];
+                document.getElementById('cust-store-name').innerText = data.storeName || "MENU TOKO";
+                renderCategories();
+                renderMenuList();
+            } catch (err) { console.error("Gagal memuat menu"); }
+        }
+
+        async function addNewMenu(btn) {
+            const name = document.getElementById('new-name').value.trim();
+            const category = document.getElementById('new-category').value;
+            const price = document.getElementById('new-price').value;
+            const image = document.getElementById('new-image').value.trim();
+
+            if (!name || !price) { alert("Nama menu dan harga wajib diisi!"); return; }
+
+            const oldText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN...`;
+            btn.disabled = true;
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "saveMenu", storeKey: currentStore.storeKey, name, category, price, image })
+                });
+                let result = await response.json();
+                if (result.status === "success") {
+                    alert("Menu baru berhasil disimpan!");
+                    location.reload();
+                } else {
+                    alert("Gagal menyimpan.");
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert("Kesalahan koneksi.");
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            }
+        }
+
+        function togglePaymentProof() {
+            const method = document.getElementById('payment-method').value;
+            const proofContainer = document.getElementById('proof-container');
+            if (method.includes('Cash')) { proofContainer.classList.add('hidden'); } 
+            else { proofContainer.classList.remove('hidden'); }
+        }
+
+        function renderCategories() {
+            const categories = ['Semua', ...new Set(menuItems.map(item => item.category))];
+            const container = document.getElementById('category-filters');
+            container.innerHTML = categories.map(cat => `
+                <button onclick="filterCategory('${cat}')" class="category-btn px-4 py-2 rounded-full text-xs font-bold ${currentCategory === cat ? 'bg-purple-600 text-white shadow-md' : 'bg-purple-950/60 text-purple-200 border border-purple-500/30'} shrink-0 transition">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            renderCategories();
+            renderMenuList();
+        }
+
+        function renderMenuList() {
+            const container = document.getElementById('menu-list-container');
+            const filtered = currentCategory === 'Semua' ? menuItems : menuItems.filter(i => i.category === currentCategory);
+            if (filtered.length === 0) { container.innerHTML = `<p class="text-center text-xs text-purple-300/60 py-6">Belum ada menu tersedia.</p>`; return; }
+
+            container.innerHTML = filtered.map(item => {
+                const qty = cart[item.id] ? cart[item.id].qty : 0;
+                return `
+                    <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-lg">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150'}" class="w-14 h-14 object-cover rounded-xl border border-purple-500/30">
+                            <div>
+                                <span class="text-[9px] bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded font-bold uppercase border border-purple-500/40">${item.category}</span>
+                                <h3 class="font-bold text-white text-sm mt-0.5">${item.name}</h3>
+                                <p class="purple-gold-text text-xs font-extrabold">Rp ${parseInt(item.price).toLocaleString('id-ID')}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${qty > 0 ? `<button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold text-xs shadow">-</button><span class="text-xs font-bold w-6 text-center text-white">${qty}</span>` : ''}
+                            <button onclick="updateCart(${item.id}, 1)" class="purple-gold-btn w-9 h-9 rounded-xl text-xs flex items-center justify-center shadow"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateCart(id, change) {
+            const item = menuItems.find(i => i.id == id);
+            if (!cart[id]) cart[id] = { ...item, qty: 0 };
+            cart[id].qty += change;
+            if (cart[id].qty <= 0) delete cart[id];
+            renderMenuList();
+            renderCartSummary();
+        }
+
+        function renderCartSummary() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            const keys = Object.keys(cart);
+            if (keys.length === 0) { container.innerHTML = `<p class="text-purple-300/65 text-center py-3">Belum ada menu yang dipilih.</p>`; totalEl.innerText = `Rp 0`; return; }
+
+            let total = 0;
+            container.innerHTML = keys.map(k => {
+                const sub = cart[k].price * cart[k].qty;
+                total += sub;
+                return `<div class="py-2 flex justify-between items-center text-xs"><span>${cart[k].name} <span class="text-amber-400 font-bold">(${cart[k].qty}x)</span></span><span class="font-bold text-white">Rp ${sub.toLocaleString('id-ID')}</span></div>`;
+            }).join('');
+            totalEl.innerText = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function sendOrderToWhatsApp() {
+            const keys = Object.keys(cart);
+            if (keys.length === 0) { alert("Pilih menu pesanan dulu!"); return; }
+            const customerName = document.getElementById('customer-name').value.trim();
+            const customerLocation = document.getElementById('customer-location').value.trim();
+            if (!customerName || !customerLocation) { alert("Mohon isi Nama dan Nomor Meja / Alamat!"); return; }
+
+            const paymentMethod = document.getElementById('payment-method').value;
+            const hasProof = document.getElementById('payment-proof').files.length > 0;
+            let statusPembayaran = paymentMethod.includes('Cash') ? "BELUM LUNAS (Cash)" : "LUNAS (Transfer)";
+
+            let total = 0;
+            let itemsText = "";
+            keys.forEach((k, index) => {
+                const sub = cart[k].price * cart[k].qty;
+                total += sub;
+                itemsText += ` ${index + 1}  | ${cart[k].name.padEnd(12, ' ')} |  ${cart[k].qty}  | Rp ${sub.toLocaleString('id-ID')}\n`;
+            });
+
+            let message = `══════════════════════════\n`;
+            message += `      *NOTA PESANAN* 🧾\n`;
+            message += `══════════════════════════\n`;
+            message += `👤 *Pemesan:* ${customerName}\n`;
+            message += `📍 *Meja/Alamat:* ${customerLocation}\n`;
+            message += `------------------------------------------\n`;
+            message += `*NO | MENU         | QTY | SUB-TOTAL*\n`;
+            message += `------------------------------------------\n`;
+            message += itemsText;
+            message += `------------------------------------------\n`;
+            message += `💰 *TOTAL:*            *Rp ${total.toLocaleString('id-ID')}*\n`;
+            message += `💳 *Metode:* ${paymentMethod}\n`;
+            message += `📌 *Status:* *${statusPembayaran}*\n`;
+            if(hasProof) message += `📷 *Bukti Transfer:* Terlampir\n`;
+            message += `══════════════════════════`;
+
+            window.open(`https://wa.me/${currentStore.wa}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function copyStoreLink() {
+            const copyText = document.getElementById("store-link-input");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert("Link toko berhasil disalin!");
+        }
+
+        function logoutDevice() {
+            if (confirm("Keluar dari perangkat ini?")) {
+                localStorage.removeItem('locked_store_data');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
