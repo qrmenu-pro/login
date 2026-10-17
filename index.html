@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- html2pdf untuk cetak barcode -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -223,7 +224,7 @@
         </div>
     </div>
 
-    <!-- VIEW 2: DASHBOARD ADMIN UTAMA DENGAN 3 TAB (SETTING, KATEGORI, MENU) -->
+    <!-- VIEW 2: DASHBOARD ADMIN UTAMA DENGAN TAB COLLAPSED SETTING -->
     <div id="admin-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
         
         <!-- HEADER ADMIN -->
@@ -260,11 +261,11 @@
             </button>
         </div>
 
-        <!-- KONTEN TAB 1: SETTING & BARCODE PDF -->
+        <!-- KONTEN TAB 1: SETTING & METODE PEMBAYARAN + BARCODE PDF -->
         <div id="tab-content-setting" class="space-y-6">
             <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
                 <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                    <i class="fa-solid fa-gears"></i> Konfigurasi Toko & Keamanan
+                    <i class="fa-solid fa-gears"></i> Konfigurasi Akun & Toko
                 </h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
@@ -286,12 +287,22 @@
                         <input type="text" id="setting-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
                     </div>
                 </div>
+
+                <!-- PENGATURAN METODE PEMBAYARAN BEBAS -->
+                <div class="space-y-2 pt-2">
+                    <label class="block text-[11px] font-bold text-amber-300 uppercase tracking-wider">
+                        <i class="fa-solid fa-wallet mr-1"></i> Metode Pembayaran & Rekening Toko (Bebas diatur Admin):
+                    </label>
+                    <p class="text-[10px] text-purple-200/70">Tuliskan metode pembayaran, nomor akun, dan Atas Nama (AN) agar tampil di ringkasan pesanan konsumen.</p>
+                    <textarea id="setting-payment-methods" rows="5" placeholder="Contoh:&#10;- OVO : 085222952220 AN Budi&#10;- DANA : 085222952220 AN Budi&#10;- SHOPEEPAY : 085222952220 AN Budi&#10;- BCA : 6765070558 AN Budi Santoso" class="input-glass w-full rounded-xl p-4 text-xs font-mono leading-relaxed"></textarea>
+                </div>
+
                 <button onclick="updateAccountSettings(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
                     <i class="fa-solid fa-floppy-disk mr-1.5 text-amber-300"></i> SIMPAN PERUBAHAN KE GOOGLE SHEET
                 </button>
             </div>
 
-            <!-- BARCODE & DOWNLOAD PDF (PERMANEN DAN STABIL) -->
+            <!-- BARCODE & DOWNLOAD PDF -->
             <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 text-center relative overflow-hidden shadow-2xl">
                 <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center justify-center gap-2">
                     <i class="fa-solid fa-qrcode"></i> Barcode QR Meja Pelanggan
@@ -329,13 +340,6 @@
             <p class="text-xs text-purple-200/70 leading-relaxed">
                 Kategori berfungsi untuk mengelompokkan menu Anda (contoh: <span class="text-amber-300 font-bold">Makanan Berat</span>, <span class="text-amber-300 font-bold">Minuman</span>). Kategori baru otomatis terbentuk saat Anda menambahkan menu dengan kategori baru.
             </p>
-            <div class="bg-purple-950/40 border border-purple-500/30 p-4 rounded-2xl space-y-2">
-                <div class="text-xs font-bold text-amber-300"><i class="fa-solid fa-circle-info mr-1"></i> Daftar Kategori Aktif di Toko Anda:</div>
-                <div id="active-categories-list" class="flex flex-wrap gap-2 pt-2">
-                    <span class="text-xs bg-purple-900/60 text-purple-200 px-3 py-1.5 rounded-xl border border-purple-500/30">Makanan Berat</span>
-                    <span class="text-xs bg-purple-900/60 text-purple-200 px-3 py-1.5 rounded-xl border border-purple-500/30">Minuman</span>
-                </div>
-            </div>
         </div>
 
         <!-- KONTEN TAB 3: MENU -->
@@ -401,6 +405,12 @@
                     <span id="cart-total" class="purple-gold-text text-lg">Rp 0</span>
                 </div>
 
+                <!-- INFO METODE PEMBAYARAN DARI ADMIN -->
+                <div id="store-payment-info" class="bg-purple-950/50 border border-purple-500/30 p-4 rounded-2xl space-y-1.5 hidden">
+                    <p class="text-[11px] font-black text-amber-300 uppercase"><i class="fa-solid fa-wallet mr-1"></i> Informasi Pembayaran Toko:</p>
+                    <div id="payment-methods-text" class="text-[11px] text-purple-200 whitespace-pre-line font-mono"></div>
+                </div>
+
                 <div class="space-y-3.5 pt-2">
                     <div>
                         <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Nama Pemesan:</label>
@@ -413,7 +423,7 @@
                     <div>
                         <label class="block text-[11px] font-bold text-purple-200 mb-1 uppercase">Metode Pembayaran:</label>
                         <select id="payment-method" onchange="togglePaymentProof()" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                            <option value="Transfer Bank / QRIS" class="bg-slate-900">Transfer Bank / QRIS / E-Wallet</option>
+                            <option value="Transfer Bank / E-Wallet" class="bg-slate-900">Transfer Bank / E-Wallet</option>
                             <option value="Cash (Bayar di Kasir)" class="bg-slate-900">Cash / Bayar di Tempat</option>
                         </select>
                     </div>
@@ -467,6 +477,7 @@
                     document.getElementById('setting-store-name').value = currentStore.storeName || '';
                     document.getElementById('setting-username').value = currentStore.username || '';
                     document.getElementById('setting-wa').value = currentStore.wa || '';
+                    document.getElementById('setting-payment-methods').value = currentStore.paymentMethods || '';
 
                     const storeLink = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
                     document.getElementById('store-link-input').value = storeLink;
@@ -476,8 +487,10 @@
                         text: storeLink, width: 160, height: 160,
                         colorDark: "#0f0728", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
                     });
+
+                    // Default buka tab setting terkecuali diklik
+                    switchAdminTab('setting');
                 } else {
-                    // Default layar pertama adalah FORM REGISTER
                     switchAuthScreen('register');
                 }
             }
@@ -537,7 +550,6 @@
                 
                 if (result.status === "success") {
                     registeredUsernameTemp = username;
-                    // Berpindah ke layar input token sesuai permintaan
                     switchAuthScreen('token');
                     btn.innerHTML = oldText;
                     btn.disabled = false;
@@ -647,6 +659,7 @@
             const username = document.getElementById('setting-username').value.trim();
             const password = document.getElementById('setting-password').value.trim();
             const wa = document.getElementById('setting-wa').value.trim();
+            const paymentMethods = document.getElementById('setting-payment-methods').value.trim();
 
             if (!storeName || !username || !wa) { alert("Nama Toko, Username, dan No. WA wajib diisi!"); return; }
 
@@ -657,15 +670,16 @@
             try {
                 let response = await fetch(GAS_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "updateAccount", storeKey: currentStore.storeKey, storeName, username, password, wa })
+                    body: JSON.stringify({ action: "updateAccount", storeKey: currentStore.storeKey, storeName, username, password, wa, paymentMethods })
                 });
                 let result = await response.json();
                 if (result.status === "success") {
                     currentStore.storeName = storeName;
                     currentStore.username = username;
                     currentStore.wa = wa;
+                    currentStore.paymentMethods = paymentMethods;
                     localStorage.setItem('locked_store_data', JSON.stringify(currentStore));
-                    alert("Pengaturan akun berhasil disinkronkan ke Google Sheet!");
+                    alert("Pengaturan akun & pembayaran berhasil disinkronkan ke Google Sheet!");
                     location.reload();
                 } else {
                     alert("Gagal memperbarui: " + (result.message || "Kesalahan server."));
@@ -732,8 +746,14 @@
                 });
                 let data = await response.json();
                 menuItems = data.menu || [];
-                currentStore = { wa: data.wa || "" };
+                currentStore = { wa: data.wa || "", paymentMethods: data.paymentMethods || "" };
                 document.getElementById('cust-store-name').innerText = data.storeName || "MENU TOKO";
+                
+                if (data.paymentMethods) {
+                    document.getElementById('payment-methods-text').innerText = data.paymentMethods;
+                    document.getElementById('store-payment-info').classList.remove('hidden');
+                }
+
                 renderCategories();
                 renderMenuList();
             } catch (err) { console.error("Gagal memuat menu"); }
