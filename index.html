@@ -96,7 +96,7 @@
     <div class="glow-orb -top-20 -left-20"></div>
     <div class="glow-orb top-1/2 -right-20"></div>
 
-    <!-- VIEW 1: PORTAL LOGIN & KLAIM TOKEN LISENSI -->
+    <!-- VIEW 1: PORTAL LOGIN / REGISTER ADMIN -->
     <div id="auth-view" class="max-w-md mx-auto space-y-6 animate-fade-in relative z-10">
         <div class="glass-card rounded-3xl p-8 space-y-6 relative overflow-hidden">
             
@@ -116,7 +116,7 @@
             </div>
 
             <!-- FORM LOGIN UTAMA -->
-            <div id="form-login" class="space-y-4 transition-all duration-300">
+            <div id="form-login" class="space-y-4">
                 <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
                     <p class="text-xs font-extrabold purple-gold-text uppercase">Login Portal Admin Toko</p>
                 </div>
@@ -132,40 +132,44 @@
                     <i class="fa-solid fa-right-to-bracket mr-2 text-amber-300"></i> MASUK KE DASHBOARD
                 </button>
                 <div class="text-center pt-2">
-                    <button onclick="toggleAuthMode('activate')" class="text-xs text-amber-300 hover:text-white underline font-bold transition">Sudah Bayar di Lynk.id? Klaim Token Lisensi Disini</button>
+                    <button type="button" onclick="toggleAuthMode('register')" class="text-xs text-amber-300 hover:text-white underline font-bold transition cursor-pointer">Sudah Bayar di Lynk.id? Buat Akun & Minta Token Disini</button>
                 </div>
             </div>
 
-            <!-- FORM KLAIM TOKEN LISENSI -->
-            <div id="form-activate" class="space-y-4 hidden transition-all duration-300">
+            <!-- FORM REGISTER / REQUEST TOKEN MANUAL -->
+            <div id="form-register" class="space-y-4 hidden">
                 <div class="bg-purple-950/50 border border-amber-500/30 p-3 rounded-2xl text-center shadow-inner">
-                    <p class="text-[11px] text-amber-300 font-bold"><i class="fa-solid fa-ticket mr-1"></i> Aktivasi Akun Berdasarkan Bukti Bayar</p>
+                    <p class="text-[11px] text-amber-300 font-bold"><i class="fa-solid fa-user-plus mr-1"></i> Pendaftaran Akun & Minta Token Admin</p>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Kode Token Lisensi / Store Key:</label>
-                    <input type="text" id="act-token" placeholder="Contoh: QRP-XXXXX atau STORE-XXXXX" class="input-glass w-full rounded-xl px-4 py-3 text-xs text-amber-300 font-mono font-bold">
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username Unik:</label>
+                    <input type="text" id="reg-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Buat Username Baru:</label>
-                    <input type="text" id="act-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password Admin:</label>
+                    <input type="password" id="reg-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Buat Password:</label>
-                    <input type="password" id="act-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Toko / Resto:</label>
+                    <input type="text" id="reg-store" placeholder="Warung Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Toko Anda:</label>
-                    <input type="text" id="act-store" placeholder="Warung Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Pemilik:</label>
+                    <input type="text" id="reg-owner" placeholder="Ibu Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">No. WhatsApp Kasir:</label>
-                    <input type="text" id="act-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <input type="text" id="reg-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
-                <button onclick="claimTokenAndSetup(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
-                    <i class="fa-solid fa-check-circle mr-2 text-amber-300"></i> KLAIM TOKEN & KUNCI PERANGKAT
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Email Terdaftar:</label>
+                    <input type="email" id="reg-email" placeholder="tokoanda@gmail.com" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <button onclick="registerAndRequestToken(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
+                    <i class="fa-brands fa-whatsapp text-lg text-emerald-400 mr-2"></i> KIRIM KONFIRMASI KE WA ADMIN
                 </button>
                 <div class="text-center pt-2">
-                    <button onclick="toggleAuthMode('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition">&larr; Kembali ke Form Login</button>
+                    <button type="button" onclick="toggleAuthMode('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition cursor-pointer">&larr; Kembali ke Form Login</button>
                 </div>
             </div>
         </div>
@@ -382,47 +386,62 @@
 
         function toggleAuthMode(mode) {
             const loginForm = document.getElementById('form-login');
-            const actForm = document.getElementById('form-activate');
+            const regForm = document.getElementById('form-register');
 
-            loginForm.classList.add('hidden');
-            actForm.classList.add('hidden');
-
-            if (mode === 'activate') {
-                actForm.classList.remove('hidden');
+            if (mode === 'register') {
+                loginForm.classList.add('hidden');
+                regForm.classList.remove('hidden');
             } else {
+                regForm.classList.add('hidden');
                 loginForm.classList.remove('hidden');
             }
         }
 
-        async function claimTokenAndSetup(btn) {
-            const token = document.getElementById('act-token').value.trim();
-            const username = document.getElementById('act-user').value.trim();
-            const password = document.getElementById('act-pass').value.trim();
-            const storeName = document.getElementById('act-store').value.trim();
-            const wa = document.getElementById('act-wa').value.trim();
+        async function registerAndRequestToken(btn) {
+            const username = document.getElementById('reg-user').value.trim();
+            const password = document.getElementById('reg-pass').value.trim();
+            const storeName = document.getElementById('reg-store').value.trim();
+            const ownerName = document.getElementById('reg-owner').value.trim();
+            const wa = document.getElementById('reg-wa').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
             const deviceId = getDeviceId();
 
-            if (!token || !username || !password || !storeName || !wa) {
-                alert("Semua kolom termasuk Token Lisensi wajib diisi!");
+            if (!username || !password || !storeName || !ownerName || !wa || !email) {
+                alert("Semua kolom wajib diisi, Boss!");
                 return;
             }
 
             const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEMVALIDASI TOKEN...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN KE SHEET...`;
             btn.disabled = true;
 
             try {
                 let response = await fetch(GAS_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "claimToken", token, username, password, storeName, wa, deviceId })
+                    body: JSON.stringify({ action: "requestToken", username, password, storeName, ownerName, wa, email, deviceId })
                 });
                 let result = await response.json();
+                
                 if (result.status === "success") {
                     localStorage.setItem('locked_store_data', JSON.stringify(result));
-                    alert("Aktivasi Token Sukses! Perangkat Anda kini resmi terkunci.");
+                    
+                    let waMessage = `Permisi Admin, saya sudah melakukan pembayaran di Lynk.id.\n\n` +
+                                    `*DETAIL AKUN SAYA:*\n` +
+                                    `• Nama Toko: ${storeName}\n` +
+                                    `• Pemilik: ${ownerName}\n` +
+                                    `• Username: ${username}\n` +
+                                    `• No WA: ${wa}\n` +
+                                    `• Token Lisensi / StoreKey: ${result.token} / ${result.storeKey}\n\n` +
+                                    `Mohon verifikasi dan kirimkan token aktivasi/konfirmasi ke nomor ini. Terima kasih!`;
+                    
+                    let devPhone = "6285222952220";
+                    let waUrl = `https://wa.me/${devPhone}?text=${encodeURIComponent(waMessage)}`;
+                    
+                    alert("Data akun berhasil disimpan ke Google Sheet! Anda akan dialihkan ke WhatsApp Admin untuk konfirmasi.");
+                    window.open(waUrl, '_blank');
                     location.reload();
                 } else {
-                    alert("Gagal: " + (result.message || "Token tidak valid."));
+                    alert("Gagal: " + (result.message || "Username sudah terdaftar."));
                     btn.innerHTML = oldText;
                     btn.disabled = false;
                 }
