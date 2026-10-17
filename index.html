@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRMENU.PRO | Enterprise Cloud SaaS & Management Suite</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Library QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <!-- Google Fonts: Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -100,7 +96,7 @@
     <div class="glow-orb -top-20 -left-20"></div>
     <div class="glow-orb top-1/2 -right-20"></div>
 
-    <!-- VIEW 1: PORTAL LOGIN / REGISTER ADMIN -->
+    <!-- VIEW 1: PORTAL LOGIN & KLAIM TOKEN LISENSI -->
     <div id="auth-view" class="max-w-md mx-auto space-y-6 animate-fade-in relative z-10">
         <div class="glass-card rounded-3xl p-8 space-y-6 relative overflow-hidden">
             
@@ -136,41 +132,37 @@
                     <i class="fa-solid fa-right-to-bracket mr-2 text-amber-300"></i> MASUK KE DASHBOARD
                 </button>
                 <div class="text-center pt-2">
-                    <button onclick="toggleAuthMode('register')" class="text-xs text-amber-300 hover:text-white underline font-bold transition">Belum punya akun? Buat Akun Baru (Register)</button>
+                    <button onclick="toggleAuthMode('activate')" class="text-xs text-amber-300 hover:text-white underline font-bold transition">Sudah Bayar di Lynk.id? Klaim Token Lisensi Disini</button>
                 </div>
             </div>
 
-            <!-- FORM REGISTER ADMIN / BUAT AKUN BARU MANDIRI -->
-            <div id="form-register" class="space-y-4 hidden transition-all duration-300">
+            <!-- FORM KLAIM TOKEN LISENSI -->
+            <div id="form-activate" class="space-y-4 hidden transition-all duration-300">
                 <div class="bg-purple-950/50 border border-amber-500/30 p-3 rounded-2xl text-center shadow-inner">
-                    <p class="text-[11px] text-amber-300 font-bold"><i class="fa-solid fa-user-plus mr-1"></i> Pendaftaran Akun & Toko Baru</p>
+                    <p class="text-[11px] text-amber-300 font-bold"><i class="fa-solid fa-ticket mr-1"></i> Aktivasi Akun Berdasarkan Bukti Bayar</p>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username Unik:</label>
-                    <input type="text" id="reg-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Kode Token Lisensi / Store Key:</label>
+                    <input type="text" id="act-token" placeholder="Contoh: QRP-XXXXX atau STORE-XXXXX" class="input-glass w-full rounded-xl px-4 py-3 text-xs text-amber-300 font-mono font-bold">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password Admin:</label>
-                    <input type="password" id="reg-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Buat Username Baru:</label>
+                    <input type="text" id="act-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Toko / Resto:</label>
-                    <input type="text" id="reg-store" placeholder="Warung Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Buat Password:</label>
+                    <input type="password" id="act-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Pemilik:</label>
-                    <input type="text" id="reg-owner" placeholder="Ibu Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Toko Anda:</label>
+                    <input type="text" id="act-store" placeholder="Warung Siska" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">No. WhatsApp Kasir:</label>
-                    <input type="text" id="reg-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                    <input type="text" id="act-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Email Terdaftar:</label>
-                    <input type="email" id="reg-email" placeholder="tokoanda@gmail.com" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <button onclick="registerNewStore(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
-                    <i class="fa-solid fa-check-circle mr-2 text-amber-300"></i> DAFTAR & MASUK DASHBOARD
+                <button onclick="claimTokenAndSetup(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
+                    <i class="fa-solid fa-check-circle mr-2 text-amber-300"></i> KLAIM TOKEN & KUNCI PERANGKAT
                 </button>
                 <div class="text-center pt-2">
                     <button onclick="toggleAuthMode('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition">&larr; Kembali ke Form Login</button>
@@ -201,13 +193,11 @@
             </div>
         </header>
 
-        <!-- MENU 1: PENGATURAN AKUN -->
+        <!-- PENGATURAN AKUN -->
         <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
             <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
                 <i class="fa-solid fa-gears"></i> 1. Pengaturan Akun & Toko
             </h3>
-            <p class="text-xs text-purple-200/70">Perubahan data di sini akan langsung memperbarui database di Google Sheet secara otomatis.</p>
-            
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                     <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nama Toko:</label>
@@ -392,48 +382,47 @@
 
         function toggleAuthMode(mode) {
             const loginForm = document.getElementById('form-login');
-            const regForm = document.getElementById('form-register');
+            const actForm = document.getElementById('form-activate');
 
             loginForm.classList.add('hidden');
-            regForm.classList.add('hidden');
+            actForm.classList.add('hidden');
 
-            if (mode === 'register') {
-                regForm.classList.remove('hidden');
+            if (mode === 'activate') {
+                actForm.classList.remove('hidden');
             } else {
                 loginForm.classList.remove('hidden');
             }
         }
 
-        async function registerNewStore(btn) {
-            const username = document.getElementById('reg-user').value.trim();
-            const password = document.getElementById('reg-pass').value.trim();
-            const storeName = document.getElementById('reg-store').value.trim();
-            const ownerName = document.getElementById('reg-owner').value.trim();
-            const wa = document.getElementById('reg-wa').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
+        async function claimTokenAndSetup(btn) {
+            const token = document.getElementById('act-token').value.trim();
+            const username = document.getElementById('act-user').value.trim();
+            const password = document.getElementById('act-pass').value.trim();
+            const storeName = document.getElementById('act-store').value.trim();
+            const wa = document.getElementById('act-wa').value.trim();
             const deviceId = getDeviceId();
 
-            if (!username || !password || !storeName || !ownerName || !wa || !email) {
-                alert("Semua kolom wajib diisi, Boss!");
+            if (!token || !username || !password || !storeName || !wa) {
+                alert("Semua kolom termasuk Token Lisensi wajib diisi!");
                 return;
             }
 
             const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENDAFTARKAN AKUN...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEMVALIDASI TOKEN...`;
             btn.disabled = true;
 
             try {
                 let response = await fetch(GAS_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "generateToken", username, password, storeName, ownerName, wa, email, deviceId })
+                    body: JSON.stringify({ action: "claimToken", token, username, password, storeName, wa, deviceId })
                 });
                 let result = await response.json();
                 if (result.status === "success") {
                     localStorage.setItem('locked_store_data', JSON.stringify(result));
-                    alert("Registrasi Sukses! Akun dan Toko Anda siap digunakan.");
+                    alert("Aktivasi Token Sukses! Perangkat Anda kini resmi terkunci.");
                     location.reload();
                 } else {
-                    alert("Gagal: " + (result.message || "Username sudah terdaftar."));
+                    alert("Gagal: " + (result.message || "Token tidak valid."));
                     btn.innerHTML = oldText;
                     btn.disabled = false;
                 }
