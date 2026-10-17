@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QRMENU.PRO | Admin Dashboard & Cloud SaaS Enterprise</title>
+    <title>QRMENU.PRO | Enterprise Cloud SaaS & Management Suite</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- FontAwesome Icons -->
@@ -86,7 +86,6 @@
         .animate-fade-in {
             animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        /* Glow Background Orb */
         .glow-orb {
             position: absolute;
             width: 300px;
@@ -104,18 +103,17 @@
     <div class="glow-orb -top-20 -left-20"></div>
     <div class="glow-orb top-1/2 -right-20"></div>
 
-    <!-- VIEW 1: PORTAL ADMIN & AKTIVASI TOKEN QRMENU.PRO -->
+    <!-- VIEW 1: PORTAL LOGIN / AUTH ADMIN -->
     <div id="auth-view" class="max-w-md mx-auto space-y-6 animate-fade-in relative z-10">
         <div class="glass-card rounded-3xl p-8 space-y-6 relative overflow-hidden">
             
-            <!-- Indikator Status Oranye Menyala di Kanan Atas Card Portal -->
+            <!-- Indikator Oranye Berkedip -->
             <div class="absolute top-6 right-6 flex items-center gap-2 bg-purple-950/70 border border-amber-500/30 px-3 py-1 rounded-full shadow-inner">
                 <span class="pulse-orange-dot"></span>
                 <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">SaaS Online</span>
             </div>
 
             <div class="text-center space-y-3 pt-2">
-                <!-- LOGO [ QRP ] -->
                 <div class="w-16 h-16 rounded-2xl logo-box mx-auto flex items-center justify-center text-xl font-black tracking-tighter shadow-2xl">
                     QRP
                 </div>
@@ -125,8 +123,29 @@
                 </div>
             </div>
 
-            <!-- FORM GENERATE TOKEN / REGISTER -->
-            <div id="form-register" class="space-y-4 transition-all duration-300">
+            <!-- FORM LOGIN UTAMA (DEFAULT) -->
+            <div id="form-login" class="space-y-4 transition-all duration-300">
+                <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
+                    <p class="text-xs font-extrabold purple-gold-text uppercase">Login Portal Admin</p>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username:</label>
+                    <input type="text" id="login-user" placeholder="Masukkan username toko anda" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password:</label>
+                    <input type="password" id="login-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <button onclick="loginStore(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl cursor-pointer">
+                    <i class="fa-solid fa-right-to-bracket mr-2 text-amber-300"></i> MASUK KE DASHBOARD
+                </button>
+                <div class="text-center pt-2">
+                    <button onclick="toggleAuthMode('register')" class="text-xs text-purple-300 hover:text-white underline transition">Belum punya akun? Aktivasi token baru</button>
+                </div>
+            </div>
+
+            <!-- FORM AKTIVASI TOKEN / REGISTER -->
+            <div id="form-register" class="space-y-4 hidden transition-all duration-300">
                 <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
                     <p class="text-[11px] text-purple-200 font-bold"><i class="fa-solid fa-shield-halved mr-1 text-amber-400"></i> Aktivasi Lisensi Eksklusif 1 Tahun</p>
                 </div>
@@ -158,28 +177,7 @@
                     <i class="fa-solid fa-key mr-2 text-amber-300"></i> GENERATE TOKEN & AKTIFKAN DASHBOARD
                 </button>
                 <div class="text-center pt-2">
-                    <button onclick="toggleAuthMode('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition">Sudah punya akun aktif? Login di sini</button>
-                </div>
-            </div>
-
-            <!-- FORM LOGIN -->
-            <div id="form-login" class="space-y-4 hidden transition-all duration-300">
-                <div class="bg-purple-950/50 border border-purple-500/30 p-3 rounded-2xl text-center shadow-inner">
-                    <p class="text-xs font-extrabold purple-gold-text uppercase">Login Portal Admin QRMENU.PRO</p>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username:</label>
-                    <input type="text" id="login-user" placeholder="Username toko anda" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password:</label>
-                    <input type="password" id="login-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                </div>
-                <button onclick="loginStore(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl cursor-pointer">
-                    <i class="fa-solid fa-right-to-bracket mr-2 text-amber-300"></i> MASUK KE DASHBOARD
-                </button>
-                <div class="text-center pt-2">
-                    <button onclick="toggleAuthMode('register')" class="text-xs text-purple-300 hover:text-white underline transition">&larr; Kembali ke Form Aktivasi Token</button>
+                    <button onclick="toggleAuthMode('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition">&larr; Kembali ke Form Login</button>
                 </div>
             </div>
         </div>
@@ -193,10 +191,9 @@
                     <span class="text-[10px] bg-purple-900/60 text-purple-300 px-2.5 py-0.5 rounded font-black tracking-widest uppercase border border-purple-500/40">QRP</span>
                     <h2 id="admin-store-name" class="font-black text-base sm:text-lg purple-gold-text tracking-wide">NAMA TOKO</h2>
                 </div>
-                <p class="text-[11px] text-purple-300/70">Status Lisensi Cloud: <span id="license-status" class="text-emerald-400 font-bold">Aktif & Terlindungi (1 Tahun)</span></p>
+                <p class="text-[11px] text-purple-300/70">Status Lisensi: <span class="text-emerald-400 font-bold">Aktif & Terlindungi (1 Tahun)</span></p>
             </div>
             
-            <!-- TOMBOL ORANYE BERKEDIP DI KANAN ATAS HEADER DASHBOARD UTAMA -->
             <div class="flex items-center gap-3">
                 <div class="hidden sm:flex items-center gap-2 bg-orange-950/40 border border-orange-500/40 px-3 py-1.5 rounded-xl shadow-inner">
                     <span class="pulse-orange-dot"></span>
@@ -208,19 +205,46 @@
             </div>
         </header>
 
+        <!-- MENU 1: PENGATURAN AKUN (TERHUBUNG KE SHEET) -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+            <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
+                <i class="fa-solid fa-gears"></i> 1. Pengaturan Akun & Toko
+            </h3>
+            <p class="text-xs text-purple-200/70">Perubahan data di sini akan langsung memperbarui database di Google Sheet secara otomatis.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nama Toko:</label>
+                    <input type="text" id="setting-store-name" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Username:</label>
+                    <input type="text" id="setting-username" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Password Baru:</label>
+                    <input type="password" id="setting-password" placeholder="Kosongkan jika tidak diubah" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nomor WA Penerima Order:</label>
+                    <input type="text" id="setting-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
+                </div>
+            </div>
+            <button onclick="updateAccountSettings(this)" class="purple-gold-btn w-full py-3.5 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
+                <i class="fa-solid fa-floppy-disk mr-1.5 text-amber-300"></i> SUBMIT PERUBAHAN KE GOOGLE SHEET
+            </button>
+        </div>
+
         <!-- BARCODE & LINK MEJA -->
         <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 text-center relative overflow-hidden shadow-2xl">
-            <div class="space-y-1">
-                <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-qrcode"></i> Barcode & Link Pemesan Meja Pelanggan
-                </h3>
-                <p class="text-xs text-purple-200/70">Cetak QR Code eksklusif ini dan pasang di setiap meja makan:</p>
-            </div>
-            
+            <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center justify-center gap-2">
+                <i class="fa-solid fa-qrcode"></i> Barcode & Link Pemesan Meja Pelanggan
+            </h3>
             <div class="bg-white p-4 rounded-2xl inline-block mx-auto shadow-2xl border-4 border-purple-500/30 transform hover:scale-105 transition duration-300">
                 <div id="qrcode"></div>
             </div>
-
             <div class="space-y-1.5 text-left max-w-lg mx-auto">
                 <label class="block text-[11px] font-bold text-purple-200 uppercase tracking-wider">Link Akses Menu Toko Anda:</label>
                 <div class="flex gap-2">
@@ -232,10 +256,10 @@
             </div>
         </div>
 
-        <!-- MANAJEMEN TAMBAH MENU -->
+        <!-- MANAJEMEN MENU: KATEGORI, NAMA MENU, & HARGA -->
         <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
             <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                <i class="fa-solid fa-utensils"></i> Tambah Menu Baru ke Sistem Cloud
+                <i class="fa-solid fa-utensils"></i> 2. Tambah Kategori, Nama Menu & Harga
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
@@ -243,17 +267,13 @@
                     <input type="text" id="new-name" placeholder="Contoh: Nasi Goreng Spesial" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Kategori Menu:</label>
-                    <select id="new-category" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
-                        <option value="Makanan Berat" class="bg-slate-900">Makanan Berat</option>
-                        <option value="Minuman" class="bg-slate-900">Minuman</option>
-                        <option value="Cemilan" class="bg-slate-900">Cemilan</option>
-                    </select>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Tambah / Pilih Kategori:</label>
+                    <input type="text" id="new-category" placeholder="Contoh: Makanan Berat / Minuman / Cemilan" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Harga (Rp tanpa titik):</label>
+                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Tambah Harga (Rp tanpa titik):</label>
                     <input type="number" id="new-price" placeholder="25000" class="input-glass w-full rounded-xl px-4 py-3 text-xs">
                 </div>
                 <div>
@@ -267,9 +287,14 @@
         </div>
     </div>
 
-    <!-- VIEW 3: KONSUMEN (TAMPILAN MENU PESANAN) -->
+    <!-- VIEW 3: KONSUMEN (TAMPILAN MENU PESANAN DENGAN PLUS MINUS) -->
     <div id="customer-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
-        <header class="glass-card rounded-2xl px-6 py-4 text-center shadow-xl">
+        <header class="glass-card rounded-2xl px-6 py-4 text-center shadow-xl relative">
+            <!-- Indikator Oranye Berkedip di View Konsumen -->
+            <div class="absolute top-4 right-4 flex items-center gap-1.5 bg-purple-950/70 border border-amber-500/30 px-2.5 py-1 rounded-full shadow-inner">
+                <span class="pulse-orange-dot"></span>
+                <span class="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Buka</span>
+            </div>
             <span class="text-[9px] bg-purple-900/60 text-purple-300 px-2.5 py-0.5 rounded font-black tracking-widest uppercase border border-purple-500/40">QRP DIGITAL CATALOG</span>
             <h2 id="cust-store-name" class="font-black text-lg purple-gold-text tracking-wide mt-1">NAMA TOKO</h2>
             <p class="text-xs text-purple-200/70 mt-0.5">Silakan pilih menu pesanan favorit Anda di bawah ini</p>
@@ -356,6 +381,11 @@
                     document.getElementById('admin-view').classList.remove('hidden');
                     document.getElementById('admin-store-name').innerText = currentStore.storeName;
                     
+                    // Isi form pengaturan akun
+                    document.getElementById('setting-store-name').value = currentStore.storeName || '';
+                    document.getElementById('setting-username').value = currentStore.username || '';
+                    document.getElementById('setting-wa').value = currentStore.wa || '';
+
                     const storeLink = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
                     document.getElementById('store-link-input').value = storeLink;
 
@@ -369,12 +399,12 @@
         function toggleAuthMode(mode) {
             const regForm = document.getElementById('form-register');
             const loginForm = document.getElementById('form-login');
-            if (mode === 'login') {
-                regForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
-            } else {
+            if (mode === 'register') {
                 loginForm.classList.add('hidden');
                 regForm.classList.remove('hidden');
+            } else {
+                regForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
             }
         }
 
@@ -451,27 +481,57 @@
             }
         }
 
-        async function fetchCustomerMenu(storeKey) {
+        async function updateAccountSettings(btn) {
+            const storeName = document.getElementById('setting-store-name').value.trim();
+            const username = document.getElementById('setting-username').value.trim();
+            const password = document.getElementById('setting-password').value.trim();
+            const wa = document.getElementById('setting-wa').value.trim();
+
+            if (!storeName || !username || !wa) { alert("Nama Toko, Username, dan No. WA wajib diisi!"); return; }
+
+            const oldText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN KE SHEET...`;
+            btn.disabled = true;
+
             try {
                 let response = await fetch(GAS_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "getMenu", storeKey: storeKey })
+                    body: JSON.stringify({ 
+                        action: "updateAccount", 
+                        storeKey: currentStore.storeKey, 
+                        storeName, 
+                        username, 
+                        password, 
+                        wa 
+                    })
                 });
-                let data = await response.json();
-                menuItems = data.menu || [];
-                document.getElementById('cust-store-name').innerText = data.storeName || "MENU TOKO";
-                renderCategories();
-                renderMenuList();
-            } catch (err) { console.error("Gagal memuat menu"); }
+                let result = await response.json();
+                if (result.status === "success") {
+                    currentStore.storeName = storeName;
+                    currentStore.username = username;
+                    currentStore.wa = wa;
+                    localStorage.setItem('locked_store_data', JSON.stringify(currentStore));
+                    alert("Pengaturan akun berhasil diubah dan disinkronkan ke Google Sheet!");
+                    location.reload();
+                } else {
+                    alert("Gagal memperbarui: " + (result.message || "Kesalahan server."));
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert("Kesalahan koneksi.");
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            }
         }
 
         async function addNewMenu(btn) {
             const name = document.getElementById('new-name').value.trim();
-            const category = document.getElementById('new-category').value;
+            const category = document.getElementById('new-category').value.trim();
             const price = document.getElementById('new-price').value;
             const image = document.getElementById('new-image').value.trim();
 
-            if (!name || !price) { alert("Nama menu dan harga wajib diisi!"); return; }
+            if (!name || !category || !price) { alert("Nama menu, kategori, dan harga wajib diisi!"); return; }
 
             const oldText = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN...`;
@@ -484,7 +544,7 @@
                 });
                 let result = await response.json();
                 if (result.status === "success") {
-                    alert("Menu baru berhasil disimpan!");
+                    alert("Menu baru berhasil disimpan ke Google Sheet!");
                     location.reload();
                 } else {
                     alert("Gagal menyimpan.");
@@ -496,6 +556,21 @@
                 btn.innerHTML = oldText;
                 btn.disabled = false;
             }
+        }
+
+        async function fetchCustomerMenu(storeKey) {
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "getMenu", storeKey: storeKey })
+                });
+                let data = await response.json();
+                menuItems = data.menu || [];
+                currentStore = { wa: data.wa || "" };
+                document.getElementById('cust-store-name').innerText = data.storeName || "MENU TOKO";
+                renderCategories();
+                renderMenuList();
+            } catch (err) { console.error("Gagal memuat menu"); }
         }
 
         function togglePaymentProof() {
@@ -539,7 +614,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            ${qty > 0 ? `<button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold text-xs shadow">-</button><span class="text-xs font-bold w-6 text-center text-white">${qty}</span>` : ''}
+                            ${qty > 0 ? `<button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold text-xs shadow transition">-</button><span class="text-xs font-bold w-6 text-center text-white">${qty}</span>` : ''}
                             <button onclick="updateCart(${item.id}, 1)" class="purple-gold-btn w-9 h-9 rounded-xl text-xs flex items-center justify-center shadow"><i class="fa-solid fa-plus"></i></button>
                         </div>
                     </div>
@@ -596,7 +671,7 @@
             message += `👤 *Pemesan:* ${customerName}\n`;
             message += `📍 *Meja/Alamat:* ${customerLocation}\n`;
             message += `------------------------------------------\n`;
-            message += `*NO | MENU         | QTY | SUB-TOTAL*\n`;
+            message += `*NO | MENU        | QTY | SUB-TOTAL*\n`;
             message += `------------------------------------------\n`;
             message += itemsText;
             message += `------------------------------------------\n`;
