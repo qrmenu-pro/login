@@ -3,868 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QRMENU.PRO | Enterprise Cloud SaaS & Management Suite</title>
+    <title>Sistem Manajemen Restoran</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <style>
-        body { 
-            background: radial-gradient(circle at 50% 0%, #2e1065 0%, #0f0728 50%, #030014 100%); 
-            color: #f8fafc; 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            min-height: 100vh;
-        }
-        .glass-card { 
-            background: rgba(30, 27, 75, 0.55); 
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(168, 85, 247, 0.4); 
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.2), inset 0 0 25px rgba(168, 85, 247, 0.15);
-        }
-        .glass-tab {
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(168, 85, 247, 0.25);
-        }
-        .app-card-btn {
-            background: linear-gradient(135deg, rgba(30, 27, 75, 0.8) 0%, rgba(76, 29, 149, 0.4) 100%);
-            border: 1px solid rgba(168, 85, 247, 0.35);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .app-card-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            border-color: rgba(234, 179, 8, 0.6);
-            box-shadow: 0 12px 30px -5px rgba(168, 85, 247, 0.5);
-            filter: brightness(1.15);
-        }
-        .logo-box {
-            background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
-            color: #ffffff;
-            border: 2px solid rgba(234, 179, 8, 0.6);
-            box-shadow: 0 0 25px rgba(124, 58, 237, 0.7);
-        }
-        .purple-gold-text { 
-            background: linear-gradient(135deg, #fef08a 0%, #e879f9 50%, #c084fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .purple-gold-btn { 
-            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6d28d9 100%); 
-            color: #ffffff; 
-            font-weight: 800; 
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.6);
-            border: 1px solid rgba(234, 179, 8, 0.4);
-        }
-        .purple-gold-btn:hover { 
-            transform: translateY(-2px) scale(1.01); 
-            box-shadow: 0 18px 40px -5px rgba(168, 85, 247, 0.9); 
-            filter: brightness(1.15);
-        }
-        .report-btn {
-            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
-            color: #ffffff;
-            font-weight: 800;
-            transition: all 0.4s ease;
-            box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.6);
-            border: 1px solid rgba(52, 211, 153, 0.4);
-        }
-        .report-btn:hover {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 15px 35px -5px rgba(5, 150, 105, 0.9);
-            filter: brightness(1.1);
-        }
-        .whatsapp-btn {
-            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
-            color: #ffffff;
-            font-weight: 800;
-            transition: all 0.4s ease;
-            box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.6);
-            border: 1px solid rgba(52, 211, 153, 0.4);
-        }
-        .whatsapp-btn:hover {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 15px 35px -5px rgba(5, 150, 105, 0.9);
-            filter: brightness(1.1);
-        }
-        .input-glass {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(168, 85, 247, 0.35);
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-        .input-glass:focus {
-            border-color: #c084fc;
-            background: rgba(15, 23, 42, 0.9);
-            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.25);
-            outline: none;
-        }
-        @keyframes pulseOrangeLarge {
-            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.9); }
-            70% { transform: scale(1.15); box-shadow: 0 0 0 16px rgba(249, 115, 22, 0); }
-            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
-        }
-        .pulse-orange-dot-large {
-            width: 16px;
-            height: 16px;
-            background-color: #f97316;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 18px #f97316;
-            animation: pulseOrangeLarge 1.6s infinite;
-        }
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.97) translateY(15px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .animate-fade-in {
-            animation: fadeInScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .glow-orb {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.22) 0%, rgba(76, 29, 149, 0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
+        body { background: #0f172a; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; font-weight: 700; }
+        .btn-primary:hover { filter: brightness(1.1); }
     </style>
 </head>
-<body class="pb-20 pt-8 px-4 relative overflow-x-hidden">
+<body class="p-4 sm:p-6 max-w-lg mx-auto">
 
-    <div class="glow-orb -top-32 -left-32"></div>
-    <div class="glow-orb top-1/3 -right-32"></div>
-
-    <!-- VIEW 1: AUTHENTICATION FLOW -->
-    <div id="auth-view" class="max-w-md mx-auto space-y-6 animate-fade-in relative z-10">
-        <div class="glass-card rounded-3xl p-8 space-y-6 relative overflow-hidden">
-            
-            <div class="absolute top-6 right-6 flex items-center gap-2.5 bg-purple-950/70 border border-amber-500/30 px-3.5 py-1.5 rounded-full shadow-inner">
-                <span class="pulse-orange-dot-large"></span>
-                <span class="text-[11px] font-extrabold text-amber-400 uppercase tracking-widest">SaaS Live</span>
+    <!-- LOGIN / AUTH VIEW -->
+    <div id="auth-view" class="space-y-6 pt-10">
+        <div class="text-center space-y-2">
+            <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black shadow-lg">SR</div>
+            <h1 class="text-xl font-black">Sistem Manajemen Restoran</h1>
+            <p class="text-xs text-slate-400">Login Administrator Toko / Resto</p>
+        </div>
+        <div class="glass p-6 rounded-3xl space-y-4 shadow-xl">
+            <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Username:</label>
+                <input type="text" id="login-user" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white">
             </div>
-
-            <div class="text-center space-y-3 pt-2">
-                <div class="w-18 h-18 rounded-2xl logo-box mx-auto flex items-center justify-center text-2xl font-black tracking-tighter shadow-2xl">
-                    QRP
-                </div>
-                <div>
-                    <h1 class="text-2xl font-black purple-gold-text tracking-wider">QRMENU<span class="text-white">-PRO</span></h1>
-                    <p class="text-xs text-purple-300/70 font-medium mt-1">Enterprise Cloud SaaS & Management Suite</p>
-                </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Password:</label>
+                <input type="password" id="login-pass" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white">
             </div>
-
-            <!-- FORM REGISTER -->
-            <div id="form-register" class="space-y-4">
-                <div class="bg-purple-950/50 border border-amber-500/30 p-3.5 rounded-2xl text-center shadow-inner">
-                    <p class="text-[11px] text-amber-300 font-bold"><i class="fa-solid fa-user-plus mr-1"></i> Pendaftaran Akun & Dapatkan Token</p>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username Unik:</label>
-                    <input type="text" id="reg-user" placeholder="warungmakanbsd" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password Admin:</label>
-                    <input type="password" id="reg-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Toko / Resto:</label>
-                    <input type="text" id="reg-store" placeholder="Warung Siska" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Nama Pemilik:</label>
-                    <input type="text" id="reg-owner" placeholder="Ibu Siska" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">No. WhatsApp Kasir:</label>
-                    <input type="text" id="reg-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Email Terdaftar:</label>
-                    <input type="email" id="reg-email" placeholder="tokoanda@gmail.com" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <button onclick="registerAndRequestToken(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl mt-2 cursor-pointer">
-                    <i class="fa-solid fa-key mr-2 text-amber-300"></i> DAPATKAN TOKEN
-                </button>
-                <div class="text-center pt-2">
-                    <button type="button" onclick="switchAuthScreen('login')" class="text-xs text-purple-300 hover:text-white underline font-semibold transition cursor-pointer">Sudah punya akun & token? Login disini</button>
-                </div>
-            </div>
-
-            <!-- FORM INPUT TOKEN -->
-            <div id="form-token-input" class="space-y-5 hidden text-center">
-                <div class="bg-purple-950/60 border border-emerald-500/40 p-4 rounded-2xl shadow-inner space-y-1">
-                    <p class="text-xs text-emerald-400 font-extrabold uppercase"><i class="fa-solid fa-circle-check mr-1"></i> Data Berhasil Dicatat!</p>
-                    <p class="text-[11px] text-purple-200/80">Masukkan Token Lisensi yang telah Anda terima dari Admin.</p>
-                </div>
-                
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-2 uppercase tracking-wider text-left">Masukkan Token Lisensi:</label>
-                    <input type="text" id="token-input-field" placeholder="QRP-XXXXXX" class="input-glass w-full rounded-xl px-4 py-4 text-sm text-center text-amber-300 font-mono font-black tracking-widest">
-                </div>
-
-                <button onclick="submitTokenAccess(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl cursor-pointer">
-                    <i class="fa-solid fa-lock-open mr-2 text-amber-300"></i> DAPATKAN AKSESNYA
-                </button>
-
-                <div class="border-t border-purple-500/20 pt-4 space-y-3">
-                    <p class="text-[11px] text-purple-300">Belum menerima Token Lisensi dari Admin?</p>
-                    <button onclick="openAdminWhatsApp()" class="whatsapp-btn w-full py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-lg cursor-pointer flex items-center justify-center gap-2">
-                        <i class="fa-brands fa-whatsapp text-emerald-300 text-base"></i> KONFIRMASI TOKEN VIA WHATSAPP ADMIN
-                    </button>
-                </div>
-
-                <div class="text-center pt-1">
-                    <button type="button" onclick="switchAuthScreen('register')" class="text-xs text-purple-400 hover:text-white underline font-semibold transition cursor-pointer">&larr; Kembali ke Pendaftaran</button>
-                </div>
-            </div>
-
-            <!-- FORM LOGIN -->
-            <div id="form-login" class="space-y-4 hidden">
-                <div class="bg-purple-950/50 border border-purple-500/30 p-3.5 rounded-2xl text-center shadow-inner">
-                    <p class="text-xs font-extrabold purple-gold-text uppercase">Login Portal Admin Toko</p>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Username:</label>
-                    <input type="text" id="login-user" placeholder="Masukkan username toko anda" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-purple-200 mb-1.5 uppercase tracking-wider">Password:</label>
-                    <input type="password" id="login-pass" placeholder="••••••••" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <button onclick="loginStore(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl cursor-pointer">
-                    <i class="fa-solid fa-right-to-bracket mr-2 text-amber-300"></i> MASUK KE DASHBOARD
-                </button>
-                <div class="text-center pt-2">
-                    <button type="button" onclick="switchAuthScreen('register')" class="text-xs text-amber-300 hover:text-white underline font-bold transition cursor-pointer">&larr; Belum Punya Akun? Daftar Disini</button>
-                </div>
-            </div>
-
+            <button onclick="loginStore(this)" class="btn-primary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg cursor-pointer">Masuk Dashboard</button>
         </div>
     </div>
 
-    <!-- VIEW 2: DASHBOARD ADMIN -->
-    <div id="admin-view" class="hidden max-w-2xl mx-auto space-y-6 animate-fade-in relative z-10">
-        
-        <header class="glass-card rounded-2xl px-6 py-4 flex justify-between items-center shadow-xl">
-            <div class="space-y-0.5">
-                <div class="flex items-center gap-2">
-                    <span class="text-[10px] bg-purple-900/60 text-purple-300 px-2.5 py-0.5 rounded font-black tracking-widest uppercase border border-purple-500/40">QRP</span>
-                    <h2 id="admin-store-name" class="font-black text-base sm:text-lg purple-gold-text tracking-wide">NAMA TOKO</h2>
-                </div>
-                <p class="text-[11px] text-purple-300/70">Status Lisensi: <span class="text-emerald-400 font-bold">Aktif & Terlindungi (1 Tahun)</span></p>
+    <!-- ADMIN VIEW (FILAMENT STYLE) -->
+    <div id="admin-view" class="hidden space-y-6 pb-20">
+        <header class="glass p-4 rounded-2xl flex justify-between items-center shadow-lg">
+            <div>
+                <h2 id="admin-store-name" class="font-black text-base text-blue-400">NAMA TOKO</h2>
+                <p class="text-[10px] text-slate-400">Admin Panel (Filament Style)</p>
             </div>
-            
-            <div class="flex items-center gap-3">
-                <div class="hidden sm:flex items-center gap-2.5 bg-orange-950/40 border border-orange-500/40 px-3.5 py-2 rounded-xl shadow-inner">
-                    <span class="pulse-orange-dot-large"></span>
-                    <span class="text-[11px] font-extrabold text-orange-300 uppercase tracking-wider">Live System</span>
-                </div>
-                <button onclick="logoutDevice()" class="bg-red-950/60 hover:bg-red-900/80 text-red-300 text-xs px-4 py-2.5 rounded-xl border border-red-500/40 font-bold transition shadow-md cursor-pointer">
-                    <i class="fa-solid fa-power-off mr-1"></i> Logout
-                </button>
-            </div>
+            <button onclick="logoutDevice()" class="bg-red-600/80 text-white text-xs px-3 py-2 rounded-xl font-bold">Logout</button>
         </header>
 
-        <!-- TAB NAVIGASI -->
-        <div class="grid grid-cols-4 gap-1.5 p-1.5 glass-tab rounded-2xl shadow-xl">
-            <button onclick="switchAdminTab('setting')" id="tab-btn-setting" class="py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer bg-purple-600 text-white shadow-lg flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-gears"></i> Setting
-            </button>
-            <button onclick="switchAdminTab('kategori')" id="tab-btn-kategori" class="py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer text-purple-300 hover:text-white flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-tags"></i> Kategori & Menu
-            </button>
-            <button onclick="switchAdminTab('menu')" id="tab-btn-menu" class="py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer text-purple-300 hover:text-white flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-utensils"></i> Tambah Menu
-            </button>
-            <button onclick="switchAdminTab('laporan')" id="tab-btn-laporan" class="py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer text-emerald-300 hover:text-white flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-chart-line"></i> Laporan
-            </button>
+        <div class="grid grid-cols-3 gap-2">
+            <button onclick="switchAdminTab('menu')" id="tab-btn-menu" class="py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow">Menu</button>
+            <button onclick="switchAdminTab('order')" id="tab-btn-order" class="py-2.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">Pesanan Masuk</button>
+            <button onclick="switchAdminTab('setting')" id="tab-btn-setting" class="py-2.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">Setting</button>
         </div>
 
-        <!-- TAB 1: SETTING -->
-        <div id="tab-content-setting" class="space-y-6">
-            <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
-                <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                    <i class="fa-solid fa-gears"></i> Konfigurasi Akun & Database Order
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <div>
-                        <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nama Toko:</label>
-                        <input type="text" id="setting-store-name" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Username:</label>
-                        <input type="text" id="setting-username" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <div>
-                        <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Password Baru:</label>
-                        <input type="password" id="setting-password" placeholder="Kosongkan jika tidak diubah" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nomor WA Penerima Order:</label>
-                        <input type="text" id="setting-wa" placeholder="62852xxxxxxxx" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                    </div>
-                </div>
-
-                <div class="space-y-1.5 pt-2">
-                    <label class="block text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
-                        <i class="fa-solid fa-database mr-1"></i> Akun Gmail Database Order Otomatis:
-                    </label>
-                    <p class="text-[10px] text-purple-200/70">Masukkan Akun Gmail Anda agar data pesanan masuk otomatis ke Google Sheet.</p>
-                    <input type="email" id="setting-admin-gmail" placeholder="adminstore@gmail.com" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-
-                <div class="space-y-1.5 pt-2">
-                    <label class="block text-[11px] font-bold text-amber-300 uppercase tracking-wider">
-                        <i class="fa-solid fa-wallet mr-1"></i> Metode Pembayaran & Rekening Toko:
-                    </label>
-                    <textarea id="setting-payment-methods" rows="4" placeholder="Contoh:&#10;- OVO : 085222952220 AN Budi&#10;- BCA : 6765070558 AN Budi" class="input-glass w-full rounded-xl p-4 text-xs font-mono leading-relaxed"></textarea>
-                </div>
-
-                <button onclick="updateAccountSettings(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
-                    <i class="fa-solid fa-floppy-disk mr-1.5 text-amber-300"></i> SIMPAN PERUBAHAN KE GOOGLE SHEET
-                </button>
+        <!-- TAB MENU -->
+        <div id="admin-tab-menu" class="space-y-4">
+            <div class="glass p-5 rounded-2xl space-y-3">
+                <h3 class="text-xs font-bold text-blue-400 uppercase"><i class="fa-solid fa-plus mr-1"></i> Tambah Menu Baru</h3>
+                <input type="text" id="m-name" placeholder="Nama Menu (Contoh: Nasi Goreng)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                <input type="text" id="m-cat" placeholder="Kategori (Contoh: Makanan)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                <input type="number" id="m-price" placeholder="Harga (Contoh: 25000)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                <input type="text" id="m-img" placeholder="URL Foto (Opsional)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                <button onclick="saveNewMenu(this)" class="btn-primary w-full py-3 rounded-xl text-xs uppercase cursor-pointer">Simpan Menu</button>
             </div>
+            <div id="admin-menu-list" class="space-y-2"></div>
+        </div>
 
-            <!-- BARCODE & PDF -->
-            <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 text-center relative overflow-hidden shadow-2xl">
-                <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-qrcode"></i> Barcode QR Meja Pelanggan
-                </h3>
-                
-                <div id="pdf-barcode-card" class="bg-white p-6 rounded-3xl inline-block mx-auto shadow-2xl border-4 border-purple-500/30 text-slate-900 space-y-3">
-                    <div class="font-black text-sm tracking-widest text-purple-900 uppercase">QRMENU.PRO SYSTEM</div>
-                    <div id="qrcode" class="flex justify-center"></div>
-                    <div id="barcode-store-label" class="text-xs font-bold text-slate-700">Scan untuk Pesan Menu</div>
-                </div>
+        <!-- TAB ORDER MASUK -->
+        <div id="admin-tab-order" class="space-y-3 hidden">
+            <h3 class="text-xs font-bold text-slate-300 uppercase">Daftar Pesanan Masuk (Real-Time)</h3>
+            <div id="admin-order-list" class="space-y-2"></div>
+        </div>
 
-                <div class="flex justify-center pt-2">
-                    <button onclick="downloadBarcodePDF()" class="purple-gold-btn px-6 py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-lg cursor-pointer flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-file-pdf text-amber-300 text-sm"></i> Download Barcode (PDF)
-                    </button>
-                </div>
+        <!-- TAB SETTING & LINK -->
+        <div id="admin-tab-setting" class="glass p-5 rounded-2xl space-y-4 hidden text-center">
+            <h3 class="text-xs font-bold text-blue-400 uppercase">QR Code Meja & Link Pelanggan</h3>
+            <div id="qrcode" class="bg-white p-4 rounded-xl inline-block mx-auto"></div>
+            <input type="text" id="store-link" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-yellow-300 text-center font-mono">
+            <button onclick="copyLink()" class="btn-primary w-full py-3 rounded-xl text-xs uppercase cursor-pointer">Salin Link Pelanggan</button>
+        </div>
+    </div>
 
-                <div class="space-y-1.5 text-left max-w-lg mx-auto pt-2">
-                    <label class="block text-[11px] font-bold text-purple-200 uppercase tracking-wider">Link Akses Permanen Toko Anda:</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="store-link-input" readonly class="input-glass w-full rounded-xl px-4 py-3.5 text-xs text-amber-300 text-center select-all font-mono font-bold">
-                        <button onclick="copyStoreLink()" class="purple-gold-btn px-5 py-3.5 rounded-xl text-xs font-extrabold shrink-0 transition shadow-lg cursor-pointer">
-                            <i class="fa-regular fa-copy mr-1"></i> Salin
-                        </button>
-                    </div>
-                </div>
+    <!-- CUSTOMER VIEW (SESUAI GAMBAR SHOPEE) -->
+    <div id="customer-view" class="hidden space-y-5 pb-20">
+        <header class="glass p-4 rounded-2xl text-center space-y-1">
+            <h2 id="cust-store-name" class="font-black text-lg text-blue-400">NAMA RESTORAN</h2>
+            <p class="text-xs text-slate-400">Silakan isi data meja dan pilih menu</p>
+        </header>
+
+        <!-- Pesanan Meja Form -->
+        <div class="glass p-5 rounded-2xl space-y-3">
+            <h3 class="text-xs font-bold text-blue-400 uppercase"><i class="fa-solid fa-chair mr-1"></i> Informasi Meja</h3>
+            <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">Nomor Meja:</label>
+                <select id="c-table" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white">
+                    <option value="Meja 01">Meja 01</option><option value="Meja 02">Meja 02</option><option value="Meja 03">Meja 03</option><option value="Meja 04">Meja 04</option><option value="Meja 05">Meja 05</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">Nama Pemesan:</label>
+                <input type="text" id="c-name" placeholder="Nama Anda" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs">
+            </div>
+            <div>
+                <label class="block text-[11px] font-bold text-slate-300 mb-1">Nomor HP:</label>
+                <input type="text" id="c-phone" placeholder="0852xxxxxxxx" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs">
             </div>
         </div>
 
-        <!-- TAB 2: KATEGORI & DAFTAR MENU (DILENGKAPI DATA REAL-TIME & TOMBOL EDIT/HAPUS) -->
-        <div id="tab-content-kategori" class="glass-card rounded-3xl p-6 sm:p-8 space-y-5 hidden shadow-2xl">
-            <div class="flex justify-between items-center">
-                <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                    <i class="fa-solid fa-tags"></i> Daftar Menu & Kategori Toko
-                </h3>
-                <button onclick="loadAdminMenuList()" class="bg-purple-900/60 hover:bg-purple-800 text-purple-200 text-[10px] px-3 py-1.5 rounded-xl border border-purple-500/40 font-bold transition cursor-pointer">
-                    <i class="fa-solid fa-rotate mr-1"></i> Refresh Data
-                </button>
-            </div>
-            
-            <p class="text-xs text-purple-200/75 leading-relaxed">
-                Berikut adalah daftar seluruh menu yang telah Anda masukkan. Anda dapat langsung mengubah harga atau menghapus menu di sini.
-            </p>
-
-            <div id="admin-menu-list-container" class="space-y-3 pt-2">
-                <p class="text-center text-xs text-purple-300/60 py-6">Memuat daftar menu...</p>
-            </div>
+        <!-- Tampilan Menu -->
+        <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-300 uppercase"><i class="fa-solid fa-utensils mr-1"></i> Tampilan Menu</h3>
+            <div id="cust-menu-list" class="space-y-2"></div>
         </div>
 
-        <!-- TAB 3: TAMBAH MENU -->
-        <div id="tab-content-menu" class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 hidden shadow-2xl">
-            <h3 class="text-xs font-black purple-gold-text uppercase tracking-widest flex items-center gap-2">
-                <i class="fa-solid fa-utensils"></i> Tambah Menu Makanan / Minuman Baru
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Nama Menu:</label>
-                    <input type="text" id="new-name" placeholder="Contoh: Nasi Goreng Spesial" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Kategori:</label>
-                    <input type="text" id="new-category" placeholder="Contoh: Makanan Berat" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
+        <!-- Submit Order & Ringkasan -->
+        <div class="glass p-5 rounded-2xl space-y-3">
+            <div class="flex justify-between font-black text-sm">
+                <span>Total Bayar:</span>
+                <span id="cust-total" class="text-blue-400">Rp 0</span>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">Harga (Rp tanpa titik):</label>
-                    <input type="number" id="new-price" placeholder="25000" class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-200 mb-1 uppercase">URL Foto Makanan (Opsional):</label>
-                    <input type="text" id="new-image" placeholder="https://..." class="input-glass w-full rounded-xl px-4 py-3.5 text-xs">
-                </div>
-            </div>
-            <button onclick="addNewMenu(this)" class="purple-gold-btn w-full py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer shadow-lg mt-2">
-                <i class="fa-solid fa-plus mr-1.5 text-amber-300"></i> SIMPAN MENU KE DATABASE CLOUD
-            </button>
+            <button onclick="submitOrder()" class="btn-primary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-lg">Submit Order & Bayar</button>
         </div>
 
-        <!-- TAB 4: LAPORAN PENJUALAN -->
-        <div id="tab-content-laporan" class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 hidden shadow-2xl">
-            <div class="text-center space-y-1.5">
-                <h3 class="text-sm font-black purple-gold-text uppercase tracking-widest">Pusat Laporan & Rekap Penjualan</h3>
-                <p class="text-xs text-purple-200/80">Pilih jenis laporan yang ingin Anda buka secara real-time:</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <button onclick="openAdminSalesReport()" class="app-card-btn p-5 rounded-2xl text-left space-y-3 cursor-pointer group flex flex-col justify-between">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-lg shadow-inner group-hover:scale-110 transition">
-                        <i class="fa-solid fa-file-excel"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Sheet Rekap Utama</h4>
-                        <p class="text-[11px] text-purple-200/70 mt-0.5">Buka Google Sheet database rekap transaksi toko.</p>
-                    </div>
-                </button>
-
-                <button onclick="openReportFilter()" class="app-card-btn p-5 rounded-2xl text-left space-y-3 cursor-pointer group flex flex-col justify-between">
-                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg shadow-inner group-hover:scale-110 transition">
-                        <i class="fa-solid fa-calendar-day"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Laporan Harian</h4>
-                        <p class="text-[11px] text-purple-200/70 mt-0.5">Pantau omzet dan transaksi penjualan hari ini.</p>
-                    </div>
-                </button>
-
-                <button onclick="openReportFilter()" class="app-card-btn p-5 rounded-2xl text-left space-y-3 cursor-pointer group flex flex-col justify-between">
-                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 text-lg shadow-inner group-hover:scale-110 transition">
-                        <i class="fa-solid fa-calendar-days"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Rekap Bulanan</h4>
-                        <p class="text-[11px] text-purple-200/70 mt-0.5">Analisis performa bisnis selama sebulan penuh.</p>
-                    </div>
-                </button>
-
-                <button onclick="openReportFilter()" class="app-card-btn p-5 rounded-2xl text-left space-y-3 cursor-pointer group flex flex-col justify-between">
-                    <div class="w-12 h-12 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 text-lg shadow-inner group-hover:scale-110 transition">
-                        <i class="fa-solid fa-cloud-arrow-down"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Backup / Download CSV</h4>
-                        <p class="text-[11px] text-purple-200/70 mt-0.5">Unduh data laporan ke perangkat lokal Anda.</p>
-                    </div>
-                </button>
-            </div>
+        <!-- Riwayat Pesanan Pelanggan -->
+        <div class="glass p-5 rounded-2xl space-y-3">
+            <h3 class="text-xs font-bold text-blue-400 uppercase"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Pesanan</h3>
+            <div id="cust-history-list" class="space-y-2 text-xs text-slate-400">Belum ada riwayat pesanan.</div>
         </div>
-
     </div>
 
     <!-- SCRIPT UTAMA -->
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbw6MttZqj53DwJ8ilEDTV_fDatmhjIBBCCCZIujTT_lXVvg2vbXybl1SbJ9ri7CrHJJ0w/exec";
-        let adminMenuList = [];
         let currentStore = {};
-        let registeredUsernameTemp = "";
-
-        function getDeviceId() {
-            let deviceId = localStorage.getItem('app_device_id');
-            if (!deviceId) {
-                deviceId = 'DEV-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                localStorage.setItem('app_device_id', deviceId);
-            }
-            return deviceId;
-        }
+        let menuItems = [];
+        let cart = {};
+        let fetchedStoreKey = "";
 
         document.addEventListener("DOMContentLoaded", () => {
-            const savedStore = localStorage.getItem('locked_store_data');
-            if (savedStore) {
-                currentStore = JSON.parse(savedStore);
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetStoreKey = urlParams.get('store');
+
+            if (targetStoreKey) {
                 document.getElementById('auth-view').classList.add('hidden');
-                document.getElementById('admin-view').classList.remove('hidden');
-                document.getElementById('admin-store-name').innerText = currentStore.storeName;
-                
-                document.getElementById('setting-store-name').value = currentStore.storeName || '';
-                document.getElementById('setting-username').value = currentStore.username || '';
-                document.getElementById('setting-wa').value = currentStore.wa || '';
-                document.getElementById('setting-payment-methods').value = currentStore.paymentMethods || '';
-                document.getElementById('setting-admin-gmail').value = currentStore.adminGmail || '';
-
-                const storeLink = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
-                document.getElementById('store-link-input').value = storeLink;
-                document.getElementById('barcode-store-label').innerText = currentStore.storeName;
-
-                new QRCode(document.getElementById("qrcode"), {
-                    text: storeLink, width: 160, height: 160,
-                    colorDark: "#0f0728", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
-                });
-
-                switchAdminTab('setting');
+                document.getElementById('customer-view').classList.remove('hidden');
+                fetchCustomerMenu(targetStoreKey);
             } else {
-                switchAuthScreen('register');
+                const saved = localStorage.getItem('store_session');
+                if (saved) {
+                    currentStore = JSON.parse(saved);
+                    document.getElementById('auth-view').classList.add('hidden');
+                    document.getElementById('admin-view').classList.remove('hidden');
+                    document.getElementById('admin-store-name').innerText = currentStore.storeName;
+                    
+                    const link = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
+                    document.getElementById('store-link').value = link;
+                    new QRCode(document.getElementById("qrcode"), { text: link, width: 140, height: 140 });
+                    switchAdminTab('menu');
+                }
             }
         });
-
-        function switchAuthScreen(screen) {
-            document.getElementById('form-register').classList.add('hidden');
-            document.getElementById('form-token-input').classList.add('hidden');
-            document.getElementById('form-login').classList.add('hidden');
-
-            if (screen === 'register') document.getElementById('form-register').classList.remove('hidden');
-            else if (screen === 'token') document.getElementById('form-token-input').classList.remove('hidden');
-            else if (screen === 'login') document.getElementById('form-login').classList.remove('hidden');
-        }
-
-        function switchAdminTab(tabName) {
-            const tabs = ['setting', 'kategori', 'menu', 'laporan'];
-            tabs.forEach(t => {
-                const content = document.getElementById('tab-content-' + t);
-                if(content) content.classList.add('hidden');
-                const btn = document.getElementById('tab-btn-' + t);
-                if(btn) btn.className = "py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer text-purple-300 hover:text-white flex items-center justify-center gap-1.5";
-            });
-
-            const targetContent = document.getElementById('tab-content-' + tabName);
-            if(targetContent) targetContent.classList.remove('hidden');
-            const activeBtn = document.getElementById('tab-btn-' + tabName);
-            if(activeBtn) activeBtn.className = "py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition cursor-pointer bg-purple-600 text-white shadow-lg flex items-center justify-center gap-1.5";
-
-            if (tabName === 'kategori') {
-                loadAdminMenuList();
-            }
-        }
-
-        async function loadAdminMenuList() {
-            const container = document.getElementById('admin-menu-list-container');
-            container.innerHTML = `<p class="text-center text-xs text-purple-300/60 py-6"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Memuat daftar menu...</p>`;
-
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "getMenu", storeKey: currentStore.storeKey })
-                });
-                let data = await response.json();
-                adminMenuList = data.menu || [];
-
-                if (adminMenuList.length === 0) {
-                    container.innerHTML = `<p class="text-center text-xs text-purple-300/60 py-6">Belum ada menu yang di-input.</p>`;
-                    return;
-                }
-
-                container.innerHTML = adminMenuList.map(item => `
-                    <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-lg">
-                        <div class="flex items-center gap-3">
-                            <img src="${item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150'}" class="w-14 h-14 object-cover rounded-xl border border-purple-500/30">
-                            <div>
-                                <span class="text-[9px] bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded font-bold uppercase border border-purple-500/40">${item.category}</span>
-                                <h4 class="font-bold text-white text-sm mt-0.5">${item.name}</h4>
-                                <p class="purple-gold-text text-xs font-extrabold">Rp ${parseInt(item.price).toLocaleString('id-ID')}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <button onclick="editMenuPrompt('${item.id}', '${item.name}', '${item.category}', '${item.price}')" class="bg-blue-600/80 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-xl font-bold transition shadow cursor-pointer">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <button onclick="deleteMenuAction('${item.id}')" class="bg-red-600/80 hover:bg-red-500 text-white text-xs px-3 py-2 rounded-xl font-bold transition shadow cursor-pointer">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (err) {
-                container.innerHTML = `<p class="text-center text-xs text-red-400 py-6">Gagal memuat data menu.</p>`;
-            }
-        }
-
-        async function editMenuPrompt(id, currentName, currentCategory, currentPrice) {
-            const newName = prompt("Ubah Nama Menu:", currentName);
-            if (newName === null) return;
-            const newCategory = prompt("Ubah Kategori:", currentCategory);
-            if (newCategory === null) return;
-            const newPrice = prompt("Ubah Harga (angka saja):", currentPrice);
-            if (newPrice === null) return;
-
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "updateMenu", id: id, name: newName, category: newCategory, price: newPrice })
-                });
-                let result = await response.json();
-                if (result.status === "success") {
-                    alert("Menu berhasil diperbarui!");
-                    loadAdminMenuList();
-                } else {
-                    alert("Gagal memperbarui menu.");
-                }
-            } catch (err) {
-                alert("Kesalahan koneksi.");
-            }
-        }
-
-        async function deleteMenuAction(id) {
-            if (!confirm("Yakin ingin menghapus menu ini dari daftar?")) return;
-
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "deleteMenu", id: id })
-                });
-                let result = await response.json();
-                if (result.status === "success") {
-                    alert("Menu berhasil dihapus!");
-                    loadAdminMenuList();
-                } else {
-                    alert("Gagal menghapus menu.");
-                }
-            } catch (err) {
-                alert("Kesalahan koneksi.");
-            }
-        }
-
-        async function addNewMenu(btn) {
-            const name = document.getElementById('new-name').value.trim();
-            const category = document.getElementById('new-category').value.trim();
-            const price = document.getElementById('new-price').value;
-            const image = document.getElementById('new-image').value.trim();
-
-            if (!name || !category || !price) { alert("Nama menu, kategori, dan harga wajib diisi!"); return; }
-
-            const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN MENU...`;
-            btn.disabled = true;
-
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "saveMenu", storeKey: currentStore.storeKey, name, category, price, image })
-                });
-                let result = await response.json();
-                if (result.status === "success") {
-                    alert("Menu baru berhasil disimpan ke Database Cloud!");
-                    document.getElementById('new-name').value = '';
-                    document.getElementById('new-category').value = '';
-                    document.getElementById('new-price').value = '';
-                    document.getElementById('new-image').value = '';
-                    switchAdminTab('kategori');
-                } else {
-                    alert("Gagal menyimpan menu.");
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                alert("Kesalahan koneksi.");
-                btn.innerHTML = oldText;
-                btn.disabled = false;
-            }
-        }
-
-        function openAdminSalesReport() {
-            if (!currentStore.spreadsheetId) { alert("ID Google Sheet belum tersinkronisasi."); return; }
-            window.open(`https://docs.google.com/spreadsheets/d/${currentStore.spreadsheetId}/edit#gid=0`, '_blank');
-        }
-
-        function openReportFilter() {
-            if (!currentStore.spreadsheetId) { alert("ID Google Sheet belum tersinkronisasi."); return; }
-            window.open(`https://docs.google.com/spreadsheets/d/${currentStore.spreadsheetId}/edit#gid=0`, '_blank');
-        }
-
-        async function registerAndRequestToken(btn) {
-            const username = document.getElementById('reg-user').value.trim();
-            const password = document.getElementById('reg-pass').value.trim();
-            const storeName = document.getElementById('reg-store').value.trim();
-            const ownerName = document.getElementById('reg-owner').value.trim();
-            const wa = document.getElementById('reg-wa').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const deviceId = getDeviceId();
-
-            if (!username || !password || !storeName || !ownerName || !wa || !email) {
-                alert("Semua kolom wajib diisi, Boss!");
-                return;
-            }
-
-            const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN KE SHEET...`;
-            btn.disabled = true;
-
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "requestToken", username, password, storeName, ownerName, wa, email, deviceId })
-                });
-                let result = await response.json();
-                
-                if (result.status === "success") {
-                    registeredUsernameTemp = username;
-                    switchAuthScreen('token');
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-                } else {
-                    alert("Gagal: " + (result.message || "Username sudah terdaftar."));
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                alert("Kesalahan koneksi server.");
-                btn.innerHTML = oldText;
-                btn.disabled = false;
-            }
-        }
-
-        function openAdminWhatsApp() {
-            let storeName = document.getElementById('reg-store').value.trim() || "Toko Baru";
-            let ownerName = document.getElementById('reg-owner').value.trim() || "Pemilik";
-            let username = registeredUsernameTemp || document.getElementById('reg-user').value.trim() || "-";
-            let wa = document.getElementById('reg-wa').value.trim() || "-";
-
-            let waMessage = `Permisi Admin, saya sudah melakukan pembayaran di Lynk.id.\n\n` +
-                            `*DETAIL AKUN SAYA:*\n` +
-                            `• Nama Toko: ${storeName}\n` +
-                            `• Pemilik: ${ownerName}\n` +
-                            `• Username: ${username}\n` +
-                            `• No WA: ${wa}\n\n` +
-                            `Mohon verifikasi pembayaran saya dan kirimkan Token Lisensinya ke nomor ini ya. Terima kasih!`;
-            
-            window.open(`https://wa.me/6285222952220?text=${encodeURIComponent(waMessage)}`, '_blank');
-        }
-
-        async function submitTokenAccess(btn) {
-            const token = document.getElementById('token-input-field').value.trim();
-            const username = registeredUsernameTemp || document.getElementById('reg-user').value.trim();
-            const deviceId = getDeviceId();
-
-            if (!token) { alert("Masukkan Token Lisensi!"); return; }
-
-            const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEMVALIDASI TOKEN...`;
-            btn.disabled = true;
-
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "activateAccount", username, token, deviceId })
-                });
-                let result = await response.json();
-
-                if (result.status === "success") {
-                    localStorage.setItem('locked_store_data', JSON.stringify(result));
-                    alert("Aktivasi Sukses! Selamat datang di Dashboard Admin.");
-                    location.reload();
-                } else {
-                    alert("Gagal: " + (result.message || "Token tidak valid."));
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                alert("Kesalahan koneksi server.");
-                btn.innerHTML = oldText;
-                btn.disabled = false;
-            }
-        }
 
         async function loginStore(btn) {
             const username = document.getElementById('login-user').value.trim();
             const password = document.getElementById('login-pass').value.trim();
-            const deviceId = getDeviceId();
+            if (!username || !password) { alert("Isi username & password!"); return; }
 
-            if (!username || !password) { alert("Masukkan username dan password!"); return; }
-
-            const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENGECEK...`;
-            btn.disabled = true;
-
+            btn.innerText = "Mengecek...";
             try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "login", username, password, deviceId })
-                });
-                let result = await response.json();
-                if (result.status === "success") {
-                    localStorage.setItem('locked_store_data', JSON.stringify(result));
-                    alert("Login Berhasil!");
+                let res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "login", username, password, deviceId: "DEV-01" }) });
+                let data = await res.json();
+                if (data.status === "success") {
+                    localStorage.setItem('store_session', JSON.stringify(data));
                     location.reload();
-                } else {
-                    alert("Gagal: " + (result.message || "Akun belum aktif atau salah password."));
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                alert("Kesalahan koneksi server.");
-                btn.innerHTML = oldText;
-                btn.disabled = false;
+                } else { alert(data.message); btn.innerText = "Masuk Dashboard"; }
+            } catch(e) { alert("Koneksi gagal"); btn.innerText = "Masuk Dashboard"; }
+        }
+
+        function switchAdminTab(tab) {
+            ['menu', 'order', 'setting'].forEach(t => {
+                document.getElementById('admin-tab-' + t).classList.add('hidden');
+                document.getElementById('tab-btn-' + t).className = "py-2.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300";
+            });
+            document.getElementById('admin-tab-' + tab).classList.remove('hidden');
+            document.getElementById('tab-btn-' + tab).className = "py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow";
+            if (tab === 'menu') loadAdminMenus();
+            if (tab === 'order') loadAdminOrders();
+        }
+
+        async function loadAdminMenus() {
+            let res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getMenu", storeKey: currentStore.storeKey }) });
+            let data = await res.json();
+            let container = document.getElementById('admin-menu-list');
+            container.innerHTML = (data.menu || []).map(m => `
+                <div class="glass p-3 rounded-xl flex justify-between items-center text-xs">
+                    <div><b>${m.name}</b> (${m.category}) - Rp ${parseInt(m.price).toLocaleString('id-ID')}</div>
+                    <button onclick="deleteMenu('${m.id}')" class="bg-red-600 px-3 py-1.5 rounded-lg text-white font-bold">Hapus</button>
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 text-center py-4">Belum ada menu</p>';
+        }
+
+        async function saveNewMenu(btn) {
+            let name = document.getElementById('m-name').value.trim();
+            let category = document.getElementById('m-cat').value.trim();
+            let price = document.getElementById('m-price').value;
+            let image = document.getElementById('m-img').value.trim();
+            if (!name || !category || !price) { alert("Lengkapi data menu!"); return; }
+
+            btn.innerText = "Menyimpan...";
+            await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "saveMenu", storeKey: currentStore.storeKey, name, category, price, image }) });
+            document.getElementById('m-name').value = ''; document.getElementById('m-cat').value = ''; document.getElementById('m-price').value = ''; document.getElementById('m-img').value = '';
+            btn.innerText = "Simpan Menu";
+            loadAdminMenus();
+        }
+
+        async function deleteMenu(id) {
+            if (!confirm("Hapus menu ini?")) return;
+            await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "deleteMenu", id }) });
+            loadAdminMenus();
+        }
+
+        async function loadAdminOrders() {
+            let res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getOrders", storeKey: currentStore.storeKey }) });
+            let data = await res.json();
+            let container = document.getElementById('admin-order-list');
+            container.innerHTML = (data.orders || []).reverse().map(o => `
+                <div class="glass p-3.5 rounded-xl space-y-1 text-xs">
+                    <div class="flex justify-between font-bold text-blue-400"><span>${o.id} (${o.tableNo})</span><span>${o.total}</span></div>
+                    <div><b>${o.name}</b> (${o.phone})</div>
+                    <div class="text-slate-400 text-[11px]">${o.detail}</div>
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 text-center py-4">Belum ada pesanan masuk</p>';
+        }
+
+        async function fetchCustomerMenu(storeKey) {
+            fetchedStoreKey = storeKey;
+            let res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getMenu", storeKey }) });
+            let data = await res.json();
+            menuItems = data.menu || [];
+            document.getElementById('cust-store-name').innerText = data.storeName;
+            renderCustomerMenu();
+        }
+
+        function renderCustomerMenu() {
+            let container = document.getElementById('cust-menu-list');
+            container.innerHTML = menuItems.map(m => {
+                let qty = cart[m.id] ? cart[m.id].qty : 0;
+                return `
+                    <div class="glass p-3 rounded-2xl flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <img src="${m.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" class="w-12 h-12 object-cover rounded-xl">
+                            <div>
+                                <h4 class="font-bold text-xs">${m.name}</h4>
+                                <p class="text-blue-400 text-xs font-black">Rp ${parseInt(m.price).toLocaleString('id-ID')}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${qty > 0 ? `<button onclick="updateCart('${m.id}', -1)" class="w-7 h-7 bg-red-600 rounded-lg font-bold text-xs">-</button><span class="text-xs font-bold w-5 text-center">${qty}</span>` : ''}
+                            <button onclick="updateCart('${m.id}', 1)" class="w-7 h-7 btn-primary rounded-lg font-bold text-xs">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateCart(id, change) {
+            let item = menuItems.find(m => m.id == id);
+            if (!cart[id]) cart[id] = { ...item, qty: 0 };
+            cart[id].qty += change;
+            if (cart[id].qty <= 0) delete cart[id];
+            renderCustomerMenu();
+            let total = Object.values(cart).reduce((sum, i) => sum + (i.price * i.qty), 0);
+            document.getElementById('cust-total').innerText = "Rp " + total.toLocaleString('id-ID');
+        }
+
+        async function submitOrder() {
+            let tableNo = document.getElementById('c-table').value;
+            let name = document.getElementById('c-name').value.trim();
+            let phone = document.getElementById('c-phone').value.trim();
+            if (!name || !phone) { alert("Mohon isi Nama dan Nomor HP!"); return; }
+            if (Object.keys(cart).length === 0) { alert("Pilih menu terlebih dahulu!"); return; }
+
+            let total = Object.values(cart).reduce((sum, i) => sum + (i.price * i.qty), 0);
+            let detailStr = Object.values(cart).map(i => `${i.name} (${i.qty}x)`).join(', ');
+
+            let res = await fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "saveOrder", storeKey: fetchedStoreKey, tableNo, customerName: name, customerPhone: phone, total: "Rp " + total.toLocaleString('id-ID'), paymentMethod: "QRIS / Transfer", orderDetails: detailStr })
+            });
+            let data = await res.json();
+            if (data.status === "success") {
+                alert("Pesanan berhasil dikirim! ID Pesanan: " + data.orderId);
+                document.getElementById('cust-history-list').innerHTML = `<div class="p-2 bg-slate-900 rounded-xl"><b>${data.orderId}</b> - ${tableNo} (${name}) - <span class="text-green-400">Proses</span></div>`;
+                cart = {}; renderCustomerMenu();
+                document.getElementById('cust-total').innerText = "Rp 0";
             }
         }
 
-        async function updateAccountSettings(btn) {
-            const storeName = document.getElementById('setting-store-name').value.trim();
-            const username = document.getElementById('setting-username').value.trim();
-            const password = document.getElementById('setting-password').value.trim();
-            const wa = document.getElementById('setting-wa').value.trim();
-            const paymentMethods = document.getElementById('setting-payment-methods').value.trim();
-            const adminGmail = document.getElementById('setting-admin-gmail').value.trim();
-
-            if (!storeName || !username || !wa) { alert("Nama Toko, Username, dan No. WA wajib diisi!"); return; }
-
-            const oldText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> MENYIMPAN...`;
-            btn.disabled = true;
-
-            try {
-                let response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "updateAccount", storeKey: currentStore.storeKey, storeName, username, password, wa, paymentMethods, adminGmail })
-                });
-                let result = await response.json();
-                if (result.status === "success") {
-                    currentStore.storeName = storeName;
-                    currentStore.username = username;
-                    currentStore.wa = wa;
-                    currentStore.paymentMethods = paymentMethods;
-                    currentStore.adminGmail = adminGmail;
-                    currentStore.spreadsheetId = result.spreadsheetId;
-                    localStorage.setItem('locked_store_data', JSON.stringify(currentStore));
-                    alert("Pengaturan akun berhasil disinkronkan!");
-                    location.reload();
-                } else {
-                    alert("Gagal memperbarui.");
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                alert("Kesalahan koneksi.");
-                btn.innerHTML = oldText;
-                btn.disabled = false;
-            }
-        }
-
-        function downloadBarcodePDF() {
-            const element = document.getElementById('pdf-barcode-card');
-            const opt = {
-                margin: 10,
-                filename: `Barcode-${currentStore.storeName.replace(/\s+/g, '_')}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
-            };
-            html2pdf().from(element).set(opt).save();
-        }
-
-        function copyStoreLink() {
-            const copyText = document.getElementById("store-link-input");
-            copyText.select();
-            navigator.clipboard.writeText(copyText.value);
-            alert("Link toko berhasil disalin!");
+        function copyLink() {
+            navigator.clipboard.writeText(document.getElementById('store-link').value);
+            alert("Link berhasil disalin!");
         }
 
         function logoutDevice() {
-            if (confirm("Logout dari panel admin?")) {
-                localStorage.removeItem('locked_store_data');
-                location.reload();
-            }
+            localStorage.removeItem('store_session');
+            location.reload();
         }
     </script>
 </body>
