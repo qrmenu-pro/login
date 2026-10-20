@@ -98,7 +98,7 @@
             <div class="neon-card p-6 space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-4">
                     <h3 class="text-base font-bold text-slate-900">🍽️ Daftar Menu (Makanan = Merah | Minuman = Biru)</h3>
-                    <button onclick="bukaModalTambahMenu()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm">+ Tambah Menu Baru</button>
+                    <button onclick="bukaModalMenu()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm">+ Tambah Menu Baru</button>
                 </div>
                 <div id="gridMenu" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <p class="text-xs text-slate-400">Memuat daftar menu...</p>
@@ -107,12 +107,55 @@
         </main>
     </div>
 
-    <!-- MODAL SETTING / PENGATURAN LENGKAP (GERIGI) -->
+    <!-- MODAL FORM TAMBAH / EDIT MENU -->
+    <div id="modalMenu" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 id="modalMenuTitle" class="text-base font-bold text-slate-900">Tambah Menu Baru</h3>
+                <button onclick="tutupModalMenu()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+            </div>
+            <form id="formMenu" class="space-y-3 text-xs">
+                <input type="hidden" id="editIdMenu">
+                <div>
+                    <label class="block font-semibold mb-1">Nama Produk</label>
+                    <input type="text" id="inputNama" required class="w-full p-2.5 bg-slate-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Kategori</label>
+                    <select id="inputKategori" class="w-full p-2.5 bg-slate-50 border rounded-xl">
+                        <option value="Makanan">Makanan (Baris Merah)</option>
+                        <option value="Minuman">Minuman (Baris Biru)</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-semibold mb-1">Harga Modal (Rp)</label>
+                        <input type="number" id="inputHargaAwal" required class="w-full p-2.5 bg-slate-50 border rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Harga Jual (Rp)</label>
+                        <input type="number" id="inputHargaJual" required class="w-full p-2.5 bg-slate-50 border rounded-xl">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Deskripsi Produk</label>
+                    <textarea id="inputDeskripsi" rows="2" required class="w-full p-2.5 bg-slate-50 border rounded-xl"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Foto Produk</label>
+                    <input type="file" id="inputFoto" accept="image/*" class="w-full text-xs">
+                </div>
+                <button type="submit" id="btnSimpanMenu" class="w-full bg-amber-600 text-white font-bold py-3 rounded-xl shadow-md">Simpan Menu</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SETTING / PENGATURAN LENGKAP -->
     <div id="modalSetting" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
                 <h3 class="text-lg font-bold text-slate-900">⚙️ Panel Pengaturan & Laporan Bisnis</h3>
-                <button onclick="tutupModalSetting()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
+                <button onclick="tutupModalSetting()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
             </div>
 
             <div class="space-y-4 text-xs">
@@ -154,9 +197,7 @@
         </div>
     </div>
 
-    <!-- AUDIO NOTIFIKASI -->
-    <audio id="orderSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-
+    <!-- SCRIPT LOGIKA -->
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxWFYakEtuJanhbjHm0fhFfuTbAvkxAH8b-9fTtrN8JzcLmU8-8_LGdf3IsxeG8eHCM/exec";
         let activeResto = "";
@@ -193,24 +234,24 @@
                 const grid = document.getElementById('gridMenu');
                 let data = resData.data || [];
                 if(data.length === 0) {
-                    grid.innerHTML = `<p class="text-xs text-slate-400">Belum ada menu terdaftar.</p>`;
+                    grid.innerHTML = `<p class="text-xs text-slate-400">Belum ada menu terdaftar. Silakan tambah menu baru.</p>`;
                     return;
                 }
                 grid.innerHTML = "";
                 data.forEach(item => {
-                    let badgeColor = item.kategori === 'Minuman' ? 'bg-blue-100 text-blue-800' : 'bg-rose-100 text-rose-800';
+                    let badgeColor = item.kategori === 'Minuman' ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-rose-100 text-rose-800 border-rose-200';
                     let card = `
                         <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between">
                             <div>
                                 <img src="${item.gambar_url}" class="w-full h-32 object-cover rounded-xl mb-3" alt="Menu">
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${badgeColor}">${item.kategori || 'Makanan'}</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md border ${badgeColor}">${item.kategori || 'Makanan'}</span>
                                 <h4 class="font-bold text-sm text-slate-900 mt-1">${item.nama_menu}</h4>
                                 <p class="text-xs text-slate-500 mt-1">${item.deskripsi}</p>
                             </div>
                             <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
                                 <span class="font-extrabold text-amber-700 text-sm">Rp ${parseInt(item.harga_jual).toLocaleString()}</span>
                                 <div class="flex gap-1.5">
-                                    <button onclick="editMenu('${item.id_menu}', '${item.nama_menu}', '${item.kategori}', '${item.deskripsi}', '${item.harga_awal}', '${item.harga_jual}')" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs" title="Edit">✏️</button>
+                                    <button onclick="bukaFormEdit('${item.id_menu}', '${item.nama_menu}', '${item.kategori}', '${item.deskripsi}', '${item.harga_awal}', '${item.harga_jual}')" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs" title="Edit">✏️</button>
                                     <button onclick="hapusMenu('${item.id_menu}')" class="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs" title="Hapus">🗑️</button>
                                 </div>
                             </div>
@@ -219,6 +260,77 @@
                     grid.innerHTML += card;
                 });
             });
+        }
+
+        function bukaModalMenu() {
+            document.getElementById('modalMenuTitle').innerText = "Tambah Menu Baru";
+            document.getElementById('formMenu').reset();
+            document.getElementById('editIdMenu').value = "";
+            document.getElementById('modalMenu').classList.remove('hidden');
+        }
+
+        function tutupModalMenu() { document.getElementById('modalMenu').classList.add('hidden'); }
+
+        function bukaFormEdit(id, nama, kat, desk, awal, jual) {
+            document.getElementById('modalMenuTitle').innerText = "Edit Menu Produk";
+            document.getElementById('editIdMenu').value = id;
+            document.getElementById('inputNama').value = nama;
+            document.getElementById('inputKategori').value = kat;
+            document.getElementById('inputDeskripsi').value = desk;
+            document.getElementById('inputHargaAwal').value = awal;
+            document.getElementById('inputHargaJual').value = jual;
+            document.getElementById('modalMenu').classList.remove('hidden');
+        }
+
+        document.getElementById('formMenu').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const idMenu = document.getElementById('editIdMenu').value;
+            const nama = document.getElementById('inputNama').value;
+            const kategori = document.getElementById('inputKategori').value;
+            const hargaAwal = document.getElementById('inputHargaAwal').value;
+            const hargaJual = document.getElementById('inputHargaJual').value;
+            const deskripsi = document.getElementById('inputDeskripsi').value;
+            const file = document.getElementById('inputFoto').files[0];
+            const btn = document.getElementById('btnSimpanMenu');
+
+            btn.disabled = true;
+            btn.innerText = "Menyimpan ke Database...";
+
+            if (file) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    kirimDataMenu(idMenu ? 'editMenu' : 'tambahMenu', {
+                        id_menu: idMenu, resto: activeResto, nama_menu: nama, kategori: kategori,
+                        harga_awal: hargaAwal, harga_jual: hargaJual, deskripsi: deskripsi,
+                        image_base64: reader.result.split(',')[1], image_mime: file.type
+                    }, btn);
+                };
+            } else {
+                kirimDataMenu(idMenu ? 'editMenu' : 'tambahMenu', {
+                    id_menu: idMenu, resto: activeResto, nama_menu: nama, kategori: kategori,
+                    harga_awal: hargaAwal, harga_jual: hargaJual, deskripsi: deskripsi
+                }, btn);
+            }
+        });
+
+        function kirimDataMenu(actionType, payload, btn) {
+            payload.action = actionType;
+            fetch(GAS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+            .then(() => {
+                alert("Menu berhasil disimpan!");
+                tutupModalMenu();
+                muatMenuKlien();
+                btn.disabled = false;
+                btn.innerText = "Simpan Menu";
+            });
+        }
+
+        function hapusMenu(id) {
+            if(confirm("Yakin ingin menghapus menu ini?")) {
+                fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: 'hapusMenu', resto: activeResto, id_menu: id}) })
+                .then(() => { muatMenuKlien(); });
+            }
         }
 
         function salinLink() {
@@ -231,11 +343,8 @@
         function bukaModalSetting() { document.getElementById('modalSetting').classList.remove('hidden'); }
         function tutupModalSetting() { document.getElementById('modalSetting').classList.add('hidden'); }
         function simpanSettingPayment() { alert("Pengaturan pembayaran disimpan."); tutupModalSetting(); }
-        function muatReport( jenis ) { document.getElementById('containerReport').innerText = `Menampilkan rekapitulasi data ${jenis} secara otomatis...`; }
+        function muatReport(jenis) { document.getElementById('containerReport').innerText = `Menampilkan rekapitulasi data ${jenis}...`; }
         function bukaModalOrderMasuk() { alert("Membuka halaman khusus order masuk hijau hari ini."); }
-        function bukaModalTambahMenu() { alert("Fitur tambah menu pop-up."); }
-        function hapusMenu(id) { if(confirm("Yakin ingin menghapus menu ini?")) { fetch(GAS_URL, {method:'POST', mode:'no-cors', body:JSON.stringify({action:'hapusMenu', resto:activeResto, id_menu:id})}).then(()=>muatMenuKlien()); } }
-        function editMenu(id, nama, kat, desk, awal, jual) { alert("Edit menu: " + nama); }
     </script>
 </body>
 </html>
