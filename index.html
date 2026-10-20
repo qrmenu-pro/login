@@ -101,7 +101,7 @@
                         <span class="text-xl bg-white/20 p-2 rounded-xl">📂</span>
                     </button>
 
-                    <!-- Tombol Tambahkan Menu -->
+                    <!-- Tombol Tambahkan Menu Baru -->
                     <button onclick="bukaModalTambahMenu()" class="w-full bg-slate-900 hover:bg-slate-800 text-white p-4 rounded-3xl shadow-md transition flex items-center justify-between text-left">
                         <div>
                             <h3 class="text-base font-bold">➕ Tambahkan Menu Baru</h3>
@@ -140,11 +140,11 @@
                         <tr class="bg-slate-100 border-b text-slate-700 font-bold">
                             <th class="p-3">Waktu</th>
                             <th class="p-3">Nama Pemesan</th>
-                            <th class="p-3">No. WhatsApp</th>
+                            <th class="p-3">Nomor WA</th>
                             <th class="p-3">Jenis Orderan & Jumlah</th>
                             <th class="p-3">Total Harga</th>
-                            <th class="p-3">No. Meja / Alamat</th>
-                            <th class="p-3 text-center">Metode Bayar</th>
+                            <th class="p-3">Nomor Meja</th>
+                            <th class="p-3 text-center">Metode Bayar (Transfer/Cash/QRIS)</th>
                         </tr>
                     </thead>
                     <tbody id="tabelOrderList" class="divide-y divide-slate-100">
@@ -182,7 +182,7 @@
                     <input type="text" id="inputNama" required class="w-full p-2.5 bg-slate-50 border rounded-xl">
                 </div>
                 <div>
-                    <label class="block font-semibold mb-1">Kategori (Warna Baris Sheet)</label>
+                    <label class="block font-semibold mb-1">Kategori</label>
                     <select id="inputKategori" class="w-full p-2.5 bg-slate-50 border rounded-xl">
                         <option value="Makanan">Makanan (Latar Merah)</option>
                         <option value="Minuman">Minuman (Latar Biru)</option>
@@ -211,7 +211,7 @@
         </div>
     </div>
 
-    <!-- MODAL PENGATURAN LENGKAP (GERIGI) -->
+    <!-- MODAL PENGATURAN LENGKAP -->
     <div id="modalSetting" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-4">
@@ -234,9 +234,9 @@
 
                 <!-- Setting Payment (Bank, E-Wallet, Atas Nama, Norek, QRIS Barcode) -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-3">
-                    <h4 class="font-bold text-slate-800 text-sm">💳 Setting Payment (Transfer & QRIS Barcode)</h4>
+                    <h4 class="font-bold text-slate-800 text-sm">💳 Setting Payment (Transfer, E-Wallet & QRIS Barcode)</h4>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="setBank" placeholder="Nama Bank / E-Wallet (Cth: BCA / Dana)" class="p-2.5 bg-white border rounded-xl">
+                        <input type="text" id="setBank" placeholder="Bank / E-Wallet (Cth: BCA / DANA)" class="p-2.5 bg-white border rounded-xl">
                         <input type="text" id="setNorek" placeholder="Nomor Rekening / No E-Wallet" class="p-2.5 bg-white border rounded-xl">
                     </div>
                     <input type="text" id="setAn" placeholder="Atas Nama Pemilik" class="w-full p-2.5 bg-white border rounded-xl">
@@ -247,14 +247,15 @@
                     <button onclick="simpanSettingPayment()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl">Simpan Metode Pembayaran</button>
                 </div>
 
-                <!-- Pusat Report Berbentuk Tabel (Mingguan, Bulanan, Kategori, Konsumen) -->
+                <!-- Pusat Report Berbentuk Tabel (Bulanan, Harian, Mingguan, Kategori, Konsumen) -->
                 <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
                     <h4 class="font-bold text-amber-900 text-sm">📊 Pusat Laporan Berbentuk Tabel</h4>
                     <div class="flex gap-2 flex-wrap">
+                        <button onclick="muatReportTabel('harian')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Harian</button>
                         <button onclick="muatReportTabel('mingguan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Mingguan</button>
                         <button onclick="muatReportTabel('bulanan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Bulanan</button>
                         <button onclick="muatReportTabel('kategori')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Kategori</button>
-                        <button onclick="muatReportTabel('konsumen')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Data Konsumen (WA + Meja)</button>
+                        <button onclick="muatReportTabel('konsumen')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Data Konsumen (Nomor WA + Nomor Meja)</button>
                     </div>
                     <div id="containerReportTabel" class="mt-3 p-3 bg-white rounded-xl border overflow-x-auto text-[11px]">
                         <p class="text-slate-400">Pilih salah satu tombol laporan di atas untuk melihat tabel rincian.</p>
@@ -434,8 +435,8 @@
         function muatReportTabel(jenis) {
             document.getElementById('containerReportTabel').innerHTML = `
                 <table class="w-full text-left border-collapse">
-                    <thead><tr class="bg-slate-100 border-b"><th class="p-2">Periode / Kategori</th><th class="p-2">Total Transaksi</th><th class="p-2">Omset (Rp)</th></tr></thead>
-                    <tbody><tr><td class="p-2">Contoh ${jenis}</td><td class="p-2">12 Pesanan</td><td class="p-2">Rp 450.000</td></tr></tbody>
+                    <thead><tr class="bg-slate-100 border-b"><th class="p-2">Nomor WA</th><th class="p-2">Nomor Meja</th><th class="p-2">Report ${jenis.toUpperCase()}</th><th class="p-2">Total Penjualan</th></tr></thead>
+                    <tbody><tr><td class="p-2">08123456789</td><td class="p-2">Meja 01</td><td class="p-2">Aman / Terkonfirmasi</td><td class="p-2">Rp 450.000</td></tr></tbody>
                 </table>`;
         }
 
