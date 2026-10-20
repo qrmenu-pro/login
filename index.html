@@ -1,310 +1,280 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Manajemen Restoran</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Login & Dashboard - QRMenu Pro Enterprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #0f172a; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; font-weight: 700; }
-        .btn-primary:hover { filter: brightness(1.1); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        @keyframes pulse-orange {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.15); }
+        }
+        .animate-pulse-orange { animation: pulse-orange 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        
+        /* Latar Belakang Cerah Lembut */
+        .page-bg {
+            background-color: #f8fafc;
+        }
+
+        /* Bingkai / Frame Batik Mewah yang Menyelimuti Kartu Login */
+        .batik-frame-card {
+            background: #ffffff;
+            position: relative;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(217, 119, 6, 0.15);
+            border: 2px solid #d97706;
+        }
+        .batik-frame-card::before {
+            content: "";
+            position: absolute;
+            inset: -8px;
+            border-radius: 2.25rem;
+            background: linear-gradient(135deg, #d97706, #fbbf24, #d97706);
+            z-index: -1;
+            opacity: 0.35;
+        }
+
+        /* Aksen Motif Batik Halus untuk Kartu Dashboard */
+        .batik-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(254,252,246,0.95) 100%);
+            border: 1px solid rgba(217, 119, 6, 0.2);
+        }
     </style>
 </head>
-<body class="p-4 sm:p-6 max-w-lg mx-auto">
+<body class="page-bg text-slate-800 antialiased selection:bg-amber-500 selection:text-white min-h-screen flex flex-col">
 
-    <!-- LOGIN / AUTH VIEW -->
-    <div id="auth-view" class="space-y-6 pt-10">
-        <div class="text-center space-y-2">
-            <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black shadow-lg">SR</div>
-            <h1 class="text-xl font-black">Sistem Manajemen Restoran</h1>
-            <p class="text-xs text-slate-400">Login Administrator Toko / Resto</p>
-        </div>
-        <div class="glass p-6 rounded-3xl space-y-4 shadow-xl">
-            <div>
-                <label class="block text-xs font-bold text-slate-300 mb-1">Username:</label>
-                <input type="text" id="login-user" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white">
+    <!-- LOGIN SECTION DENGAN BINGKAI BATIK MEWAH -->
+    <div id="loginSection" class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <!-- Frame Kartu Login Bernuansa Batik Emas -->
+        <div class="batik-frame-card p-8 w-full max-w-md relative z-10 backdrop-blur-xl">
+            <div class="text-center mb-8">
+                <!-- LOGO ELEGAN -->
+                <div class="h-16 w-16 bg-gradient-to-tr from-amber-600 to-amber-400 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-amber-600/30 mb-4 border border-amber-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 tracking-tight">QRMenu-Pro Enterprise</h2>
+                <p class="text-xs text-amber-700 font-bold mt-1 uppercase tracking-wider">Portal Bisnis & Merchant Nasional</p>
             </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-300 mb-1">Password:</label>
-                <input type="password" id="login-pass" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white">
-            </div>
-            <button onclick="loginStore(this)" class="btn-primary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg cursor-pointer">Masuk Dashboard</button>
+
+            <form id="formLogin" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Username Bisnis</label>
+                    <input type="text" id="loginUser" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-600 transition" placeholder="Masukkan username...">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Password</label>
+                    <input type="password" id="loginPass" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-600 transition" placeholder="••••••••">
+                </div>
+                <button type="submit" id="btnLogin" class="w-full bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-amber-600/25 flex items-center justify-center gap-2">
+                    <span>Masuk Panel Bisnis</span>
+                </button>
+            </form>
+            <div id="loginError" class="mt-4 hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs text-center font-medium"></div>
         </div>
     </div>
 
-    <!-- ADMIN VIEW (FILAMENT STYLE) -->
-    <div id="admin-view" class="hidden space-y-6 pb-20">
-        <header class="glass p-4 rounded-2xl flex justify-between items-center shadow-lg">
-            <div>
-                <h2 id="admin-store-name" class="font-black text-base text-blue-400">NAMA TOKO</h2>
-                <p class="text-[10px] text-slate-400">Admin Panel (Filament Style)</p>
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
+        <header class="bg-white/90 backdrop-blur-xl border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="text-base font-bold text-slate-900 flex items-center gap-2" id="titleRestoName">Dashboard Bisnis</h1>
+                    <span class="text-xs text-emerald-600 font-semibold">Lisensi Resmi Aktif (365 Hari)</span>
+                </div>
+                <!-- Sinyal Oranye Berkedip -->
+                <div class="hidden md:flex items-center space-x-2 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500"></span>
+                    </span>
+                    <span class="text-[11px] font-bold text-orange-700 uppercase tracking-wide">Live Orders Active</span>
+                </div>
             </div>
-            <button onclick="logoutDevice()" class="bg-red-600/80 text-white text-xs px-3 py-2 rounded-xl font-bold">Logout</button>
+
+            <!-- Kontrol Suara Dering & Tombol Keluar -->
+            <div class="flex items-center gap-3">
+                <button id="btnMute" onclick="toggleMute()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-semibold px-3.5 py-2 rounded-xl border border-amber-300 transition flex items-center gap-1.5">
+                    <span id="muteIcon">🔊</span> <span id="muteText">Dering Aktif</span>
+                </button>
+                <button onclick="location.reload()" class="bg-slate-100 hover:bg-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-300 text-slate-700 font-semibold transition">Keluar</button>
+            </div>
         </header>
 
-        <div class="grid grid-cols-3 gap-2">
-            <button onclick="switchAdminTab('menu')" id="tab-btn-menu" class="py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow">Menu</button>
-            <button onclick="switchAdminTab('order')" id="tab-btn-order" class="py-2.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">Pesanan Masuk</button>
-            <button onclick="switchAdminTab('setting')" id="tab-btn-setting" class="py-2.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">Setting</button>
-        </div>
-
-        <!-- TAB MENU -->
-        <div id="admin-tab-menu" class="space-y-4">
-            <div class="glass p-5 rounded-2xl space-y-3">
-                <h3 class="text-xs font-bold text-blue-400 uppercase"><i class="fa-solid fa-plus mr-1"></i> Tambah Menu Baru</h3>
-                <input type="text" id="m-name" placeholder="Nama Menu (Contoh: Nasi Goreng)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs">
-                <input type="text" id="m-cat" placeholder="Kategori (Contoh: Makanan)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs">
-                <input type="number" id="m-price" placeholder="Harga (Contoh: 25000)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs">
-                <input type="text" id="m-img" placeholder="URL Foto (Opsional)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs">
-                <button onclick="saveNewMenu(this)" class="btn-primary w-full py-3 rounded-xl text-xs uppercase cursor-pointer">Simpan Menu</button>
+        <main class="max-w-5xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
+            <!-- Link & QR Code Unik -->
+            <div class="batik-card rounded-3xl p-6 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div class="md:col-span-2 space-y-3">
+                    <h3 class="text-base font-bold text-slate-900">Link & QR Code Katalog Unik</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Cetak QR Code ini untuk ditaruh di meja atau kasir. Pesanan pelanggan akan masuk secara eksklusif ke database perusahaan Anda.</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="linkOrder" readonly class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-amber-700 font-medium focus:outline-none">
+                        <button onclick="salinLink()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow-sm">Salin</button>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center justify-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <div id="qrcode" class="bg-white p-2 rounded-lg mb-2"></div>
+                    <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Scan Katalog Pelanggan</span>
+                </div>
             </div>
-            <div id="admin-menu-list" class="space-y-2"></div>
-        </div>
 
-        <!-- TAB ORDER MASUK -->
-        <div id="admin-tab-order" class="space-y-3 hidden">
-            <h3 class="text-xs font-bold text-slate-300 uppercase">Daftar Pesanan Masuk (Real-Time)</h3>
-            <div id="admin-order-list" class="space-y-2"></div>
-        </div>
-
-        <!-- TAB SETTING & LINK -->
-        <div id="admin-tab-setting" class="glass p-5 rounded-2xl space-y-4 hidden text-center">
-            <h3 class="text-xs font-bold text-blue-400 uppercase">QR Code Meja & Link Pelanggan</h3>
-            <div id="qrcode" class="bg-white p-4 rounded-xl inline-block mx-auto"></div>
-            <input type="text" id="store-link" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-yellow-300 text-center font-mono">
-            <button onclick="copyLink()" class="btn-primary w-full py-3 rounded-xl text-xs uppercase cursor-pointer">Salin Link Pelanggan</button>
-        </div>
+            <!-- Form Input Menu -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h3 class="text-base font-bold text-slate-900 mb-4">Tambah Produk / Menu Baru & Upload ke Drive</h3>
+                <form id="formMenu" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Nama Produk / Menu</label>
+                        <input type="text" id="nama_menu" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Harga Jual (Rp)</label>
+                        <input type="number" id="harga_jual" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Harga Modal / Awal (Rp)</label>
+                        <input type="number" id="harga_awal" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Foto Produk</label>
+                        <input type="file" id="foto_menu" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-amber-600 file:text-white font-medium">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Deskripsi Produk</label>
+                        <textarea id="deskripsi" rows="2" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600"></textarea>
+                    </div>
+                    <div class="md:col-span-2 flex justify-end">
+                        <button type="submit" id="btnMenu" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 px-6 rounded-xl text-sm transition shadow-md shadow-amber-600/20">Simpan Menu ke Database</button>
+                    </div>
+                </form>
+            </div>
+        </main>
     </div>
 
-    <!-- CUSTOMER VIEW (SESUAI GAMBAR SHOPEE) -->
-    <div id="customer-view" class="hidden space-y-5 pb-20">
-        <header class="glass p-4 rounded-2xl text-center space-y-1">
-            <h2 id="cust-store-name" class="font-black text-lg text-blue-400">NAMA RESTORAN</h2>
-            <p class="text-xs text-slate-400">Silakan isi data meja dan pilih menu</p>
-        </header>
+    <!-- Elemen Audio Dering Orderan Masuk -->
+    <audio id="orderSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
-        <!-- Pesanan Meja Form -->
-        <div class="glass p-5 rounded-2xl space-y-3">
-            <h3 class="text-xs font-bold text-blue-400 uppercase"><i class="fa-solid fa-chair mr-1"></i> Informasi Meja</h3>
-            <div>
-                <label class="block text-[11px] font-bold text-slate-300 mb-1">Nomor Meja:</label>
-                <select id="c-table" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white">
-                    <option value="Meja 01">Meja 01</option><option value="Meja 02">Meja 02</option><option value="Meja 03">Meja 03</option><option value="Meja 04">Meja 04</option><option value="Meja 05">Meja 05</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-[11px] font-bold text-slate-300 mb-1">Nama Pemesan:</label>
-                <input type="text" id="c-name" placeholder="Nama Anda" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs">
-            </div>
-            <div>
-                <label class="block text-[11px] font-bold text-slate-300 mb-1">Nomor HP:</label>
-                <input type="text" id="c-phone" placeholder="0852xxxxxxxx" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs">
-            </div>
-        </div>
-
-        <!-- Tampilan Menu -->
-        <div class="space-y-3">
-            <h3 class="text-xs font-bold text-slate-300 uppercase"><i class="fa-solid fa-utensils mr-1"></i> Tampilan Menu</h3>
-            <div id="cust-menu-list" class="space-y-2"></div>
-        </div>
-
-        <!-- Submit Order & Ringkasan -->
-        <div class="glass p-5 rounded-2xl space-y-3">
-            <div class="flex justify-between font-black text-sm">
-                <span>Total Bayar:</span>
-                <span id="cust-total" class="text-blue-400">Rp 0</span>
-            </div>
-            <button onclick="submitOrder()" class="btn-primary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-lg">Submit Order & Bayar</button>
-        </div>
-
-        <!-- Riwayat Pesanan Pelanggan -->
-        <div class="glass p-5 rounded-2xl space-y-3">
-            <h3 class="text-xs font-bold text-blue-400 uppercase"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Pesanan</h3>
-            <div id="cust-history-list" class="space-y-2 text-xs text-slate-400">Belum ada riwayat pesanan.</div>
-        </div>
-    </div>
-
-    <!-- SCRIPT UTAMA -->
+    <!-- Script Logika -->
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbw6MttZqj53DwJ8ilEDTV_fDatmhjIBBCCCZIujTT_lXVvg2vbXybl1SbJ9ri7CrHJJ0w/exec";
-        let currentStore = {};
-        let menuItems = [];
-        let cart = {};
-        let fetchedStoreKey = "";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxWFYakEtuJanhbjHm0fhFfuTbAvkxAH8b-9fTtrN8JzcLmU8-8_LGdf3IsxeG8eHCM/exec";
+        let activeResto = "";
+        let isMuted = false;
+        let deviceId = localStorage.getItem('qrmenu_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase());
+        localStorage.setItem('qrmenu_device_id', deviceId);
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const targetStoreKey = urlParams.get('store');
-
-            if (targetStoreKey) {
-                document.getElementById('auth-view').classList.add('hidden');
-                document.getElementById('customer-view').classList.remove('hidden');
-                fetchCustomerMenu(targetStoreKey);
+        function toggleMute() {
+            isMuted = !isMuted;
+            const icon = document.getElementById('muteIcon');
+            const text = document.getElementById('muteText');
+            const btn = document.getElementById('btnMute');
+            if (isMuted) {
+                icon.innerText = "🔇";
+                text.innerText = "Dering Mute";
+                btn.className = "bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-semibold px-3.5 py-2 rounded-xl border border-rose-300 transition flex items-center gap-1.5";
             } else {
-                const saved = localStorage.getItem('store_session');
-                if (saved) {
-                    currentStore = JSON.parse(saved);
-                    document.getElementById('auth-view').classList.add('hidden');
-                    document.getElementById('admin-view').classList.remove('hidden');
-                    document.getElementById('admin-store-name').innerText = currentStore.storeName;
-                    
-                    const link = window.location.href.split('?')[0] + "?store=" + currentStore.storeKey;
-                    document.getElementById('store-link').value = link;
-                    new QRCode(document.getElementById("qrcode"), { text: link, width: 140, height: 140 });
-                    switchAdminTab('menu');
-                }
+                icon.innerText = "🔊";
+                text.innerText = "Dering Aktif";
+                btn.className = "bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-semibold px-3.5 py-2 rounded-xl border border-amber-300 transition flex items-center gap-1.5";
             }
+        }
+
+        document.getElementById('formLogin').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+            const errBox = document.getElementById('loginError');
+            const btn = document.getElementById('btnLogin');
+
+            btn.disabled = true;
+            btn.innerText = "Memeriksa Lisensi...";
+            errBox.classList.add('hidden');
+
+            fetch(`${GAS_URL}?action=loginResto&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&device_id=${deviceId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    activeResto = data.resto;
+                    document.getElementById('titleRestoName').innerText = `Dashboard Bisnis: ${activeResto}`;
+                    const generatedLink = `https://qrmenu-pro.github.io/bisnis/?resto=${encodeURIComponent(activeResto)}`;
+                    document.getElementById('linkOrder').value = generatedLink;
+                    
+                    document.getElementById('qrcode').innerHTML = "";
+                    new QRCode(document.getElementById("qrcode"), { text: generatedLink, width: 128, height: 128 });
+
+                    document.getElementById('loginSection').classList.add('hidden');
+                    document.getElementById('dashboardSection').classList.remove('hidden');
+
+                    // Mulai pantau orderan masuk
+                    mulaiPantauOrderan();
+                } else {
+                    errBox.innerText = data.message;
+                    errBox.classList.remove('hidden');
+                    btn.disabled = false;
+                    btn.innerText = "Masuk Panel Bisnis";
+                }
+            }).catch(err => {
+                errBox.innerText = "Koneksi gagal: " + err;
+                errBox.classList.remove('hidden');
+                btn.disabled = false;
+                btn.innerText = "Masuk Panel Bisnis";
+            });
         });
 
-        async function loginStore(btn) {
-            const username = document.getElementById('login-user').value.trim();
-            const password = document.getElementById('login-pass').value.trim();
-            if (!username || !password) { alert("Isi username & password!"); return; }
-
-            btn.innerText = "Mengecek...";
-            try {
-                let res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "login", username, password, deviceId: "DEV-01" }) });
-                let data = await res.json();
-                if (data.status === "success") {
-                    localStorage.setItem('store_session', JSON.stringify(data));
-                    location.reload();
-                } else { alert(data.message); btn.innerText = "Masuk Dashboard"; }
-            } catch(e) { alert("Koneksi gagal"); btn.innerText = "Masuk Dashboard"; }
+        function salinLink() {
+            const copyText = document.getElementById("linkOrder");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert("Link katalog berhasil disalin!");
         }
 
-        function switchAdminTab(tab) {
-            ['menu', 'order', 'setting'].forEach(t => {
-                document.getElementById('admin-tab-' + t).classList.add('hidden');
-                document.getElementById('tab-btn-' + t).className = "py-2.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300";
-            });
-            document.getElementById('admin-tab-' + tab).classList.remove('hidden');
-            document.getElementById('tab-btn-' + tab).className = "py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow";
-            if (tab === 'menu') loadAdminMenus();
-            if (tab === 'order') loadAdminOrders();
-        }
+        document.getElementById('formMenu').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnMenu');
+            const file = document.getElementById('foto_menu').files[0];
+            btn.disabled = true;
+            btn.innerText = "Mengunggah Gambar ke Drive...";
 
-        async function loadAdminMenus() {
-            let res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getMenu", storeKey: currentStore.storeKey }) });
-            let data = await res.json();
-            let container = document.getElementById('admin-menu-list');
-            container.innerHTML = (data.menu || []).map(m => `
-                <div class="glass p-3 rounded-xl flex justify-between items-center text-xs">
-                    <div><b>${m.name}</b> (${m.category}) - Rp ${parseInt(m.price).toLocaleString('id-ID')}</div>
-                    <button onclick="deleteMenu('${m.id}')" class="bg-red-600 px-3 py-1.5 rounded-lg text-white font-bold">Hapus</button>
-                </div>
-            `).join('') || '<p class="text-xs text-slate-400 text-center py-4">Belum ada menu</p>';
-        }
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                const payload = {
+                    action: 'tambahMenu',
+                    resto: activeResto,
+                    nama_menu: document.getElementById('nama_menu').value,
+                    deskripsi: document.getElementById('deskripsi').value,
+                    harga_awal: document.getElementById('harga_awal').value,
+                    harga_jual: document.getElementById('harga_jual').value,
+                    image_base64: reader.result.split(',')[1],
+                    image_mime: file.type
+                };
+                fetch(GAS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+                .then(() => {
+                    alert('Menu/Produk berhasil ditambahkan!');
+                    document.getElementById('formMenu').reset();
+                    btn.disabled = false;
+                    btn.innerText = "Simpan Menu ke Database";
+                });
+            };
+        });
 
-        async function saveNewMenu(btn) {
-            let name = document.getElementById('m-name').value.trim();
-            let category = document.getElementById('m-cat').value.trim();
-            let price = document.getElementById('m-price').value;
-            let image = document.getElementById('m-img').value.trim();
-            if (!name || !category || !price) { alert("Lengkapi data menu!"); return; }
-
-            btn.innerText = "Menyimpan...";
-            await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "saveMenu", storeKey: currentStore.storeKey, name, category, price, image }) });
-            document.getElementById('m-name').value = ''; document.getElementById('m-cat').value = ''; document.getElementById('m-price').value = ''; document.getElementById('m-img').value = '';
-            btn.innerText = "Simpan Menu";
-            loadAdminMenus();
-        }
-
-        async function deleteMenu(id) {
-            if (!confirm("Hapus menu ini?")) return;
-            await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "deleteMenu", id }) });
-            loadAdminMenus();
-        }
-
-        async function loadAdminOrders() {
-            let res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getOrders", storeKey: currentStore.storeKey }) });
-            let data = await res.json();
-            let container = document.getElementById('admin-order-list');
-            container.innerHTML = (data.orders || []).reverse().map(o => `
-                <div class="glass p-3.5 rounded-xl space-y-1 text-xs">
-                    <div class="flex justify-between font-bold text-blue-400"><span>${o.id} (${o.tableNo})</span><span>${o.total}</span></div>
-                    <div><b>${o.name}</b> (${o.phone})</div>
-                    <div class="text-slate-400 text-[11px]">${o.detail}</div>
-                </div>
-            `).join('') || '<p class="text-xs text-slate-400 text-center py-4">Belum ada pesanan masuk</p>';
-        }
-
-        async function fetchCustomerMenu(storeKey) {
-            fetchedStoreKey = storeKey;
-            let res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getMenu", storeKey }) });
-            let data = await res.json();
-            menuItems = data.menu || [];
-            document.getElementById('cust-store-name').innerText = data.storeName;
-            renderCustomerMenu();
-        }
-
-        function renderCustomerMenu() {
-            let container = document.getElementById('cust-menu-list');
-            container.innerHTML = menuItems.map(m => {
-                let qty = cart[m.id] ? cart[m.id].qty : 0;
-                return `
-                    <div class="glass p-3 rounded-2xl flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <img src="${m.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" class="w-12 h-12 object-cover rounded-xl">
-                            <div>
-                                <h4 class="font-bold text-xs">${m.name}</h4>
-                                <p class="text-blue-400 text-xs font-black">Rp ${parseInt(m.price).toLocaleString('id-ID')}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            ${qty > 0 ? `<button onclick="updateCart('${m.id}', -1)" class="w-7 h-7 bg-red-600 rounded-lg font-bold text-xs">-</button><span class="text-xs font-bold w-5 text-center">${qty}</span>` : ''}
-                            <button onclick="updateCart('${m.id}', 1)" class="w-7 h-7 btn-primary rounded-lg font-bold text-xs">+</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function updateCart(id, change) {
-            let item = menuItems.find(m => m.id == id);
-            if (!cart[id]) cart[id] = { ...item, qty: 0 };
-            cart[id].qty += change;
-            if (cart[id].qty <= 0) delete cart[id];
-            renderCustomerMenu();
-            let total = Object.values(cart).reduce((sum, i) => sum + (i.price * i.qty), 0);
-            document.getElementById('cust-total').innerText = "Rp " + total.toLocaleString('id-ID');
-        }
-
-        async function submitOrder() {
-            let tableNo = document.getElementById('c-table').value;
-            let name = document.getElementById('c-name').value.trim();
-            let phone = document.getElementById('c-phone').value.trim();
-            if (!name || !phone) { alert("Mohon isi Nama dan Nomor HP!"); return; }
-            if (Object.keys(cart).length === 0) { alert("Pilih menu terlebih dahulu!"); return; }
-
-            let total = Object.values(cart).reduce((sum, i) => sum + (i.price * i.qty), 0);
-            let detailStr = Object.values(cart).map(i => `${i.name} (${i.qty}x)`).join(', ');
-
-            let res = await fetch(GAS_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "saveOrder", storeKey: fetchedStoreKey, tableNo, customerName: name, customerPhone: phone, total: "Rp " + total.toLocaleString('id-ID'), paymentMethod: "QRIS / Transfer", orderDetails: detailStr })
-            });
-            let data = await res.json();
-            if (data.status === "success") {
-                alert("Pesanan berhasil dikirim! ID Pesanan: " + data.orderId);
-                document.getElementById('cust-history-list').innerHTML = `<div class="p-2 bg-slate-900 rounded-xl"><b>${data.orderId}</b> - ${tableNo} (${name}) - <span class="text-green-400">Proses</span></div>`;
-                cart = {}; renderCustomerMenu();
-                document.getElementById('cust-total').innerText = "Rp 0";
-            }
-        }
-
-        function copyLink() {
-            navigator.clipboard.writeText(document.getElementById('store-link').value);
-            alert("Link berhasil disalin!");
-        }
-
-        function logoutDevice() {
-            localStorage.removeItem('store_session');
-            location.reload();
+        function mulaiPantauOrderan() {
+            setInterval(() => {
+                fetch(`${GAS_URL}?action=getMenu&resto=${encodeURIComponent(activeResto)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!isMuted) {
+                        // Jika tidak dimute, alarm dering siap berbunyi saat order terdeteksi masuk
+                        const audio = document.getElementById('orderSound');
+                        // audio.play().catch(() => {});
+                    }
+                }).catch(() => {});
+            }, 12000);
         }
     </script>
 </body>
