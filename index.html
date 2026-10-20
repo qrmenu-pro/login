@@ -6,33 +6,7 @@
     <title>Admin Dashboard Enterprise - QRMenu-Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <!-- INLINE WEB APP MANIFEST UNTUK PWABUILDER -->
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{
-      "name": "QRMenu-Pro Admin",
-      "short_name": "QRAdmin",
-      "start_url": "/",
-      "display": "standalone",
-      "background_color": "#0f172a",
-      "theme_color": "#d97706",
-      "orientation": "portrait",
-      "description": "Aplikasi pengelola order masuk dan manajemen resto QRMenu-Pro",
-      "icons": [
-        {
-          "src": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
-          "sizes": "192x192",
-          "type": "image/png"
-        },
-        {
-          "src": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
-          "sizes": "512x512",
-          "type": "image/png"
-        }
-      ]
-    }'>
     <meta name="theme-color" content="#d97706">
-
-    <!-- Leaflet CSS untuk Modal Peta Pelanggan -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -102,7 +76,7 @@
             </div>
 
             <div class="flex items-center gap-3">
-                <button onclick="bukaModalSetting()" class="bg-slate-100 hover:bg-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-300 font-semibold flex items-center gap-1.5 shadow-sm">⚙️ Pengaturan</button>
+                <button onclick="bukaModalSetting()" class="bg-slate-100 hover:bg-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-300 font-semibold flex items-center gap-1.5 shadow-sm">Pengaturan</button>
                 <button onclick="location.reload()" class="bg-rose-50 hover:bg-rose-100 text-xs px-3.5 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold">Keluar</button>
             </div>
         </header>
@@ -174,8 +148,8 @@
                             <th class="p-3">Total Harga</th>
                             <th class="p-3">Nomor Meja</th>
                             <th class="p-3 text-center">Metode Bayar</th>
-                            <th class="p-3 text-center">Aksi WhatsApp</th>
-                            <th class="p-3 text-center">Pantau Koordinat Tamu</th>
+                            <th class="p-3 text-center">Aksi WA</th>
+                            <th class="p-3 text-center">GPS Tamu</th>
                         </tr>
                     </thead>
                     <tbody id="tabelOrderList" class="divide-y divide-slate-100">
@@ -227,8 +201,8 @@
                 <div>
                     <label class="block font-semibold mb-1">Kategori</label>
                     <select id="inputKategori" class="w-full p-2.5 bg-slate-50 border rounded-xl">
-                        <option value="Makanan">Makanan (Latar Merah)</option>
-                        <option value="Minuman">Minuman (Latar Biru)</option>
+                        <option value="Makanan">Makanan</option>
+                        <option value="Minuman">Minuman</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
@@ -254,36 +228,45 @@
         </div>
     </div>
 
-    <!-- MODAL PENGATURAN & LAPORAN OTOMATIS -->
+    <!-- MODAL PENGATURAN LENGKAP -->
     <div id="modalSetting" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-4">
-                <h3 class="text-lg font-bold text-slate-900">⚙️ Panel Pengaturan & Laporan Bisnis</h3>
+                <h3 class="text-lg font-bold text-slate-900">Panel Pengaturan & Laporan Bisnis</h3>
                 <button onclick="tutupModalSetting()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
             </div>
 
-            <div class="space-y-4 text-xs">
+            <div class="space-y-6 text-xs">
+                <!-- Setting Akun -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
-                    <h4 class="font-bold text-slate-800 text-sm">🔔 Setting Notifikasi Dering Order</h4>
-                    <button onclick="testAudio()" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl">🔊 Tes Dering Order</button>
+                    <h4 class="font-bold text-slate-800 text-sm">Setting Akun & Live Chat Super Admin</h4>
+                    <p class="text-slate-500">Live chat terhubung langsung ke panel Super Admin pusat untuk bantuan teknis.</p>
+                </div>
+
+                <!-- Setting Notifikasi -->
+                <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
+                    <h4 class="font-bold text-slate-800 text-sm">Setting Notifikasi Dering Order</h4>
+                    <button onclick="testAudio()" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl">Tes Dering Order</button>
                 </div>
                 
+                <!-- Setting Payment -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-3">
-                    <h4 class="font-bold text-slate-800 text-sm">💳 Setting Payment (Transfer & QRIS Barcode)</h4>
+                    <h4 class="font-bold text-slate-800 text-sm">Setting Payment (Bank, E-Wallet, & QRIS Barcode)</h4>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="setBank" placeholder="Bank (Cth: BCA)" class="p-2.5 bg-white border rounded-xl">
-                        <input type="text" id="setNorek" placeholder="Nomor Rekening" class="p-2.5 bg-white border rounded-xl">
+                        <input type="text" id="setBank" placeholder="Bank / E-Wallet (Cth: BCA / Dana)" class="p-2.5 bg-white border rounded-xl">
+                        <input type="text" id="setNorek" placeholder="Nomor Rekening / No Akun" class="p-2.5 bg-white border rounded-xl">
                     </div>
                     <input type="text" id="setAn" placeholder="Atas Nama Pemilik" class="w-full p-2.5 bg-white border rounded-xl">
                     <div>
-                        <label class="block text-[11px] text-slate-500 mb-1">Upload Barcode QRIS Pembayaran</label>
+                        <label class="block text-[11px] text-slate-500 mb-1">Upload QRIS Barcode Pembayaran</label>
                         <input type="file" id="setQrisFile" accept="image/*" class="w-full text-xs">
                     </div>
                     <button onclick="simpanSettingPayment()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl">Simpan Metode Pembayaran</button>
                 </div>
 
+                <!-- Pusat Laporan Berbentuk Tabel -->
                 <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
-                    <h4 class="font-bold text-amber-900 text-sm">📊 Pusat Laporan Otomatis (Real-Time Sheet)</h4>
+                    <h4 class="font-bold text-amber-900 text-sm">Pusat Laporan & Report Otomatis (Format Tabel)</h4>
                     <div class="flex gap-2 flex-wrap">
                         <button onclick="muatReportTabel('harian')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Harian</button>
                         <button onclick="muatReportTabel('mingguan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Mingguan</button>
@@ -292,7 +275,7 @@
                         <button onclick="muatReportTabel('konsumen')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Data Konsumen</button>
                     </div>
                     <div id="containerReportTabel" class="mt-3 p-3 bg-white rounded-xl border overflow-x-auto text-[11px]">
-                        <p class="text-slate-400">Pilih salah satu tombol laporan di atas untuk melihat tabel rincian.</p>
+                        <p class="text-slate-400">Pilih salah satu tombol laporan di atas untuk melihat tabel rincian data.</p>
                     </div>
                 </div>
             </div>
@@ -302,7 +285,6 @@
     <!-- AUDIO NOTIFIKASI -->
     <audio id="orderSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
-    <!-- Leaflet JS untuk Peta Pelanggan -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxi7tce2iHuEPgYggs2ECsjgMJUWyA071G-tDUeNKuiw14lcdE-H9n2BdMLf68PPaHQ/exec";
@@ -315,7 +297,6 @@
         let lastOrderCount = 0;
         let pollingInterval = null;
 
-        // FUNGSI PEMBERSIH NOMOR WHATSAPP (OTOMATIS AWALAN 62)
         function formatNomorWA(nomor) {
             if (!nomor) return '';
             let cleaned = String(nomor).replace(/\D/g, '');
@@ -354,8 +335,6 @@
 
                     if(pollingInterval) clearInterval(pollingInterval);
                     pollingInterval = setInterval(() => { muatOrderMasuk(false); }, 5000);
-
-                    kirimSinyalGeolokasiSuperAdmin(activeResto);
                 } else {
                     errBox.innerText = data.message;
                     errBox.classList.remove('hidden');
@@ -385,10 +364,8 @@
 
                 tbody.innerHTML = "";
                 orders.forEach(ord => {
-                    let latTamu = localStorage.getItem('tamu_lat') || -6.9175;
-                    let lonTamu = localStorage.getItem('tamu_lon') || 107.6191;
-
-                    // Bersihkan nomor WA menggunakan fungsi formatNomorWA
+                    let latTamu = -6.9175;
+                    let lonTamu = 107.6191;
                     let bersihWA = formatNomorWA(ord.nomor_wa);
                     let pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto}. Pesanan Anda sedang diproses.`);
                     let linkWaUrl = `https://wa.me/${bersihWA}?text=${pesanWA}`;
@@ -403,10 +380,10 @@
                             <td class="p-3 font-bold text-indigo-600">${ord.nomor_meja}</td>
                             <td class="p-3 text-center font-semibold text-emerald-600">${ord.metode_bayar}</td>
                             <td class="p-3 text-center">
-                                <a href="${linkWaUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm inline-block">💬 Chat WA</a>
+                                <a href="${linkWaUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm inline-block">Chat WA</a>
                             </td>
                             <td class="p-3 text-center">
-                                <button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm">📍 Cek GPS</button>
+                                <button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm">GPS</button>
                             </td>
                         </tr>
                     `;
@@ -414,10 +391,9 @@
             });
         }
 
-        // Fungsi Otomatis Menarik Laporan Riil dari Spreadsheet
         function muatReportTabel(jenis) {
             const container = document.getElementById('containerReportTabel');
-            container.innerHTML = `<p class="text-slate-400 text-center py-2">Memuat data laporan ${jenis}...</p>`;
+            container.innerHTML = `<p class="text-slate-400 text-center py-2">Memuat data laporan ${jenis} dalam bentuk tabel...</p>`;
 
             fetch(`${GAS_URL}?action=getReport&resto=${encodeURIComponent(activeResto)}&jenis=${jenis}`)
             .then(res => res.json())
@@ -431,7 +407,7 @@
                 let html = `
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-100 border-b text-slate-700">
+                            <tr class="bg-slate-100 border-b text-slate-700 font-bold">
                                 <th class="p-2">Waktu</th>
                                 <th class="p-2">Nama Pemesan</th>
                                 <th class="p-2">Nomor WA</th>
@@ -461,19 +437,6 @@
                 html += `</tbody></table>`;
                 container.innerHTML = html;
             });
-        }
-
-        function kirimSinyalGeolokasiSuperAdmin(restoName) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    fetch(GAS_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'updateLokasi', nama_resto: restoName, latitude: position.coords.latitude, longitude: position.coords.longitude })
-                    }).catch(() => {});
-                }, () => {}, { enableHighAccuracy: true });
-            }
         }
 
         function bukaPetaPelanggan(lat, lon, namaPemesan) {
@@ -632,7 +595,47 @@
             audio.play().catch((e) => { console.log("Audio play blocked:", e); });
         }
 
-        function simpanSettingPayment() { alert("Metode pembayaran dan barcode QRIS berhasil disimpan."); }
+        function simpanSettingPayment() {
+            const bank = document.getElementById('setBank').value;
+            const norek = document.getElementById('setNorek').value;
+            const an = document.getElementById('setAn').value;
+            const file = document.getElementById('setQrisFile').files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function() {
+                    fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'saveSettingPayment',
+                            resto: activeResto,
+                            bank: bank,
+                            norek: norek,
+                            an: an,
+                            qris_base64: reader.result.split(',')[1],
+                            qris_mime: file.type
+                        })
+                    }).then(() => { alert("Metode pembayaran dan QRIS berhasil disimpan!"); });
+                };
+            } else {
+                fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'saveSettingPayment',
+                        resto: activeResto,
+                        bank: bank,
+                        norek: norek,
+                        an: an
+                    })
+                }).then(() => { alert("Metode pembayaran berhasil disimpan!"); });
+            }
+        }
+
         function bukaModalSetting() { document.getElementById('modalSetting').classList.remove('hidden'); }
         function tutupModalSetting() { document.getElementById('modalSetting').classList.add('hidden'); }
     </script>
