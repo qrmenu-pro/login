@@ -174,11 +174,12 @@
                             <th class="p-3">Total Harga</th>
                             <th class="p-3">Nomor Meja</th>
                             <th class="p-3 text-center">Metode Bayar</th>
+                            <th class="p-3 text-center">Aksi WhatsApp</th>
                             <th class="p-3 text-center">Pantau Koordinat Tamu</th>
                         </tr>
                     </thead>
                     <tbody id="tabelOrderList" class="divide-y divide-slate-100">
-                        <tr><td colspan="8" class="p-4 text-center text-slate-400">Memuat data order masuk...</td></tr>
+                        <tr><td colspan="9" class="p-4 text-center text-slate-400">Memuat data order masuk...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -314,6 +315,19 @@
         let lastOrderCount = 0;
         let pollingInterval = null;
 
+        // FUNGSI PEMBERSIH NOMOR WHATSAPP (OTOMATIS AWALAN 62)
+        function formatNomorWA(nomor) {
+            if (!nomor) return '';
+            let cleaned = String(nomor).replace(/\D/g, '');
+            if (cleaned.startsWith('0')) {
+                cleaned = '62' + cleaned.substring(1);
+            }
+            if (!cleaned.startsWith('62')) {
+                cleaned = '62' + cleaned;
+            }
+            return cleaned;
+        }
+
         document.getElementById('formLogin').addEventListener('submit', function(e) {
             e.preventDefault();
             const user = document.getElementById('loginUser').value;
@@ -358,7 +372,7 @@
                 const tbody = document.getElementById('tabelOrderList');
                 
                 if(orders.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
                     lastOrderCount = 0;
                     return;
                 }
@@ -374,6 +388,11 @@
                     let latTamu = localStorage.getItem('tamu_lat') || -6.9175;
                     let lonTamu = localStorage.getItem('tamu_lon') || 107.6191;
 
+                    // Bersihkan nomor WA menggunakan fungsi formatNomorWA
+                    let bersihWA = formatNomorWA(ord.nomor_wa);
+                    let pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto}. Pesanan Anda sedang diproses.`);
+                    let linkWaUrl = `https://wa.me/${bersihWA}?text=${pesanWA}`;
+
                     tbody.innerHTML += `
                         <tr class="hover:bg-slate-50 transition">
                             <td class="p-3 text-slate-500">${ord.waktu}</td>
@@ -383,6 +402,9 @@
                             <td class="p-3 font-extrabold text-amber-700">${ord.total_harga}</td>
                             <td class="p-3 font-bold text-indigo-600">${ord.nomor_meja}</td>
                             <td class="p-3 text-center font-semibold text-emerald-600">${ord.metode_bayar}</td>
+                            <td class="p-3 text-center">
+                                <a href="${linkWaUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm inline-block">💬 Chat WA</a>
+                            </td>
                             <td class="p-3 text-center">
                                 <button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm">📍 Cek GPS</button>
                             </td>
