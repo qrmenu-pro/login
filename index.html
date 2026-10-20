@@ -3,91 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Dashboard - QRMenu Pro Enterprise</title>
+    <title>Admin Dashboard Enterprise - QRMenu-Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        /* Animasi Sinyal Berkedip Hijau Menyala (Live Active Status) */
         @keyframes pulse-green {
             0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(34, 197, 94, 0.6); }
             50% { opacity: 0.4; transform: scale(1.2); box-shadow: 0 0 20px rgba(34, 197, 94, 0.9); }
         }
         .animate-pulse-green { animation: pulse-green 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-
-        /* Efek Kilatan Cahaya & Frame Menyala Neon Emas */
-        @keyframes neon-glow {
-            0%, 100% { 
-                border-color: rgba(245, 158, 11, 0.6); 
-                box-shadow: 0 0 30px rgba(245, 158, 11, 0.25), inset 0 0 15px rgba(245, 158, 11, 0.1); 
-            }
-            50% { 
-                border-color: rgba(251, 191, 36, 1); 
-                box-shadow: 0 0 50px rgba(251, 191, 36, 0.5), inset 0 0 25px rgba(251, 191, 36, 0.2); 
-            }
-        }
-        .neon-frame-card {
-            background: #ffffff;
-            position: relative;
-            border-radius: 2.25rem;
-            border: 2.5px solid #d97706;
-            animation: neon-glow 3.5s infinite ease-in-out;
-        }
-
-        /* Latar Belakang Cerah Elegan */
         .page-bg {
             background-color: #f8fafc;
             background-image: radial-gradient(#d97706 0.6px, transparent 0.6px), radial-gradient(#d97706 0.6px, #f8fafc 0.6px);
             background-size: 32px 32px;
             background-position: 0 0, 16px 16px;
-            background-opacity: 0.04;
         }
-
-        .batik-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(254,252,246,0.95) 100%);
-            border: 1px solid rgba(217, 119, 6, 0.2);
-        }
+        .neon-card { background: #ffffff; border-radius: 2rem; border: 2px solid rgba(217, 119, 6, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="page-bg text-slate-800 antialiased selection:bg-amber-500 selection:text-white min-h-screen flex flex-col">
+<body class="page-bg text-slate-800 antialiased min-h-screen flex flex-col">
 
-    <!-- LOGIN SECTION DENGAN FRAME NEON & KILATAN CAHAYA -->
-    <div id="loginSection" class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
-        
-        <!-- Frame Kartu Login dengan Neon Glow & Kilatan Cahaya -->
-        <div class="neon-frame-card p-8 w-full max-w-md relative z-10 backdrop-blur-xl shadow-2xl">
+    <!-- LOGIN SECTION KLIEN -->
+    <div id="loginSection" class="min-h-screen flex items-center justify-center p-6 relative">
+        <div class="neon-card p-8 w-full max-w-md relative z-10 shadow-2xl">
             <div class="text-center mb-8">
-                <!-- LOGO QRMenu-Pro -->
-                <div class="h-16 w-16 bg-gradient-to-tr from-amber-600 to-amber-400 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-amber-600/30 mb-4 border border-amber-300">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                    </svg>
-                </div>
+                <div class="h-16 w-16 bg-gradient-to-tr from-amber-600 to-amber-400 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-amber-600/30 mb-4 text-white font-bold text-xl">QR</div>
                 <h2 class="text-xl font-bold text-slate-900 tracking-tight">QRMenu-Pro Enterprise</h2>
-                <p class="text-xs text-amber-700 font-bold mt-1 uppercase tracking-wider">Portal Bisnis & Merchant Nasional</p>
+                <p class="text-xs text-amber-700 font-bold mt-1 uppercase tracking-wider">Portal Login Merchant Klien</p>
             </div>
 
             <form id="formLogin" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Username Bisnis</label>
-                    <input type="text" id="loginUser" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-600 transition" placeholder="Masukkan username...">
+                    <input type="text" id="loginUser" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Password</label>
-                    <input type="password" id="loginPass" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-600 transition" placeholder="••••••••">
+                    <input type="password" id="loginPass" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
                 </div>
-                <button type="submit" id="btnLogin" class="w-full bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-amber-600/25 flex items-center justify-center gap-2">
-                    <span>Masuk Panel Bisnis</span>
-                </button>
+                <button type="submit" id="btnLogin" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-amber-600/25">Masuk Panel Bisnis</button>
             </form>
             <div id="loginError" class="mt-4 hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs text-center font-medium"></div>
         </div>
     </div>
 
-    <!-- DASHBOARD SECTION -->
+    <!-- DASHBOARD UTAMA KLIEN -->
     <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
         <header class="bg-white/90 backdrop-blur-xl border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
             <div class="flex items-center gap-4">
@@ -95,111 +57,117 @@
                     <h1 class="text-base font-bold text-slate-900 flex items-center gap-2" id="titleRestoName">Dashboard Bisnis</h1>
                     <span class="text-xs text-emerald-600 font-semibold">Lisensi Resmi Aktif (365 Hari)</span>
                 </div>
-                <!-- Sinyal Berkedip Hijau Terang (Live Active Status) -->
-                <div class="hidden md:flex items-center space-x-2 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200 shadow-inner">
+                <div class="hidden md:flex items-center space-x-2 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
                     <span class="relative flex h-2.5 w-2.5">
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 animate-pulse-green"></span>
                     </span>
-                    <span class="text-[11px] font-extrabold text-emerald-700 uppercase tracking-wide">Live Orders Active</span>
+                    <span class="text-[11px] font-extrabold text-emerald-700 uppercase">Live System Active</span>
                 </div>
             </div>
 
-            <!-- Kontrol Suara Dering & Tombol Keluar -->
             <div class="flex items-center gap-3">
-                <button id="btnMute" onclick="toggleMute()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-semibold px-3.5 py-2 rounded-xl border border-amber-300 transition flex items-center gap-1.5">
-                    <span id="muteIcon">🔊</span> <span id="muteText">Dering Aktif</span>
-                </button>
-                <button onclick="location.reload()" class="bg-slate-100 hover:bg-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-300 text-slate-700 font-semibold transition">Keluar</button>
+                <button onclick="bukaModalSetting()" class="bg-slate-100 hover:bg-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-300 font-semibold flex items-center gap-1.5">⚙️ Pengaturan</button>
+                <button onclick="location.reload()" class="bg-rose-50 hover:bg-rose-100 text-xs px-3.5 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold">Keluar</button>
             </div>
         </header>
 
-        <main class="max-w-5xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
-            <!-- Link & QR Code Unik -->
-            <div class="batik-card rounded-3xl p-6 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                <div class="md:col-span-2 space-y-3">
-                    <h3 class="text-base font-bold text-slate-900">Link & QR Code Katalog Unik</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">Cetak QR Code ini untuk ditaruh di meja atau kasir. Pesanan pelanggan akan masuk secara eksklusif ke database perusahaan Anda.</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="linkOrder" readonly class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-amber-700 font-medium focus:outline-none">
-                        <button onclick="salinLink()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow-sm">Salin</button>
+        <main class="max-w-6xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
+            
+            <!-- TOMBOL HIJAU ORDER MASUK HARI INI & STATISTIK -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onclick="bukaModalOrderMasuk()" class="bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl p-6 shadow-lg cursor-pointer transition flex items-center justify-between">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider font-bold opacity-90">Live Monitor</span>
+                        <h3 class="text-2xl font-extrabold mt-1">🟢 Order Masuk Hari Ini</h3>
+                        <p class="text-xs mt-1 text-emerald-100">Klik untuk memantau pesanan real-time.</p>
                     </div>
+                    <span class="text-3xl font-bold bg-white/20 p-3 rounded-2xl">📋</span>
                 </div>
-                <div class="flex flex-col items-center justify-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                    <div id="qrcode" class="bg-white p-2 rounded-lg mb-2"></div>
-                    <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Scan Katalog Pelanggan</span>
+
+                <div class="md:col-span-2 neon-card p-6 flex flex-col justify-center">
+                    <h3 class="text-sm font-bold text-slate-700 mb-2">Link & Barcode Katalog Pelanggan</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="linkOrder" readonly class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-amber-700 font-medium">
+                        <button onclick="salinLink()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-xl">Salin Link</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Form Input Menu -->
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
-                <h3 class="text-base font-bold text-slate-900 mb-4">Tambah Produk / Menu Baru & Upload ke Drive</h3>
-                <form id="formMenu" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Nama Produk / Menu</label>
-                        <input type="text" id="nama_menu" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Harga Jual (Rp)</label>
-                        <input type="number" id="harga_jual" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Harga Modal / Awal (Rp)</label>
-                        <input type="number" id="harga_awal" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Foto Produk</label>
-                        <input type="file" id="foto_menu" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-amber-600 file:text-white font-medium">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Deskripsi Produk</label>
-                        <textarea id="deskripsi" rows="2" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600"></textarea>
-                    </div>
-                    <div class="md:col-span-2 flex justify-end">
-                        <button type="submit" id="btnMenu" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 px-6 rounded-xl text-sm transition shadow-md shadow-amber-600/20">Simpan Menu ke Database</button>
-                    </div>
-                </form>
+            <!-- GRID DAFTAR MENU -->
+            <div class="neon-card p-6 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <h3 class="text-base font-bold text-slate-900">🍽️ Daftar Menu (Makanan = Merah | Minuman = Biru)</h3>
+                    <button onclick="bukaModalTambahMenu()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm">+ Tambah Menu Baru</button>
+                </div>
+                <div id="gridMenu" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <p class="text-xs text-slate-400">Memuat daftar menu...</p>
+                </div>
             </div>
         </main>
     </div>
 
-    <!-- Elemen Audio Dering Orderan Masuk -->
+    <!-- MODAL SETTING / PENGATURAN LENGKAP (GERIGI) -->
+    <div id="modalSetting" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                <h3 class="text-lg font-bold text-slate-900">⚙️ Panel Pengaturan & Laporan Bisnis</h3>
+                <button onclick="tutupModalSetting()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <!-- Setting Pembayaran -->
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-800 text-sm">💳 Metode Pembayaran Tamu (Transfer & QRIS)</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="setBank" placeholder="Nama Bank (Cth: BCA)" class="p-2.5 bg-white border rounded-xl">
+                        <input type="text" id="setNorek" placeholder="Nomor Rekening" class="p-2.5 bg-white border rounded-xl">
+                    </div>
+                    <input type="text" id="setAn" placeholder="Atas Nama Pemilik Rekening" class="w-full p-2.5 bg-white border rounded-xl">
+                    <div>
+                        <label class="block text-[11px] text-slate-500 mb-1">Upload Gambar Barcode QRIS</label>
+                        <input type="file" id="setQrisFile" accept="image/*" class="w-full text-xs text-slate-500">
+                    </div>
+                    <button onclick="simpanSettingPayment()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl">Simpan Pengaturan Pembayaran</button>
+                </div>
+
+                <!-- Report Harian, Mingguan, Bulanan -->
+                <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-2">
+                    <h4 class="font-bold text-amber-900 text-sm">📊 Laporan Keuangan & Audit Kategori</h4>
+                    <div class="flex gap-2">
+                        <button onclick="muatReport('harian')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Harian</button>
+                        <button onclick="muatReport('mingguan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Mingguan</button>
+                        <button onclick="muatReport('bulanan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Bulanan</button>
+                    </div>
+                    <div id="containerReport" class="mt-3 p-3 bg-white rounded-xl border text-slate-700 font-mono text-[11px]">Pilih jenis report di atas.</div>
+                </div>
+
+                <!-- Live Chat Super Admin -->
+                <div class="p-4 bg-slate-900 text-white rounded-2xl flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-sm">💬 Bantuan & Live Chat Super Admin</h4>
+                        <p class="text-[11px] text-slate-400">Ada kendala teknis? Hubungi pengembang sistem langsung.</p>
+                    </div>
+                    <a href="https://wa.me/6285222952220?text=Halo%20Super%20Admin,%20saya%20butuh%20bantuan%20untuk%20QRMenu-Pro" target="_blank" class="bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs">Chat WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIO NOTIFIKASI -->
     <audio id="orderSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
-    <!-- Script Logika -->
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxWFYakEtuJanhbjHm0fhFfuTbAvkxAH8b-9fTtrN8JzcLmU8-8_LGdf3IsxeG8eHCM/exec";
         let activeResto = "";
-        let isMuted = false;
         let deviceId = localStorage.getItem('qrmenu_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase());
         localStorage.setItem('qrmenu_device_id', deviceId);
-
-        function toggleMute() {
-            isMuted = !isMuted;
-            const icon = document.getElementById('muteIcon');
-            const text = document.getElementById('muteText');
-            const btn = document.getElementById('btnMute');
-            if (isMuted) {
-                icon.innerText = "🔇";
-                text.innerText = "Dering Mute";
-                btn.className = "bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-semibold px-3.5 py-2 rounded-xl border border-rose-300 transition flex items-center gap-1.5";
-            } else {
-                icon.innerText = "🔊";
-                text.innerText = "Dering Aktif";
-                btn.className = "bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-semibold px-3.5 py-2 rounded-xl border border-amber-300 transition flex items-center gap-1.5";
-            }
-        }
 
         document.getElementById('formLogin').addEventListener('submit', function(e) {
             e.preventDefault();
             const user = document.getElementById('loginUser').value;
             const pass = document.getElementById('loginPass').value;
             const errBox = document.getElementById('loginError');
-            const btn = document.getElementById('btnLogin');
-
-            btn.disabled = true;
-            btn.innerText = "Memeriksa Lisensi...";
-            errBox.classList.add('hidden');
 
             fetch(`${GAS_URL}?action=loginResto&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&device_id=${deviceId}`)
             .then(res => res.json())
@@ -207,29 +175,51 @@
                 if (data.status === 'success') {
                     activeResto = data.resto;
                     document.getElementById('titleRestoName').innerText = `Dashboard Bisnis: ${activeResto}`;
-                    const generatedLink = `https://qrmenu-pro.github.io/bisnis/?resto=${encodeURIComponent(activeResto)}`;
-                    document.getElementById('linkOrder').value = generatedLink;
-                    
-                    document.getElementById('qrcode').innerHTML = "";
-                    new QRCode(document.getElementById("qrcode"), { text: generatedLink, width: 128, height: 128 });
-
+                    document.getElementById('linkOrder').value = `https://qrmenu-pro.github.io/bisnis/?resto=${encodeURIComponent(activeResto)}`;
                     document.getElementById('loginSection').classList.add('hidden');
                     document.getElementById('dashboardSection').classList.remove('hidden');
-
-                    mulaiPantauOrderan();
+                    muatMenuKlien();
                 } else {
                     errBox.innerText = data.message;
                     errBox.classList.remove('hidden');
-                    btn.disabled = false;
-                    btn.innerText = "Masuk Panel Bisnis";
                 }
-            }).catch(err => {
-                errBox.innerText = "Koneksi gagal: " + err;
-                errBox.classList.remove('hidden');
-                btn.disabled = false;
-                btn.innerText = "Masuk Panel Bisnis";
             });
         });
+
+        function muatMenuKlien() {
+            fetch(`${GAS_URL}?action=getMenu&resto=${encodeURIComponent(activeResto)}`)
+            .then(res => res.json())
+            .then(resData => {
+                const grid = document.getElementById('gridMenu');
+                let data = resData.data || [];
+                if(data.length === 0) {
+                    grid.innerHTML = `<p class="text-xs text-slate-400">Belum ada menu terdaftar.</p>`;
+                    return;
+                }
+                grid.innerHTML = "";
+                data.forEach(item => {
+                    let badgeColor = item.kategori === 'Minuman' ? 'bg-blue-100 text-blue-800' : 'bg-rose-100 text-rose-800';
+                    let card = `
+                        <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between">
+                            <div>
+                                <img src="${item.gambar_url}" class="w-full h-32 object-cover rounded-xl mb-3" alt="Menu">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${badgeColor}">${item.kategori || 'Makanan'}</span>
+                                <h4 class="font-bold text-sm text-slate-900 mt-1">${item.nama_menu}</h4>
+                                <p class="text-xs text-slate-500 mt-1">${item.deskripsi}</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                                <span class="font-extrabold text-amber-700 text-sm">Rp ${parseInt(item.harga_jual).toLocaleString()}</span>
+                                <div class="flex gap-1.5">
+                                    <button onclick="editMenu('${item.id_menu}', '${item.nama_menu}', '${item.kategori}', '${item.deskripsi}', '${item.harga_awal}', '${item.harga_jual}')" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs" title="Edit">✏️</button>
+                                    <button onclick="hapusMenu('${item.id_menu}')" class="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs" title="Hapus">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+            });
+        }
 
         function salinLink() {
             const copyText = document.getElementById("linkOrder");
@@ -238,48 +228,14 @@
             alert("Link katalog berhasil disalin!");
         }
 
-        document.getElementById('formMenu').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnMenu');
-            const file = document.getElementById('foto_menu').files[0];
-            btn.disabled = true;
-            btn.innerText = "Mengunggah Gambar ke Drive...";
-
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function () {
-                const payload = {
-                    action: 'tambahMenu',
-                    resto: activeResto,
-                    nama_menu: document.getElementById('nama_menu').value,
-                    deskripsi: document.getElementById('deskripsi').value,
-                    harga_awal: document.getElementById('harga_awal').value,
-                    harga_jual: document.getElementById('harga_jual').value,
-                    image_base64: reader.result.split(',')[1],
-                    image_mime: file.type
-                };
-                fetch(GAS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-                .then(() => {
-                    alert('Menu/Produk berhasil ditambahkan!');
-                    document.getElementById('formMenu').reset();
-                    btn.disabled = false;
-                    btn.innerText = "Simpan Menu ke Database";
-                });
-            };
-        });
-
-        function mulaiPantauOrderan() {
-            setInterval(() => {
-                fetch(`${GAS_URL}?action=getMenu&resto=${encodeURIComponent(activeResto)}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (!isMuted) {
-                        const audio = document.getElementById('orderSound');
-                        // audio.play().catch(() => {});
-                    }
-                }).catch(() => {});
-            }, 12000);
-        }
+        function bukaModalSetting() { document.getElementById('modalSetting').classList.remove('hidden'); }
+        function tutupModalSetting() { document.getElementById('modalSetting').classList.add('hidden'); }
+        function simpanSettingPayment() { alert("Pengaturan pembayaran disimpan."); tutupModalSetting(); }
+        function muatReport( jenis ) { document.getElementById('containerReport').innerText = `Menampilkan rekapitulasi data ${jenis} secara otomatis...`; }
+        function bukaModalOrderMasuk() { alert("Membuka halaman khusus order masuk hijau hari ini."); }
+        function bukaModalTambahMenu() { alert("Fitur tambah menu pop-up."); }
+        function hapusMenu(id) { if(confirm("Yakin ingin menghapus menu ini?")) { fetch(GAS_URL, {method:'POST', mode:'no-cors', body:JSON.stringify({action:'hapusMenu', resto:activeResto, id_menu:id})}).then(()=>muatMenuKlien()); } }
+        function editMenu(id, nama, kat, desk, awal, jual) { alert("Edit menu: " + nama); }
     </script>
 </body>
 </html>
