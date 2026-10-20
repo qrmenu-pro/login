@@ -130,7 +130,7 @@
         </main>
     </div>
 
-    <!-- MODAL ORDER MASUK HARI INI (REAL-TIME DARI SHEET) -->
+    <!-- MODAL ORDER MASUK HARI INI -->
     <div id="modalOrderMasuk" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-6xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
@@ -152,9 +152,7 @@
                         </tr>
                     </thead>
                     <tbody id="tabelOrderList" class="divide-y divide-slate-100">
-                        <tr>
-                            <td colspan="8" class="p-4 text-center text-slate-400">Memuat data order masuk...</td>
-                        </tr>
+                        <tr><td colspan="8" class="p-4 text-center text-slate-400">Memuat data order masuk...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -229,7 +227,7 @@
         </div>
     </div>
 
-    <!-- MODAL PENGATURAN LENGKAP -->
+    <!-- MODAL PENGATURAN & LAPORAN OTOMATIS -->
     <div id="modalSetting" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-4">
@@ -242,6 +240,7 @@
                     <h4 class="font-bold text-slate-800 text-sm">🔔 Setting Notifikasi Dering Order</h4>
                     <button onclick="testAudio()" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl">🔊 Tes Dering Order</button>
                 </div>
+                
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-3">
                     <h4 class="font-bold text-slate-800 text-sm">💳 Setting Payment (Transfer & QRIS Barcode)</h4>
                     <div class="grid grid-cols-2 gap-3">
@@ -254,6 +253,20 @@
                         <input type="file" id="setQrisFile" accept="image/*" class="w-full text-xs">
                     </div>
                     <button onclick="simpanSettingPayment()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl">Simpan Metode Pembayaran</button>
+                </div>
+
+                <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
+                    <h4 class="font-bold text-amber-900 text-sm">📊 Pusat Laporan Otomatis (Real-Time Sheet)</h4>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="muatReportTabel('harian')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Harian</button>
+                        <button onclick="muatReportTabel('mingguan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Mingguan</button>
+                        <button onclick="muatReportTabel('bulanan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Bulanan</button>
+                        <button onclick="muatReportTabel('kategori')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Kategori</button>
+                        <button onclick="muatReportTabel('konsumen')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Data Konsumen</button>
+                    </div>
+                    <div id="containerReportTabel" class="mt-3 p-3 bg-white rounded-xl border overflow-x-auto text-[11px]">
+                        <p class="text-slate-400">Pilih salah satu tombol laporan di atas untuk melihat tabel rincian.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -297,13 +310,10 @@
                     document.getElementById('dashboardSection').classList.remove('hidden');
                     
                     muatMenuKlien();
-                    muatOrderMasuk(true); // Load awal tanpa bunyi
+                    muatOrderMasuk(true);
 
-                    // Mulai Auto-Polling Cek Order Masuk Setiap 5 Detik & Bunyikan Dering
                     if(pollingInterval) clearInterval(pollingInterval);
-                    pollingInterval = setInterval(() => {
-                        muatOrderMasuk(false);
-                    }, 5000);
+                    pollingInterval = setInterval(() => { muatOrderMasuk(false); }, 5000);
 
                     kirimSinyalGeolokasiSuperAdmin(activeResto);
                 } else {
@@ -313,7 +323,6 @@
             });
         });
 
-        // Fungsi Ambil Data Order Masuk dari Sheet Secara Real-Time
         function muatOrderMasuk(isInitial) {
             if(!activeResto) return;
             fetch(`${GAS_URL}?action=getOrderMasuk&resto=${encodeURIComponent(activeResto)}`)
@@ -328,9 +337,8 @@
                     return;
                 }
 
-                // Cek apakah ada order baru masuk untuk membunyikan alarm/dering
                 if(!isInitial && orders.length > lastOrderCount) {
-                    testAudio(); // Bunyikan Dering Notifikasi!
+                    testAudio();
                     document.getElementById('badgeOrderNotif').classList.remove('hidden');
                 }
                 lastOrderCount = orders.length;
@@ -355,6 +363,55 @@
                         </tr>
                     `;
                 });
+            });
+        }
+
+        // Fungsi Otomatis Menarik Laporan Riil dari Spreadsheet
+        function muatReportTabel(jenis) {
+            const container = document.getElementById('containerReportTabel');
+            container.innerHTML = `<p class="text-slate-400 text-center py-2">Memuat data laporan ${jenis}...</p>`;
+
+            fetch(`${GAS_URL}?action=getReport&resto=${encodeURIComponent(activeResto)}&jenis=${jenis}`)
+            .then(res => res.json())
+            .then(resData => {
+                let data = resData.data || [];
+                if(data.length === 0) {
+                    container.innerHTML = `<p class="text-slate-400 text-center py-2">Belum ada data laporan untuk saat ini.</p>`;
+                    return;
+                }
+
+                let html = `
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 border-b text-slate-700">
+                                <th class="p-2">Waktu</th>
+                                <th class="p-2">Nama Pemesan</th>
+                                <th class="p-2">Nomor WA</th>
+                                <th class="p-2">Detail Pesanan</th>
+                                <th class="p-2">Total Harga</th>
+                                <th class="p-2">Meja</th>
+                                <th class="p-2">Metode</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.forEach(row => {
+                    html += `
+                        <tr class="border-b hover:bg-slate-50">
+                            <td class="p-2 text-slate-500">${row.waktu}</td>
+                            <td class="p-2 font-bold">${row.nama_pemesan}</td>
+                            <td class="p-2">${row.nomor_wa}</td>
+                            <td class="p-2">${row.detail_pesanan}</td>
+                            <td class="p-2 font-extrabold text-amber-700">${row.total_harga}</td>
+                            <td class="p-2">${row.nomor_meja}</td>
+                            <td class="p-2 font-semibold text-emerald-600">${row.metode_bayar}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table>`;
+                container.innerHTML = html;
             });
         }
 
@@ -524,9 +581,7 @@
         function downloadQR() { alert("QR Code siap diunduh."); }
         function testAudio() {
             const audio = document.getElementById('orderSound');
-            audio.play().catch((e) => {
-                console.log("Audio play blocked by browser policy:", e);
-            });
+            audio.play().catch((e) => { console.log("Audio play blocked:", e); });
         }
 
         function simpanSettingPayment() { alert("Metode pembayaran dan barcode QRIS berhasil disimpan."); }
