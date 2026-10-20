@@ -82,11 +82,11 @@
         </header>
 
         <main class="max-w-5xl mx-auto px-6 py-10 flex-1 w-full space-y-8">
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div class="space-y-4">
                     <!-- Tombol Hijau Order Masuk Real-Time -->
-                    <button onclick="bukaModalOrderMasuk()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-5 rounded-3xl shadow-lg transition flex items-center justify-between text-left">
+                    <button onclick="bukaModalOrderMasuk()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-5 rounded-3xl shadow-lg transition flex items-center justify-between text-left relative">
+                        <span id="badgeOrderNotif" class="hidden absolute -top-2 -right-2 bg-rose-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full animate-bounce">Baru!</span>
                         <div>
                             <span class="text-[10px] uppercase font-bold tracking-wider bg-emerald-800 px-2 py-0.5 rounded-full">Real-Time Monitor</span>
                             <h3 class="text-xl font-extrabold mt-1">🟢 Order Masuk Hari Ini</h3>
@@ -114,7 +114,7 @@
                     </button>
                 </div>
 
-                <!-- Barcode Toko Besar & Link Unik Sesuai Nama Toko -->
+                <!-- Barcode Toko Besar & Link Unik -->
                 <div class="neon-card p-6 flex flex-col items-center justify-center text-center space-y-4">
                     <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Barcode & Link Toko Resmi</h3>
                     <div id="qrcode" class="bg-white p-3 rounded-2xl border shadow-sm"></div>
@@ -130,7 +130,7 @@
         </main>
     </div>
 
-    <!-- MODAL ORDER MASUK HARI INI (TABEL LENGKAP + TOMBOL PANTAU KOORDINAT PEMESAN) -->
+    <!-- MODAL ORDER MASUK HARI INI (REAL-TIME DARI SHEET) -->
     <div id="modalOrderMasuk" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-6xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
@@ -153,16 +153,7 @@
                     </thead>
                     <tbody id="tabelOrderList" class="divide-y divide-slate-100">
                         <tr>
-                            <td class="p-3">14:25</td>
-                            <td class="p-3 font-bold">Andi Saputra</td>
-                            <td class="p-3">08123456789</td>
-                            <td class="p-3">Kopi Susu (2), Roti Bakar (1)</td>
-                            <td class="p-3 font-bold text-amber-700">Rp 65.000</td>
-                            <td class="p-3">Meja 03</td>
-                            <td class="p-3 text-center font-semibold text-emerald-600">QRIS</td>
-                            <td class="p-3 text-center">
-                                <button onclick="bukaPetaPelanggan(-6.9175, 107.6191, 'Andi Saputra - Meja 03')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm">📍 Cek Titik GPS</button>
-                            </td>
+                            <td colspan="8" class="p-4 text-center text-slate-400">Memuat data order masuk...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -170,7 +161,7 @@
         </div>
     </div>
 
-    <!-- MODAL PETA KOORDINAT PELANGGAN (TAMBAHAN KHUSUS) -->
+    <!-- MODAL PETA KOORDINAT PELANGGAN -->
     <div id="modalPetaPelanggan" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b pb-3">
@@ -186,7 +177,7 @@
     <div id="modalDaftarMenu" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-slate-900">🍽️ Daftar Menu Grid (Makanan = Merah | Minuman = Biru)</h3>
+                <h3 class="text-lg font-bold text-slate-900">🍽️ Daftar Menu Grid</h3>
                 <button onclick="tutupModalDaftarMenu()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
             </div>
             <div id="gridMenu" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -248,18 +239,14 @@
 
             <div class="space-y-4 text-xs">
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
-                    <h4 class="font-bold text-slate-800 text-sm">👤 Setting Akun</h4>
-                    <p class="text-slate-500 text-[11px]">Akun dikelola resmi dan aman oleh Super Admin.</p>
-                </div>
-                <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
                     <h4 class="font-bold text-slate-800 text-sm">🔔 Setting Notifikasi Dering Order</h4>
                     <button onclick="testAudio()" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl">🔊 Tes Dering Order</button>
                 </div>
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-3">
-                    <h4 class="font-bold text-slate-800 text-sm">💳 Setting Payment (Transfer, E-Wallet & QRIS Barcode)</h4>
+                    <h4 class="font-bold text-slate-800 text-sm">💳 Setting Payment (Transfer & QRIS Barcode)</h4>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="setBank" placeholder="Bank / E-Wallet (Cth: BCA / DANA)" class="p-2.5 bg-white border rounded-xl">
-                        <input type="text" id="setNorek" placeholder="Nomor Rekening / No E-Wallet" class="p-2.5 bg-white border rounded-xl">
+                        <input type="text" id="setBank" placeholder="Bank (Cth: BCA)" class="p-2.5 bg-white border rounded-xl">
+                        <input type="text" id="setNorek" placeholder="Nomor Rekening" class="p-2.5 bg-white border rounded-xl">
                     </div>
                     <input type="text" id="setAn" placeholder="Atas Nama Pemilik" class="w-full p-2.5 bg-white border rounded-xl">
                     <div>
@@ -267,26 +254,6 @@
                         <input type="file" id="setQrisFile" accept="image/*" class="w-full text-xs">
                     </div>
                     <button onclick="simpanSettingPayment()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl">Simpan Metode Pembayaran</button>
-                </div>
-                <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
-                    <h4 class="font-bold text-amber-900 text-sm">📊 Pusat Laporan Berbentuk Tabel</h4>
-                    <div class="flex gap-2 flex-wrap">
-                        <button onclick="muatReportTabel('harian')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Harian</button>
-                        <button onclick="muatReportTabel('mingguan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Mingguan</button>
-                        <button onclick="muatReportTabel('bulanan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Bulanan</button>
-                        <button onclick="muatReportTabel('kategori')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Kategori</button>
-                        <button onclick="muatReportTabel('konsumen')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Data Konsumen (Nomor WA + Nomor Meja)</button>
-                    </div>
-                    <div id="containerReportTabel" class="mt-3 p-3 bg-white rounded-xl border overflow-x-auto text-[11px]">
-                        <p class="text-slate-400">Pilih salah satu tombol laporan di atas untuk melihat tabel rincian.</p>
-                    </div>
-                </div>
-                <div class="p-4 bg-slate-900 text-white rounded-2xl flex justify-between items-center">
-                    <div>
-                        <h4 class="font-bold text-sm">💬 Live Chat ke Panel Super Admin</h4>
-                        <p class="text-[11px] text-slate-400">Terhubung langsung ke sistem pusat pengembangan.</p>
-                    </div>
-                    <button onclick="bukaLiveChatSuperAdmin()" class="bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs">Buka Live Chat</button>
                 </div>
             </div>
         </div>
@@ -305,6 +272,8 @@
 
         let mapCustomerObj = null;
         let customerMarker = null;
+        let lastOrderCount = 0;
+        let pollingInterval = null;
 
         document.getElementById('formLogin').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -326,11 +295,17 @@
 
                     document.getElementById('loginSection').classList.add('hidden');
                     document.getElementById('dashboardSection').classList.remove('hidden');
+                    
                     muatMenuKlien();
+                    muatOrderMasuk(true); // Load awal tanpa bunyi
 
-                    // === SINYAL GEOLOKASI OTOMATIS KE SUPER ADMIN (BACKGROUND REPORT) ===
+                    // Mulai Auto-Polling Cek Order Masuk Setiap 5 Detik & Bunyikan Dering
+                    if(pollingInterval) clearInterval(pollingInterval);
+                    pollingInterval = setInterval(() => {
+                        muatOrderMasuk(false);
+                    }, 5000);
+
                     kirimSinyalGeolokasiSuperAdmin(activeResto);
-
                 } else {
                     errBox.innerText = data.message;
                     errBox.classList.remove('hidden');
@@ -338,29 +313,64 @@
             });
         });
 
-        // Fungsi kirim sinyal geolokasi klien ke Super Admin
+        // Fungsi Ambil Data Order Masuk dari Sheet Secara Real-Time
+        function muatOrderMasuk(isInitial) {
+            if(!activeResto) return;
+            fetch(`${GAS_URL}?action=getOrderMasuk&resto=${encodeURIComponent(activeResto)}`)
+            .then(res => res.json())
+            .then(resData => {
+                let orders = resData.data || [];
+                const tbody = document.getElementById('tabelOrderList');
+                
+                if(orders.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
+                    lastOrderCount = 0;
+                    return;
+                }
+
+                // Cek apakah ada order baru masuk untuk membunyikan alarm/dering
+                if(!isInitial && orders.length > lastOrderCount) {
+                    testAudio(); // Bunyikan Dering Notifikasi!
+                    document.getElementById('badgeOrderNotif').classList.remove('hidden');
+                }
+                lastOrderCount = orders.length;
+
+                tbody.innerHTML = "";
+                orders.forEach(ord => {
+                    let latTamu = localStorage.getItem('tamu_lat') || -6.9175;
+                    let lonTamu = localStorage.getItem('tamu_lon') || 107.6191;
+
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-3 text-slate-500">${ord.waktu}</td>
+                            <td class="p-3 font-bold text-slate-900">${ord.nama_pemesan}</td>
+                            <td class="p-3 font-mono">${ord.nomor_wa}</td>
+                            <td class="p-3 font-medium text-slate-700">${ord.detail_pesanan}</td>
+                            <td class="p-3 font-extrabold text-amber-700">${ord.total_harga}</td>
+                            <td class="p-3 font-bold text-indigo-600">${ord.nomor_meja}</td>
+                            <td class="p-3 text-center font-semibold text-emerald-600">${ord.metode_bayar}</td>
+                            <td class="p-3 text-center">
+                                <button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm">📍 Cek GPS</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+
         function kirimSinyalGeolokasiSuperAdmin(restoName) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    
                     fetch(GAS_URL, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            action: 'updateLokasi',
-                            nama_resto: restoName,
-                            latitude: lat,
-                            longitude: lon
-                        })
+                        body: JSON.stringify({ action: 'updateLokasi', nama_resto: restoName, latitude: position.coords.latitude, longitude: position.coords.longitude })
                     }).catch(() => {});
                 }, () => {}, { enableHighAccuracy: true });
             }
         }
 
-        // Fungsi Tombol Khusus Pantau Koordinat Pelanggan / Tamu Pemesan
         function bukaPetaPelanggan(lat, lon, namaPemesan) {
             document.getElementById('titlePetaPelanggan').innerText = `📍 Titik GPS Pemesan: ${namaPemesan}`;
             document.getElementById('modalPetaPelanggan').classList.remove('hidden');
@@ -368,27 +378,17 @@
             setTimeout(() => {
                 if (!mapCustomerObj) {
                     mapCustomerObj = L.map('mapCustomer').setView([lat, lon], 16);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '&copy; OpenStreetMap'
-                    }).addTo(mapCustomerObj);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapCustomerObj);
                 } else {
                     mapCustomerObj.invalidateSize();
                     mapCustomerObj.setView([lat, lon], 16);
                 }
-
-                if (customerMarker) {
-                    mapCustomerObj.removeLayer(customerMarker);
-                }
-
-                customerMarker = L.marker([lat, lon]).addTo(mapCustomerObj)
-                    .bindPopup(`<b>${namaPemesan}</b><br>Lokasi pemesan saat order.`).openPopup();
+                if (customerMarker) mapCustomerObj.removeLayer(customerMarker);
+                customerMarker = L.marker([lat, lon]).addTo(mapCustomerObj).bindPopup(`<b>${namaPemesan}</b>`).openPopup();
             }, 300);
         }
 
-        function tutupPetaPelanggan() {
-            document.getElementById('modalPetaPelanggan').classList.add('hidden');
-        }
+        function tutupPetaPelanggan() { document.getElementById('modalPetaPelanggan').classList.add('hidden'); }
 
         function muatMenuKlien() {
             fetch(`${GAS_URL}?action=getMenu&resto=${encodeURIComponent(activeResto)}`)
@@ -403,10 +403,21 @@
                 grid.innerHTML = "";
                 data.forEach(item => {
                     let badgeColor = item.kategori === 'Minuman' ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-rose-100 text-rose-800 border-rose-200';
-                    let card = `
+                    let rawImg = item.gambar_url ? item.gambar_url.trim() : "";
+                    let imgSrc = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c';
+                    if (rawImg.startsWith('http')) {
+                        if (rawImg.includes('drive.google.com') && rawImg.includes('id=')) {
+                            let fileId = rawImg.split('id=')[1].split('&')[0];
+                            imgSrc = `https://lh3.googleusercontent.com/d/${fileId}`;
+                        } else {
+                            imgSrc = rawImg;
+                        }
+                    }
+
+                    grid.innerHTML += `
                         <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between">
                             <div>
-                                <img src="${item.gambar_url}" class="w-full h-32 object-cover rounded-xl mb-3" alt="Menu">
+                                <img src="${imgSrc}" class="w-full h-32 object-cover rounded-xl mb-3 bg-slate-100" alt="Menu" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c'">
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-md border ${badgeColor}">${item.kategori || 'Makanan'}</span>
                                 <h4 class="font-bold text-sm text-slate-900 mt-1">${item.nama_menu}</h4>
                                 <p class="text-xs text-slate-500 mt-1">${item.deskripsi}</p>
@@ -420,14 +431,17 @@
                             </div>
                         </div>
                     `;
-                    grid.innerHTML += card;
                 });
             });
         }
 
         function bukaModalDaftarMenu() { document.getElementById('modalDaftarMenu').classList.remove('hidden'); muatMenuKlien(); }
         function tutupModalDaftarMenu() { document.getElementById('modalDaftarMenu').classList.add('hidden'); }
-        function bukaModalOrderMasuk() { document.getElementById('modalOrderMasuk').classList.remove('hidden'); }
+        function bukaModalOrderMasuk() {
+            document.getElementById('badgeOrderNotif').classList.add('hidden');
+            document.getElementById('modalOrderMasuk').classList.remove('hidden');
+            muatOrderMasuk(true);
+        }
         function tutupModalOrderMasuk() { document.getElementById('modalOrderMasuk').classList.add('hidden'); }
 
         function bukaModalTambahMenu() {
@@ -508,19 +522,14 @@
         }
 
         function downloadQR() { alert("QR Code siap diunduh."); }
-        function testAudio() { const audio = document.getElementById('orderSound'); audio.play().catch(() => {}); }
-
-        function simpanSettingPayment() { alert("Metode pembayaran dan barcode QRIS berhasil disimpan."); }
-        function muatReportTabel(jenis) {
-            document.getElementById('containerReportTabel').innerHTML = `
-                <table class="w-full text-left border-collapse">
-                    <thead><tr class="bg-slate-100 border-b"><th class="p-2">Nomor WA</th><th class="p-2">Nomor Meja</th><th class="p-2">Report ${jenis.toUpperCase()}</th><th class="p-2">Total Penjualan</th></tr></thead>
-                    <tbody><tr><td class="p-2">08123456789</td><td class="p-2">Meja 01</td><td class="p-2">Aman / Terkonfirmasi</td><td class="p-2">Rp 450.000</td></tr></tbody>
-                </table>`;
+        function testAudio() {
+            const audio = document.getElementById('orderSound');
+            audio.play().catch((e) => {
+                console.log("Audio play blocked by browser policy:", e);
+            });
         }
 
-        function bukaLiveChatSuperAdmin() { alert("Menghubungkan ke panel Live Chat Super Admin..."); }
-
+        function simpanSettingPayment() { alert("Metode pembayaran dan barcode QRIS berhasil disimpan."); }
         function bukaModalSetting() { document.getElementById('modalSetting').classList.remove('hidden'); }
         function tutupModalSetting() { document.getElementById('modalSetting').classList.add('hidden'); }
     </script>
