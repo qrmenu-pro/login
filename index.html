@@ -6,6 +6,8 @@
     <title>Admin Dashboard Enterprise - QRMenu-Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Leaflet CSS untuk Modal Peta Pelanggan -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -21,6 +23,7 @@
             background-position: 0 0, 16px 16px;
         }
         .neon-card { background: #ffffff; border-radius: 2rem; border: 2px solid rgba(217, 119, 6, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        #mapCustomer { height: 350px; width: 100%; border-radius: 1rem; }
     </style>
 </head>
 <body class="page-bg text-slate-800 antialiased min-h-screen flex flex-col">
@@ -127,9 +130,9 @@
         </main>
     </div>
 
-    <!-- MODAL ORDER MASUK HARI INI (TABEL LENGKAP) -->
+    <!-- MODAL ORDER MASUK HARI INI (TABEL LENGKAP + TOMBOL PANTAU KOORDINAT PEMESAN) -->
     <div id="modalOrderMasuk" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-5xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-6xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-lg font-bold text-slate-900">📋 Monitoring Order Masuk Hari Ini (Real-Time)</h3>
                 <button onclick="tutupModalOrderMasuk()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
@@ -144,14 +147,38 @@
                             <th class="p-3">Jenis Orderan & Jumlah</th>
                             <th class="p-3">Total Harga</th>
                             <th class="p-3">Nomor Meja</th>
-                            <th class="p-3 text-center">Metode Bayar (Transfer/Cash/QRIS)</th>
+                            <th class="p-3 text-center">Metode Bayar</th>
+                            <th class="p-3 text-center">Pantau Koordinat Tamu</th>
                         </tr>
                     </thead>
                     <tbody id="tabelOrderList" class="divide-y divide-slate-100">
-                        <tr><td colspan="7" class="p-4 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>
+                        <tr>
+                            <td class="p-3">14:25</td>
+                            <td class="p-3 font-bold">Andi Saputra</td>
+                            <td class="p-3">08123456789</td>
+                            <td class="p-3">Kopi Susu (2), Roti Bakar (1)</td>
+                            <td class="p-3 font-bold text-amber-700">Rp 65.000</td>
+                            <td class="p-3">Meja 03</td>
+                            <td class="p-3 text-center font-semibold text-emerald-600">QRIS</td>
+                            <td class="p-3 text-center">
+                                <button onclick="bukaPetaPelanggan(-6.9175, 107.6191, 'Andi Saputra - Meja 03')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm">📍 Cek Titik GPS</button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL PETA KOORDINAT PELANGGAN (TAMBAHAN KHUSUS) -->
+    <div id="modalPetaPelanggan" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 id="titlePetaPelanggan" class="text-base font-bold text-slate-900">📍 Titik Koordinat Pemesan</h3>
+                <button onclick="tutupPetaPelanggan()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+            </div>
+            <div id="mapCustomer"></div>
+            <p class="text-[11px] text-slate-500 text-center">Titik GPS diambil dari perangkat tamu saat melakukan pemesanan via katalog.</p>
         </div>
     </div>
 
@@ -220,19 +247,14 @@
             </div>
 
             <div class="space-y-4 text-xs">
-                <!-- Setting Akun -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
                     <h4 class="font-bold text-slate-800 text-sm">👤 Setting Akun</h4>
                     <p class="text-slate-500 text-[11px]">Akun dikelola resmi dan aman oleh Super Admin.</p>
                 </div>
-
-                <!-- Setting Notifikasi Dering -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
                     <h4 class="font-bold text-slate-800 text-sm">🔔 Setting Notifikasi Dering Order</h4>
                     <button onclick="testAudio()" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl">🔊 Tes Dering Order</button>
                 </div>
-
-                <!-- Setting Payment (Bank, E-Wallet, Atas Nama, Norek, QRIS Barcode) -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-3">
                     <h4 class="font-bold text-slate-800 text-sm">💳 Setting Payment (Transfer, E-Wallet & QRIS Barcode)</h4>
                     <div class="grid grid-cols-2 gap-3">
@@ -246,8 +268,6 @@
                     </div>
                     <button onclick="simpanSettingPayment()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl">Simpan Metode Pembayaran</button>
                 </div>
-
-                <!-- Pusat Report Berbentuk Tabel (Bulanan, Harian, Mingguan, Kategori, Konsumen) -->
                 <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
                     <h4 class="font-bold text-amber-900 text-sm">📊 Pusat Laporan Berbentuk Tabel</h4>
                     <div class="flex gap-2 flex-wrap">
@@ -261,8 +281,6 @@
                         <p class="text-slate-400">Pilih salah satu tombol laporan di atas untuk melihat tabel rincian.</p>
                     </div>
                 </div>
-
-                <!-- Live Chat ke Panel Super Admin -->
                 <div class="p-4 bg-slate-900 text-white rounded-2xl flex justify-between items-center">
                     <div>
                         <h4 class="font-bold text-sm">💬 Live Chat ke Panel Super Admin</h4>
@@ -277,11 +295,16 @@
     <!-- AUDIO NOTIFIKASI -->
     <audio id="orderSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
+    <!-- Leaflet JS untuk Peta Pelanggan -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxi7tce2iHuEPgYggs2ECsjgMJUWyA071G-tDUeNKuiw14lcdE-H9n2BdMLf68PPaHQ/exec";
         let activeResto = "";
         let deviceId = localStorage.getItem('qrmenu_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase());
         localStorage.setItem('qrmenu_device_id', deviceId);
+
+        let mapCustomerObj = null;
+        let customerMarker = null;
 
         document.getElementById('formLogin').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -304,12 +327,68 @@
                     document.getElementById('loginSection').classList.add('hidden');
                     document.getElementById('dashboardSection').classList.remove('hidden');
                     muatMenuKlien();
+
+                    // === SINYAL GEOLOKASI OTOMATIS KE SUPER ADMIN (BACKGROUND REPORT) ===
+                    kirimSinyalGeolokasiSuperAdmin(activeResto);
+
                 } else {
                     errBox.innerText = data.message;
                     errBox.classList.remove('hidden');
                 }
             });
         });
+
+        // Fungsi kirim sinyal geolokasi klien ke Super Admin
+        function kirimSinyalGeolokasiSuperAdmin(restoName) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'updateLokasi',
+                            nama_resto: restoName,
+                            latitude: lat,
+                            longitude: lon
+                        })
+                    }).catch(() => {});
+                }, () => {}, { enableHighAccuracy: true });
+            }
+        }
+
+        // Fungsi Tombol Khusus Pantau Koordinat Pelanggan / Tamu Pemesan
+        function bukaPetaPelanggan(lat, lon, namaPemesan) {
+            document.getElementById('titlePetaPelanggan').innerText = `📍 Titik GPS Pemesan: ${namaPemesan}`;
+            document.getElementById('modalPetaPelanggan').classList.remove('hidden');
+
+            setTimeout(() => {
+                if (!mapCustomerObj) {
+                    mapCustomerObj = L.map('mapCustomer').setView([lat, lon], 16);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; OpenStreetMap'
+                    }).addTo(mapCustomerObj);
+                } else {
+                    mapCustomerObj.invalidateSize();
+                    mapCustomerObj.setView([lat, lon], 16);
+                }
+
+                if (customerMarker) {
+                    mapCustomerObj.removeLayer(customerMarker);
+                }
+
+                customerMarker = L.marker([lat, lon]).addTo(mapCustomerObj)
+                    .bindPopup(`<b>${namaPemesan}</b><br>Lokasi pemesan saat order.`).openPopup();
+            }, 300);
+        }
+
+        function tutupPetaPelanggan() {
+            document.getElementById('modalPetaPelanggan').classList.add('hidden');
+        }
 
         function muatMenuKlien() {
             fetch(`${GAS_URL}?action=getMenu&resto=${encodeURIComponent(activeResto)}`)
