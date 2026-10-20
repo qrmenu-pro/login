@@ -297,6 +297,7 @@
         let lastOrderCount = 0;
         let pollingInterval = null;
 
+        // Pembersih nomor WA universal (Aman untuk HP & PC menggunakan API WhatsApp resmi)
         function formatNomorWA(nomor) {
             if (!nomor) return '';
             let cleaned = String(nomor).replace(/\D/g, '');
@@ -307,6 +308,27 @@
                 cleaned = '62' + cleaned;
             }
             return cleaned;
+        }
+
+        // Geolokasi Otomatis (Support HP & PC dengan Fallback Akurat)
+        function kirimSinyalGeolokasiSuperAdmin(restoName) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            action: 'updateLokasi', 
+                            nama_resto: restoName, 
+                            latitude: position.coords.latitude, 
+                            longitude: position.coords.longitude 
+                        })
+                    }).catch(() => {});
+                }, (error) => {
+                    console.log("GPS Notice:", error.message);
+                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+            }
         }
 
         document.getElementById('formLogin').addEventListener('submit', function(e) {
@@ -335,6 +357,9 @@
 
                     if(pollingInterval) clearInterval(pollingInterval);
                     pollingInterval = setInterval(() => { muatOrderMasuk(false); }, 5000);
+
+                    // Kirim sinyal GPS ke Super Admin saat login sukses (Support HP/PC)
+                    kirimSinyalGeolokasiSuperAdmin(activeResto);
                 } else {
                     errBox.innerText = data.message;
                     errBox.classList.remove('hidden');
@@ -368,7 +393,8 @@
                     let lonTamu = 107.6191;
                     let bersihWA = formatNomorWA(ord.nomor_wa);
                     let pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto}. Pesanan Anda sedang diproses.`);
-                    let linkWaUrl = `https://wa.me/${bersihWA}?text=${pesanWA}`;
+                    // Menggunakan api.whatsapp.com agar 100% tembus di HP tanpa error kode negara
+                    let linkWaUrl = `https://api.whatsapp.com/send?phone=${bersihWA}&text=${pesanWA}`;
 
                     tbody.innerHTML += `
                         <tr class="hover:bg-slate-50 transition">
