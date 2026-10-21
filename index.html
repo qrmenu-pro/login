@@ -299,6 +299,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxi7tce2iHuEPgYggs2ECsjgMJUWyA071G-tDUeNKuiw14lcdE-H9n2BdMLf68PPaHQ/exec";
+        const API_KEY = "QRMenuProSecret2026Bandung"; // Kunci rahasia pengaman API backend GAS
+        
         let activeResto = localStorage.getItem('qrmenu_admin_resto') || "";
         let deviceId = localStorage.getItem('qrmenu_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase());
         localStorage.setItem('qrmenu_device_id', deviceId);
@@ -335,7 +337,7 @@
             const pass = document.getElementById('loginPass').value;
             const errBox = document.getElementById('loginError');
 
-            fetch(`${GAS_URL}?action=loginResto&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&device_id=${deviceId}`)
+            fetch(`${GAS_URL}?key=${API_KEY}&action=loginResto&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&device_id=${deviceId}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
@@ -383,7 +385,7 @@
 
         function muatOrderMasuk(isInitial) {
             if(!activeResto) return;
-            fetch(`${GAS_URL}?action=getOrderMasuk&resto=${encodeURIComponent(activeResto)}`)
+            fetch(`${GAS_URL}?key=${API_KEY}&action=getOrderMasuk&resto=${encodeURIComponent(activeResto)}`)
             .then(res => res.json())
             .then(resData => {
                 let orders = resData.data || [];
@@ -439,7 +441,7 @@
             const container = document.getElementById('containerReportTabel');
             container.innerHTML = `<p class="text-slate-400 text-center py-4 font-medium">Memuat data laporan ${jenis} dalam bentuk tabel...</p>`;
 
-            fetch(`${GAS_URL}?action=getReport&resto=${encodeURIComponent(activeResto)}&jenis=${jenis}`)
+            fetch(`${GAS_URL}?key=${API_KEY}&action=getReport&resto=${encodeURIComponent(activeResto)}&jenis=${jenis}`)
             .then(res => res.json())
             .then(resData => {
                 let data = resData.data || [];
@@ -483,7 +485,6 @@
             });
         }
 
-        // FUNGSI PETA RIIL KOORDINAT PEMESAN
         function bukaPetaPelanggan(lat, lon, namaPemesan) {
             document.getElementById('titlePetaPelanggan').innerText = `📍 Titik GPS Riil Pemesan: ${namaPemesan}`;
             document.getElementById('modalPetaPelanggan').classList.remove('hidden');
@@ -508,7 +509,7 @@
         function tutupPetaPelanggan() { document.getElementById('modalPetaPelanggan').classList.add('hidden'); }
 
         function muatMenuKlien() {
-            fetch(`${GAS_URL}?action=getMenu&resto=${encodeURIComponent(activeResto)}`)
+            fetch(`${GAS_URL}?key=${API_KEY}&action=getMenu&resto=${encodeURIComponent(activeResto)}`)
             .then(res => res.json())
             .then(resData => {
                 const grid = document.getElementById('gridMenu');
@@ -599,6 +600,7 @@
                 reader.readAsDataURL(file);
                 reader.onload = function () {
                     kirimDataMenu(idMenu ? 'editMenu' : 'tambahMenu', {
+                        key: API_KEY,
                         id_menu: idMenu, resto: activeResto, nama_menu: nama, kategori: kategori,
                         harga_awal: hargaAwal, harga_jual: hargaJual, deskripsi: deskripsi,
                         image_base64: reader.result.split(',')[1], image_mime: file.type
@@ -606,6 +608,7 @@
                 };
             } else {
                 kirimDataMenu(idMenu ? 'editMenu' : 'tambahMenu', {
+                    key: API_KEY,
                     id_menu: idMenu, resto: activeResto, nama_menu: nama, kategori: kategori,
                     harga_awal: hargaAwal, harga_jual: hargaJual, deskripsi: deskripsi
                 }, btn);
@@ -626,7 +629,7 @@
 
         function hapusMenu(id) {
             if(confirm("Yakin ingin menghapus menu ini?")) {
-                fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: 'hapusMenu', resto: activeResto, id_menu: id}) })
+                fetch(GAS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: API_KEY, action: 'hapusMenu', resto: activeResto, id_menu: id }) })
                 .then(() => { muatMenuKlien(); });
             }
         }
@@ -659,6 +662,7 @@
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
+                            key: API_KEY,
                             action: 'saveSettingPayment',
                             resto: activeResto,
                             bank: bank,
@@ -675,6 +679,7 @@
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        key: API_KEY,
                         action: 'saveSettingPayment',
                         resto: activeResto,
                         bank: bank,
