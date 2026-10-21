@@ -23,7 +23,7 @@
             background-position: 0 0, 18px 18px;
         }
         .neon-card { background: #ffffff; border-radius: 2rem; border: 2px solid rgba(217, 119, 6, 0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
-        #mapCustomer { height: 400px; width: 100%; border-radius: 1rem; }
+        #mapCustomer { height: 400px; width: 100%; border-radius: 1rem; z-index: 10; }
     </style>
 </head>
 <body class="page-bg text-slate-800 antialiased min-h-screen flex flex-col text-base">
@@ -183,7 +183,7 @@
                 <button onclick="tutupPetaPelanggan()" class="text-slate-400 hover:text-slate-700 font-extrabold text-2xl px-3 py-1 bg-slate-100 rounded-xl">✕</button>
             </div>
             <div id="mapCustomer"></div>
-            <p class="text-xs font-semibold text-slate-500 text-center">Titik GPS diambil dari perangkat tamu saat melakukan pemesanan via katalog.</p>
+            <p id="infoGpsStatus" class="text-xs font-semibold text-slate-500 text-center">Titik GPS murni direkam real-time dari perangkat pemesan.</p>
         </div>
     </div>
 
@@ -403,13 +403,16 @@
 
                 tbody.innerHTML = "";
                 orders.forEach(ord => {
-                    // Ambil latitude dan longitude dari data pesanan tamu yang tersimpan di database
-                    let latTamu = parseFloat(ord.latitude) || -6.9175;
-                    let lonTamu = parseFloat(ord.longitude) || 107.6191;
+                    let latTamu = ord.latitude ? parseFloat(ord.latitude) : null;
+                    let lonTamu = ord.longitude ? parseFloat(ord.longitude) : null;
                     
                     let bersihWA = formatNomorWA(ord.nomor_wa);
                     let pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto}. Pesanan Anda sedang diproses.`);
                     let linkWaUrl = `https://api.whatsapp.com/send?phone=${bersihWA}&text=${pesanWA}`;
+
+                    let gpsBtnHtml = (latTamu && lonTamu) 
+                        ? `<button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - Meja ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md transition active:scale-95">🗺️ Cek GPS</button>`
+                        : `<span class="text-xs font-bold text-rose-500 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200 inline-block">GPS Tidak Aktif</span>`;
 
                     tbody.innerHTML += `
                         <tr class="hover:bg-slate-50/80 transition">
@@ -424,7 +427,7 @@
                                 <a href="${linkWaUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md inline-block transition active:scale-95">Chat WA</a>
                             </td>
                             <td class="p-4 text-center">
-                                <button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md transition active:scale-95">GPS</button>
+                                ${gpsBtnHtml}
                             </td>
                         </tr>
                     `;
@@ -480,25 +483,26 @@
             });
         }
 
-        // FUNGSI PETA TITIK KORDINAT PEMESAN/TAMU
+        // FUNGSI PETA RIIL KOORDINAT PEMESAN
         function bukaPetaPelanggan(lat, lon, namaPemesan) {
-            document.getElementById('titlePetaPelanggan').innerText = `📍 Titik GPS Pemesan: ${namaPemesan}`;
+            document.getElementById('titlePetaPelanggan').innerText = `📍 Titik GPS Riil Pemesan: ${namaPemesan}`;
             document.getElementById('modalPetaPelanggan').classList.remove('hidden');
 
-            let latitude = parseFloat(lat) || -6.9175;
-            let longitude = parseFloat(lon) || 107.6191;
+            document.getElementById('infoGpsStatus').innerText = `Koordinat Aktif: Latitude ${lat}, Longitude ${lon}`;
 
             setTimeout(() => {
                 if (!mapCustomerObj) {
-                    mapCustomerObj = L.map('mapCustomer').setView([latitude, longitude], 17);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapCustomerObj);
+                    mapCustomerObj = L.map('mapCustomer').setView([lat, lon], 18);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 20 }).addTo(mapCustomerObj);
                 } else {
                     mapCustomerObj.invalidateSize();
-                    mapCustomerObj.setView([latitude, longitude], 17);
+                    mapCustomerObj.setView([lat, lon], 18);
                 }
                 if (customerMarker) mapCustomerObj.removeLayer(customerMarker);
-                customerMarker = L.marker([latitude, longitude]).addTo(mapCustomerObj).bindPopup(`<b>${namaPemesan}</b>`).openPopup();
-            }, 300);
+                customerMarker = L.marker([lat, lon]).addTo(mapCustomerObj).bindPopup(`<b>${namaPemesan}</b><br>Lat: ${lat}, Lon: ${lon}`).openPopup();
+                
+                mapCustomerObj.invalidateSize();
+            }, 250);
         }
 
         function tutupPetaPelanggan() { document.getElementById('modalPetaPelanggan').classList.add('hidden'); }
