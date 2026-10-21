@@ -65,7 +65,7 @@
             <div class="flex items-center gap-4">
                 <div>
                     <h1 class="text-base font-bold text-slate-900 flex items-center gap-2" id="titleRestoName">Dashboard Bisnis</h1>
-                    <span class="text-xs text-emerald-600 font-semibold">Lisensi Resmi Aktif (365 Hari)</span>
+                    <span id="labelSisaHari" class="text-xs text-emerald-600 font-semibold">Lisensi Resmi Aktif</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-2 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-200">
                     <span class="relative flex h-2.5 w-2.5">
@@ -128,6 +128,21 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- MODAL BLOKIR LISENSI EXPIRED -->
+    <div id="modalExpired" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl text-center space-y-5 border-2 border-rose-200">
+            <div class="h-16 w-16 bg-rose-100 text-rose-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold shadow-inner">⚠️</div>
+            <div>
+                <h3 class="text-xl font-extrabold text-slate-900">Masa Aktif Lisensi Habis</h3>
+                <p id="expiredMessage" class="text-xs text-slate-600 mt-2 leading-relaxed">Masa aktif aplikasi Anda telah berakhir. Silakan hubungi Developer / Super Admin untuk melakukan perpanjangan lisensi.</p>
+            </div>
+            <a id="btnWaDeveloper" href="https://api.whatsapp.com/send?phone=6285222952220&text=Halo%20Admin,%20saya%20ingin%20memperpanjang%20lisensi%20QRMenu-Pro%20saya." target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2">
+                💬 Hubungi Developer (WhatsApp)
+            </a>
+            <button onclick="location.reload()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition">Tutup / Coba Lagi</button>
+        </div>
     </div>
 
     <!-- MODAL ORDER MASUK HARI INI -->
@@ -237,19 +252,16 @@
             </div>
 
             <div class="space-y-6 text-xs">
-                <!-- Setting Akun -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
                     <h4 class="font-bold text-slate-800 text-sm">Setting Akun & Live Chat Super Admin</h4>
                     <p class="text-slate-500">Live chat terhubung langsung ke panel Super Admin pusat untuk bantuan teknis.</p>
                 </div>
 
-                <!-- Setting Notifikasi -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
                     <h4 class="font-bold text-slate-800 text-sm">Setting Notifikasi Dering Order</h4>
                     <button onclick="testAudio()" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl">Tes Dering Order</button>
                 </div>
                 
-                <!-- Setting Payment -->
                 <div class="p-4 bg-slate-50 rounded-2xl border space-y-3">
                     <h4 class="font-bold text-slate-800 text-sm">Setting Payment (Bank, E-Wallet, & QRIS Barcode)</h4>
                     <div class="grid grid-cols-2 gap-3">
@@ -264,7 +276,6 @@
                     <button onclick="simpanSettingPayment()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl">Simpan Metode Pembayaran</button>
                 </div>
 
-                <!-- Pusat Laporan Berbentuk Tabel -->
                 <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
                     <h4 class="font-bold text-amber-900 text-sm">Pusat Laporan & Report Otomatis (Format Tabel)</h4>
                     <div class="flex gap-2 flex-wrap">
@@ -297,10 +308,9 @@
         let lastOrderCount = 0;
         let pollingInterval = null;
 
-        // Cek Sesi Tersimpan (Stay Logged In) saat pertama kali buka aplikasi
         window.addEventListener('DOMContentLoaded', () => {
             if (activeResto) {
-                inisialisasiDashboard(activeResto);
+                inisialisasiDashboard(activeResto, null);
             } else {
                 document.getElementById('loginSection').classList.remove('hidden');
                 document.getElementById('dashboardSection').classList.add('hidden');
@@ -351,7 +361,10 @@
                 if (data.status === 'success') {
                     activeResto = data.resto;
                     localStorage.setItem('qrmenu_admin_resto', activeResto);
-                    inisialisasiDashboard(activeResto);
+                    inisialisasiDashboard(activeResto, data.sisa_hari);
+                } else if (data.status === 'expired') {
+                    document.getElementById('expiredMessage').innerText = data.message;
+                    document.getElementById('modalExpired').classList.remove('hidden');
                 } else {
                     errBox.innerText = data.message;
                     errBox.classList.remove('hidden');
@@ -359,8 +372,12 @@
             });
         });
 
-        function inisialisasiDashboard(restoName) {
+        function inisialisasiDashboard(restoName, sisaHari) {
             document.getElementById('titleRestoName').innerText = `Dashboard Bisnis: ${restoName}`;
+            if (sisaHari !== null && sisaHari !== undefined) {
+                document.getElementById('labelSisaHari').innerText = `Lisensi Resmi Aktif (Sisa ${sisaHari} Hari)`;
+            }
+
             const targetLink = `https://qrmenu-pro.github.io/bisnis/?resto=${encodeURIComponent(restoName)}`;
             document.getElementById('linkOrder').value = targetLink;
             
