@@ -77,7 +77,7 @@
 
             <div class="flex items-center gap-3">
                 <button onclick="bukaModalSetting()" class="bg-slate-100 hover:bg-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-300 font-semibold flex items-center gap-1.5 shadow-sm">Pengaturan</button>
-                <button onclick="location.reload()" class="bg-rose-50 hover:bg-rose-100 text-xs px-3.5 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold">Keluar</button>
+                <button onclick="logoutAdmin()" class="bg-rose-50 hover:bg-rose-100 text-xs px-3.5 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold">Keluar</button>
             </div>
         </header>
 
@@ -288,7 +288,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxi7tce2iHuEPgYggs2ECsjgMJUWyA071G-tDUeNKuiw14lcdE-H9n2BdMLf68PPaHQ/exec";
-        let activeResto = "";
+        let activeResto = localStorage.getItem('qrmenu_admin_resto') || "";
         let deviceId = localStorage.getItem('qrmenu_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase());
         localStorage.setItem('qrmenu_device_id', deviceId);
 
@@ -297,7 +297,16 @@
         let lastOrderCount = 0;
         let pollingInterval = null;
 
-        // Pembersih nomor WA universal (Aman untuk HP & PC menggunakan API WhatsApp resmi)
+        // Cek Sesi Tersimpan (Stay Logged In) saat pertama kali buka aplikasi
+        window.addEventListener('DOMContentLoaded', () => {
+            if (activeResto) {
+                inisialisasiDashboard(activeResto);
+            } else {
+                document.getElementById('loginSection').classList.remove('hidden');
+                document.getElementById('dashboardSection').classList.add('hidden');
+            }
+        });
+
         function formatNomorWA(nomor) {
             if (!nomor) return '';
             let cleaned = String(nomor).replace(/\D/g, '');
@@ -310,7 +319,6 @@
             return cleaned;
         }
 
-        // Geolokasi Otomatis (Support HP & PC dengan Fallback Akurat)
         function kirimSinyalGeolokasiSuperAdmin(restoName) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
@@ -342,30 +350,41 @@
             .then(data => {
                 if (data.status === 'success') {
                     activeResto = data.resto;
-                    document.getElementById('titleRestoName').innerText = `Dashboard Bisnis: ${activeResto}`;
-                    const targetLink = `https://qrmenu-pro.github.io/bisnis/?resto=${encodeURIComponent(activeResto)}`;
-                    document.getElementById('linkOrder').value = targetLink;
-                    
-                    document.getElementById('qrcode').innerHTML = "";
-                    new QRCode(document.getElementById("qrcode"), { text: targetLink, width: 140, height: 140 });
-
-                    document.getElementById('loginSection').classList.add('hidden');
-                    document.getElementById('dashboardSection').classList.remove('hidden');
-                    
-                    muatMenuKlien();
-                    muatOrderMasuk(true);
-
-                    if(pollingInterval) clearInterval(pollingInterval);
-                    pollingInterval = setInterval(() => { muatOrderMasuk(false); }, 5000);
-
-                    // Kirim sinyal GPS ke Super Admin saat login sukses (Support HP/PC)
-                    kirimSinyalGeolokasiSuperAdmin(activeResto);
+                    localStorage.setItem('qrmenu_admin_resto', activeResto);
+                    inisialisasiDashboard(activeResto);
                 } else {
                     errBox.innerText = data.message;
                     errBox.classList.remove('hidden');
                 }
             });
         });
+
+        function inisialisasiDashboard(restoName) {
+            document.getElementById('titleRestoName').innerText = `Dashboard Bisnis: ${restoName}`;
+            const targetLink = `https://qrmenu-pro.github.io/bisnis/?resto=${encodeURIComponent(restoName)}`;
+            document.getElementById('linkOrder').value = targetLink;
+            
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), { text: targetLink, width: 140, height: 140 });
+
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            
+            muatMenuKlien();
+            muatOrderMasuk(true);
+
+            if(pollingInterval) clearInterval(pollingInterval);
+            pollingInterval = setInterval(() => { muatOrderMasuk(false); }, 5000);
+
+            kirimSinyalGeolokasiSuperAdmin(restoName);
+        }
+
+        function logoutAdmin() {
+            if (confirm("Apakah Anda yakin ingin keluar dari akun toko ini?")) {
+                localStorage.removeItem('qrmenu_admin_resto');
+                location.reload();
+            }
+        }
 
         function muatOrderMasuk(isInitial) {
             if(!activeResto) return;
@@ -393,7 +412,6 @@
                     let lonTamu = 107.6191;
                     let bersihWA = formatNomorWA(ord.nomor_wa);
                     let pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto}. Pesanan Anda sedang diproses.`);
-                    // Menggunakan api.whatsapp.com agar 100% tembus di HP tanpa error kode negara
                     let linkWaUrl = `https://api.whatsapp.com/send?phone=${bersihWA}&text=${pesanWA}`;
 
                     tbody.innerHTML += `
