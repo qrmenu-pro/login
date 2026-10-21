@@ -8,121 +8,121 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <meta name="theme-color" content="#d97706">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         @keyframes pulse-live {
-            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(239, 68, 68, 0.6); }
-            50% { opacity: 0.4; transform: scale(1.2); box-shadow: 0 0 20px rgba(239, 68, 68, 0.9); }
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 12px rgba(239, 68, 68, 0.7); }
+            50% { opacity: 0.4; transform: scale(1.25); box-shadow: 0 0 24px rgba(239, 68, 68, 0.9); }
         }
         .animate-pulse-live { animation: pulse-live 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         .page-bg {
             background-color: #f8fafc;
-            background-image: radial-gradient(#d97706 0.6px, transparent 0.6px), radial-gradient(#d97706 0.6px, #f8fafc 0.6px);
-            background-size: 32px 32px;
-            background-position: 0 0, 16px 16px;
+            background-image: radial-gradient(#d97706 0.8px, transparent 0.8px), radial-gradient(#d97706 0.8px, #f8fafc 0.8px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
         }
-        .neon-card { background: #ffffff; border-radius: 2rem; border: 2px solid rgba(217, 119, 6, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        #mapCustomer { height: 350px; width: 100%; border-radius: 1rem; }
+        .neon-card { background: #ffffff; border-radius: 2rem; border: 2px solid rgba(217, 119, 6, 0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
+        #mapCustomer { height: 400px; width: 100%; border-radius: 1rem; }
     </style>
 </head>
-<body class="page-bg text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="page-bg text-slate-800 antialiased min-h-screen flex flex-col text-base">
 
     <!-- LOGIN SECTION KLIEN -->
     <div id="loginSection" class="min-h-screen flex items-center justify-center p-6 relative">
-        <div class="absolute top-6 right-6 flex items-center space-x-2 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-200">
-            <span class="relative flex h-2.5 w-2.5">
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-600 animate-pulse-live"></span>
+        <div class="absolute top-6 right-6 flex items-center space-x-2.5 bg-rose-50 px-4 py-2 rounded-full border border-rose-200 shadow-sm">
+            <span class="relative flex h-3 w-3">
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-600 animate-pulse-live"></span>
             </span>
-            <span class="text-[11px] font-extrabold text-rose-700 uppercase">System Active</span>
+            <span class="text-xs font-extrabold text-rose-700 uppercase tracking-wider">System Active</span>
         </div>
 
-        <div class="neon-card p-8 w-full max-w-md relative z-10 shadow-2xl">
+        <div class="neon-card p-10 w-full max-w-lg relative z-10 shadow-2xl">
             <div class="text-center mb-8">
-                <div class="h-16 w-16 bg-gradient-to-tr from-amber-600 to-amber-400 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-amber-600/30 mb-4 text-white font-bold text-xl">QR</div>
-                <h2 class="text-xl font-bold text-slate-900 tracking-tight">QRMenu-Pro Enterprise</h2>
-                <p class="text-xs text-amber-700 font-bold mt-1 uppercase tracking-wider">Portal Login Merchant Klien</p>
+                <div class="h-20 w-20 bg-gradient-to-tr from-amber-600 to-amber-400 rounded-3xl mx-auto flex items-center justify-center shadow-lg shadow-amber-600/30 mb-5 text-white font-extrabold text-2xl">QR</div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">QRMenu-Pro Enterprise</h2>
+                <p class="text-sm text-amber-700 font-bold mt-1.5 uppercase tracking-wider">Portal Login Merchant Klien</p>
             </div>
 
-            <form id="formLogin" class="space-y-4">
+            <form id="formLogin" class="space-y-5">
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Username Bisnis</label>
-                    <input type="text" id="loginUser" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
+                    <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">Username Bisnis</label>
+                    <input type="text" id="loginUser" required class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-base text-slate-900 focus:outline-none focus:border-amber-600 transition font-medium">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Password</label>
-                    <input type="password" id="loginPass" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
+                    <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">Password</label>
+                    <input type="password" id="loginPass" required class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-base text-slate-900 focus:outline-none focus:border-amber-600 transition font-medium">
                 </div>
-                <button type="submit" id="btnLogin" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-amber-600/25">Masuk Panel Bisnis</button>
+                <button type="submit" id="btnLogin" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 rounded-2xl text-base transition shadow-xl shadow-amber-600/30 active:scale-[0.99]">Masuk Panel Bisnis</button>
             </form>
-            <div id="loginError" class="mt-4 hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs text-center font-medium"></div>
+            <div id="loginError" class="mt-5 hidden p-4 rounded-2xl bg-rose-50 border-2 border-rose-200 text-rose-700 text-sm text-center font-bold"></div>
         </div>
     </div>
 
     <!-- DASHBOARD UTAMA KLIEN -->
     <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
-        <header class="bg-white/90 backdrop-blur-xl border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
-            <div class="flex items-center gap-4">
+        <header class="bg-white/95 backdrop-blur-xl border-b border-slate-200 px-6 py-5 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+            <div class="flex items-center gap-5">
                 <div>
-                    <h1 class="text-base font-bold text-slate-900 flex items-center gap-2" id="titleRestoName">Dashboard Bisnis</h1>
-                    <span id="labelSisaHari" class="text-xs text-emerald-600 font-semibold">Lisensi Resmi Aktif</span>
+                    <h1 class="text-lg md:text-xl font-extrabold text-slate-900 flex items-center gap-2.5" id="titleRestoName">Dashboard Bisnis</h1>
+                    <span id="labelSisaHari" class="text-sm text-emerald-700 font-bold mt-0.5 block">Lisensi Resmi Aktif</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-2 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-200">
-                    <span class="relative flex h-2.5 w-2.5">
-                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-600 animate-pulse-live"></span>
+                <div class="hidden md:flex items-center space-x-2.5 bg-rose-50 px-4 py-2 rounded-full border border-rose-200 shadow-sm">
+                    <span class="relative flex h-3 w-3">
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-600 animate-pulse-live"></span>
                     </span>
-                    <span class="text-[11px] font-extrabold text-rose-700 uppercase">Live System Active</span>
+                    <span class="text-xs font-extrabold text-rose-700 uppercase tracking-wider">Live System Active</span>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
-                <button onclick="bukaModalSetting()" class="bg-slate-100 hover:bg-slate-200 text-xs px-3.5 py-2 rounded-xl border border-slate-300 font-semibold flex items-center gap-1.5 shadow-sm">Pengaturan</button>
-                <button onclick="logoutAdmin()" class="bg-rose-50 hover:bg-rose-100 text-xs px-3.5 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold">Keluar</button>
+                <button onclick="bukaModalSetting()" class="bg-slate-100 hover:bg-slate-200 text-sm px-5 py-3 rounded-2xl border border-slate-300 font-bold flex items-center gap-2 shadow-sm transition active:scale-95">⚙️ Pengaturan</button>
+                <button onclick="logoutAdmin()" class="bg-rose-50 hover:bg-rose-100 text-sm px-5 py-3 rounded-2xl border border-rose-200 text-rose-700 font-bold transition active:scale-95">🚪 Keluar</button>
             </div>
         </header>
 
-        <main class="max-w-5xl mx-auto px-6 py-10 flex-1 w-full space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div class="space-y-4">
+        <main class="max-w-6xl mx-auto px-6 py-10 flex-1 w-full space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                <div class="space-y-5 flex flex-col justify-between">
                     <!-- Tombol Hijau Order Masuk Real-Time -->
-                    <button onclick="bukaModalOrderMasuk()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-5 rounded-3xl shadow-lg transition flex items-center justify-between text-left relative">
-                        <span id="badgeOrderNotif" class="hidden absolute -top-2 -right-2 bg-rose-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full animate-bounce">Baru!</span>
+                    <button onclick="bukaModalOrderMasuk()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-6 rounded-3xl shadow-xl transition flex items-center justify-between text-left relative active:scale-[0.99] group">
+                        <span id="badgeOrderNotif" class="hidden absolute -top-2.5 -right-2.5 bg-rose-600 text-white text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-lg animate-bounce">Baru!</span>
                         <div>
-                            <span class="text-[10px] uppercase font-bold tracking-wider bg-emerald-800 px-2 py-0.5 rounded-full">Real-Time Monitor</span>
-                            <h3 class="text-xl font-extrabold mt-1">🟢 Order Masuk Hari Ini</h3>
-                            <p class="text-xs text-emerald-100 mt-0.5">Pantau pesanan tamu real-time & metode bayar.</p>
+                            <span class="text-xs uppercase font-extrabold tracking-wider bg-emerald-900/60 px-3 py-1 rounded-full text-emerald-100">Real-Time Monitor</span>
+                            <h3 class="text-2xl font-extrabold mt-2 group-hover:translate-x-1 transition">🟢 Order Masuk Hari Ini</h3>
+                            <p class="text-sm text-emerald-100 mt-1 font-medium">Pantau pesanan tamu real-time & metode bayar.</p>
                         </div>
-                        <span class="text-2xl bg-white/20 p-3 rounded-2xl">📋</span>
+                        <span class="text-3xl bg-white/20 p-4 rounded-2xl shadow-inner">📋</span>
                     </button>
 
                     <!-- Tombol Daftar Menu -->
-                    <button onclick="bukaModalDaftarMenu()" class="w-full bg-amber-600 hover:bg-amber-700 text-white p-4 rounded-3xl shadow-md transition flex items-center justify-between text-left">
+                    <button onclick="bukaModalDaftarMenu()" class="w-full bg-amber-600 hover:bg-amber-700 text-white p-6 rounded-3xl shadow-xl transition flex items-center justify-between text-left active:scale-[0.99] group">
                         <div>
-                            <h3 class="text-base font-bold">🍽️ Daftar Menu Grid</h3>
-                            <p class="text-xs text-amber-100">Kelola dan lihat produk makanan/minuman.</p>
+                            <h3 class="text-xl font-extrabold group-hover:translate-x-1 transition">🍽️ Daftar Menu Grid</h3>
+                            <p class="text-sm text-amber-100 mt-1 font-medium">Kelola dan lihat produk makanan/minuman.</p>
                         </div>
-                        <span class="text-xl bg-white/20 p-2 rounded-xl">📂</span>
+                        <span class="text-3xl bg-white/20 p-4 rounded-2xl shadow-inner">📂</span>
                     </button>
 
                     <!-- Tombol Tambahkan Menu Baru -->
-                    <button onclick="bukaModalTambahMenu()" class="w-full bg-slate-900 hover:bg-slate-800 text-white p-4 rounded-3xl shadow-md transition flex items-center justify-between text-left">
+                    <button onclick="bukaModalTambahMenu()" class="w-full bg-slate-900 hover:bg-slate-800 text-white p-6 rounded-3xl shadow-xl transition flex items-center justify-between text-left active:scale-[0.99] group">
                         <div>
-                            <h3 class="text-base font-bold">➕ Tambahkan Menu Baru</h3>
-                            <p class="text-xs text-slate-400">Upload produk beserta foto, harga & kategori.</p>
+                            <h3 class="text-xl font-extrabold group-hover:translate-x-1 transition">➕ Tambahkan Menu Baru</h3>
+                            <p class="text-sm text-slate-300 mt-1 font-medium">Upload produk beserta foto, harga & kategori.</p>
                         </div>
-                        <span class="text-xl bg-white/10 p-2 rounded-xl">🍔</span>
+                        <span class="text-3xl bg-white/10 p-4 rounded-2xl shadow-inner">🍔</span>
                     </button>
                 </div>
 
                 <!-- Barcode Toko Besar & Link Unik -->
-                <div class="neon-card p-6 flex flex-col items-center justify-center text-center space-y-4">
-                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Barcode & Link Toko Resmi</h3>
-                    <div id="qrcode" class="bg-white p-3 rounded-2xl border shadow-sm"></div>
-                    <div class="w-full space-y-2">
-                        <input type="text" id="linkOrder" readonly class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-amber-700 font-medium text-center">
-                        <div class="flex gap-2">
-                            <button onclick="salinLink()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold py-2 rounded-xl">🔗 Salin Link</button>
-                            <button onclick="downloadQR()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold py-2 rounded-xl">📥 Download QR</button>
+                <div class="neon-card p-8 flex flex-col items-center justify-center text-center space-y-6">
+                    <h3 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Barcode & Link Toko Resmi</h3>
+                    <div id="qrcode" class="bg-white p-5 rounded-3xl border-2 border-amber-200 shadow-md"></div>
+                    <div class="w-full space-y-3">
+                        <input type="text" id="linkOrder" readonly class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-4 py-3.5 text-sm text-amber-700 font-bold text-center">
+                        <div class="flex gap-3">
+                            <button onclick="salinLink()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold py-3.5 rounded-2xl shadow-lg transition active:scale-95">🔗 Salin Link</button>
+                            <button onclick="downloadQR()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white text-sm font-bold py-3.5 rounded-2xl shadow-lg transition active:scale-95">📥 Download QR</button>
                         </div>
                     </div>
                 </div>
@@ -132,43 +132,43 @@
 
     <!-- MODAL BLOKIR LISENSI EXPIRED -->
     <div id="modalExpired" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl text-center space-y-5 border-2 border-rose-200">
-            <div class="h-16 w-16 bg-rose-100 text-rose-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold shadow-inner">⚠️</div>
+        <div class="bg-white rounded-3xl max-w-lg w-full p-10 shadow-2xl text-center space-y-6 border-4 border-rose-200">
+            <div class="h-20 w-20 bg-rose-100 text-rose-600 rounded-3xl mx-auto flex items-center justify-center text-3xl font-extrabold shadow-inner">⚠️</div>
             <div>
-                <h3 class="text-xl font-extrabold text-slate-900">Masa Aktif Lisensi Habis</h3>
-                <p id="expiredMessage" class="text-xs text-slate-600 mt-2 leading-relaxed">Masa aktif aplikasi Anda telah berakhir. Silakan hubungi Developer / Super Admin untuk melakukan perpanjangan lisensi.</p>
+                <h3 class="text-2xl font-extrabold text-slate-900">Masa Aktif Lisensi Habis</h3>
+                <p id="expiredMessage" class="text-sm text-slate-600 mt-3 leading-relaxed font-medium">Masa aktif aplikasi Anda telah berakhir. Silakan hubungi Developer / Super Admin untuk melakukan perpanjangan lisensi.</p>
             </div>
-            <a id="btnWaDeveloper" href="https://api.whatsapp.com/send?phone=6285222952220&text=Halo%20Admin,%20saya%20ingin%20memperpanjang%20lisensi%20QRMenu-Pro%20saya." target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2">
+            <a id="btnWaDeveloper" href="https://api.whatsapp.com/send?phone=6285222952220&text=Halo%20Admin,%20saya%20ingin%20memperpanjang%20lisensi%20QRMenu-Pro%20saya." target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2.5 active:scale-[0.99]">
                 💬 Hubungi Developer (WhatsApp)
             </a>
-            <button onclick="location.reload()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition">Tutup / Coba Lagi</button>
+            <button onclick="location.reload()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 rounded-2xl text-sm transition">Tutup / Coba Lagi</button>
         </div>
     </div>
 
     <!-- MODAL ORDER MASUK HARI INI -->
-    <div id="modalOrderMasuk" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-6xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-slate-900">📋 Monitoring Order Masuk Hari Ini (Real-Time)</h3>
-                <button onclick="tutupModalOrderMasuk()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+    <div id="modalOrderMasuk" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-7xl w-full p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="text-xl font-extrabold text-slate-900">📋 Monitoring Order Masuk Hari Ini (Real-Time)</h3>
+                <button onclick="tutupModalOrderMasuk()" class="text-slate-400 hover:text-slate-700 font-extrabold text-2xl px-3 py-1 bg-slate-100 rounded-xl">✕</button>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
+                <table class="w-full text-left border-collapse text-sm">
                     <thead>
-                        <tr class="bg-slate-100 border-b text-slate-700 font-bold">
-                            <th class="p-3">Waktu</th>
-                            <th class="p-3">Nama Pemesan</th>
-                            <th class="p-3">Nomor WA</th>
-                            <th class="p-3">Jenis Orderan & Jumlah</th>
-                            <th class="p-3">Total Harga</th>
-                            <th class="p-3">Nomor Meja</th>
-                            <th class="p-3 text-center">Metode Bayar</th>
-                            <th class="p-3 text-center">Aksi WA</th>
-                            <th class="p-3 text-center">GPS Tamu</th>
+                        <tr class="bg-slate-100 border-b-2 text-slate-700 font-extrabold">
+                            <th class="p-4">Waktu</th>
+                            <th class="p-4">Nama Pemesan</th>
+                            <th class="p-4">Nomor WA</th>
+                            <th class="p-4">Jenis Orderan & Jumlah</th>
+                            <th class="p-4">Total Harga</th>
+                            <th class="p-4">Nomor Meja</th>
+                            <th class="p-4 text-center">Metode Bayar</th>
+                            <th class="p-4 text-center">Aksi WA</th>
+                            <th class="p-4 text-center">GPS Tamu</th>
                         </tr>
                     </thead>
-                    <tbody id="tabelOrderList" class="divide-y divide-slate-100">
-                        <tr><td colspan="9" class="p-4 text-center text-slate-400">Memuat data order masuk...</td></tr>
+                    <tbody id="tabelOrderList" class="divide-y divide-slate-100 font-medium">
+                        <tr><td colspan="9" class="p-6 text-center text-slate-400">Memuat data order masuk...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -177,115 +177,115 @@
 
     <!-- MODAL PETA KOORDINAT PELANGGAN -->
     <div id="modalPetaPelanggan" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 id="titlePetaPelanggan" class="text-base font-bold text-slate-900">📍 Titik Koordinat Pemesan</h3>
-                <button onclick="tutupPetaPelanggan()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+        <div class="bg-white rounded-3xl max-w-3xl w-full p-8 shadow-2xl space-y-5">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 id="titlePetaPelanggan" class="text-lg font-extrabold text-slate-900">📍 Titik Koordinat Pemesan</h3>
+                <button onclick="tutupPetaPelanggan()" class="text-slate-400 hover:text-slate-700 font-extrabold text-2xl px-3 py-1 bg-slate-100 rounded-xl">✕</button>
             </div>
             <div id="mapCustomer"></div>
-            <p class="text-[11px] text-slate-500 text-center">Titik GPS diambil dari perangkat tamu saat melakukan pemesanan via katalog.</p>
+            <p class="text-xs font-semibold text-slate-500 text-center">Titik GPS diambil dari perangkat tamu saat melakukan pemesanan via katalog.</p>
         </div>
     </div>
 
     <!-- MODAL DAFTAR MENU GRID -->
-    <div id="modalDaftarMenu" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-slate-900">🍽️ Daftar Menu Grid</h3>
-                <button onclick="tutupModalDaftarMenu()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+    <div id="modalDaftarMenu" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-5xl w-full p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="text-xl font-extrabold text-slate-900">🍽️ Daftar Menu Grid</h3>
+                <button onclick="tutupModalDaftarMenu()" class="text-slate-400 hover:text-slate-700 font-extrabold text-2xl px-3 py-1 bg-slate-100 rounded-xl">✕</button>
             </div>
-            <div id="gridMenu" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <p class="text-xs text-slate-400">Memuat daftar menu...</p>
+            <div id="gridMenu" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <p class="text-sm text-slate-400">Memuat daftar menu...</p>
             </div>
         </div>
     </div>
 
     <!-- MODAL FORM TAMBAH / EDIT MENU -->
-    <div id="modalMenu" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 id="modalMenuTitle" class="text-base font-bold text-slate-900">Tambah Menu Baru</h3>
-                <button onclick="tutupModalMenu()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+    <div id="modalMenu" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 id="modalMenuTitle" class="text-lg font-extrabold text-slate-900">Tambah Menu Baru</h3>
+                <button onclick="tutupModalMenu()" class="text-slate-400 hover:text-slate-700 font-extrabold text-2xl px-3 py-1 bg-slate-100 rounded-xl">✕</button>
             </div>
-            <form id="formMenu" class="space-y-3 text-xs">
+            <form id="formMenu" class="space-y-4 text-sm font-medium">
                 <input type="hidden" id="editIdMenu">
                 <div>
-                    <label class="block font-semibold mb-1">Nama Produk</label>
-                    <input type="text" id="inputNama" required class="w-full p-2.5 bg-slate-50 border rounded-xl">
+                    <label class="block font-bold mb-2 text-slate-700">Nama Produk</label>
+                    <input type="text" id="inputNama" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600">
                 </div>
                 <div>
-                    <label class="block font-semibold mb-1">Kategori</label>
-                    <select id="inputKategori" class="w-full p-2.5 bg-slate-50 border rounded-xl">
+                    <label class="block font-bold mb-2 text-slate-700">Kategori</label>
+                    <select id="inputKategori" class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600">
                         <option value="Makanan">Makanan</option>
                         <option value="Minuman">Minuman</option>
                     </select>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block font-semibold mb-1">Harga Modal (Rp)</label>
-                        <input type="number" id="inputHargaAwal" required class="w-full p-2.5 bg-slate-50 border rounded-xl">
+                        <label class="block font-bold mb-2 text-slate-700">Harga Modal (Rp)</label>
+                        <input type="number" id="inputHargaAwal" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600">
                     </div>
                     <div>
-                        <label class="block font-semibold mb-1">Harga Jual (Rp)</label>
-                        <input type="number" id="inputHargaJual" required class="w-full p-2.5 bg-slate-50 border rounded-xl">
+                        <label class="block font-bold mb-2 text-slate-700">Harga Jual (Rp)</label>
+                        <input type="number" id="inputHargaJual" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600">
                     </div>
                 </div>
                 <div>
-                    <label class="block font-semibold mb-1">Deskripsi Produk</label>
-                    <textarea id="inputDeskripsi" rows="2" required class="w-full p-2.5 bg-slate-50 border rounded-xl"></textarea>
+                    <label class="block font-bold mb-2 text-slate-700">Deskripsi Produk</label>
+                    <textarea id="inputDeskripsi" rows="3" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600"></textarea>
                 </div>
                 <div>
-                    <label class="block font-semibold mb-1">Foto Produk</label>
-                    <input type="file" id="inputFoto" accept="image/*" class="w-full text-xs">
+                    <label class="block font-bold mb-2 text-slate-700">Foto Produk</label>
+                    <input type="file" id="inputFoto" accept="image/*" class="w-full text-sm p-3 bg-slate-50 border-2 border-slate-200 rounded-2xl">
                 </div>
-                <button type="submit" id="btnSimpanMenu" class="w-full bg-amber-600 text-white font-bold py-3 rounded-xl shadow-md">Simpan Menu ke Database</button>
+                <button type="submit" id="btnSimpanMenu" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-extrabold py-4 rounded-2xl text-base shadow-xl shadow-amber-600/30 transition active:scale-[0.99]">Simpan Menu ke Database</button>
             </form>
         </div>
     </div>
 
     <!-- MODAL PENGATURAN LENGKAP -->
-    <div id="modalSetting" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+    <div id="modalSetting" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-5xl w-full p-8 shadow-2xl space-y-8 max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-4">
-                <h3 class="text-lg font-bold text-slate-900">Panel Pengaturan & Laporan Bisnis</h3>
-                <button onclick="tutupModalSetting()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+                <h3 class="text-xl font-extrabold text-slate-900">Panel Pengaturan & Laporan Bisnis</h3>
+                <button onclick="tutupModalSetting()" class="text-slate-400 hover:text-slate-700 font-extrabold text-2xl px-3 py-1 bg-slate-100 rounded-xl">✕</button>
             </div>
 
-            <div class="space-y-6 text-xs">
-                <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
-                    <h4 class="font-bold text-slate-800 text-sm">Setting Akun & Live Chat Super Admin</h4>
-                    <p class="text-slate-500">Live chat terhubung langsung ke panel Super Admin pusat untuk bantuan teknis.</p>
+            <div class="space-y-6 text-sm">
+                <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-200 space-y-2">
+                    <h4 class="font-extrabold text-slate-900 text-base">Setting Akun & Live Chat Super Admin</h4>
+                    <p class="text-slate-600 font-medium">Live chat terhubung langsung ke panel Super Admin pusat untuk bantuan teknis.</p>
                 </div>
 
-                <div class="p-4 bg-slate-50 rounded-2xl border space-y-2">
-                    <h4 class="font-bold text-slate-800 text-sm">Setting Notifikasi Dering Order</h4>
-                    <button onclick="testAudio()" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl">Tes Dering Order</button>
+                <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-200 space-y-3">
+                    <h4 class="font-extrabold text-slate-900 text-base">Setting Notifikasi Dering Order</h4>
+                    <button onclick="testAudio()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-5 py-3.5 rounded-2xl shadow-lg transition active:scale-95">🔔 Tes Dering Order</button>
                 </div>
                 
-                <div class="p-4 bg-slate-50 rounded-2xl border space-y-3">
-                    <h4 class="font-bold text-slate-800 text-sm">Setting Payment (Bank, E-Wallet, & QRIS Barcode)</h4>
-                    <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="setBank" placeholder="Bank / E-Wallet (Cth: BCA / Dana)" class="p-2.5 bg-white border rounded-xl">
-                        <input type="text" id="setNorek" placeholder="Nomor Rekening / No Akun" class="p-2.5 bg-white border rounded-xl">
+                <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-200 space-y-4">
+                    <h4 class="font-extrabold text-slate-900 text-base">Setting Payment (Bank, E-Wallet, & QRIS Barcode)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="setBank" placeholder="Bank / E-Wallet (Cth: BCA / Dana)" class="p-4 bg-white border-2 border-slate-200 rounded-2xl font-medium">
+                        <input type="text" id="setNorek" placeholder="Nomor Rekening / No Akun" class="p-4 bg-white border-2 border-slate-200 rounded-2xl font-medium">
                     </div>
-                    <input type="text" id="setAn" placeholder="Atas Nama Pemilik" class="w-full p-2.5 bg-white border rounded-xl">
+                    <input type="text" id="setAn" placeholder="Atas Nama Pemilik" class="w-full p-4 bg-white border-2 border-slate-200 rounded-2xl font-medium">
                     <div>
-                        <label class="block text-[11px] text-slate-500 mb-1">Upload QRIS Barcode Pembayaran</label>
-                        <input type="file" id="setQrisFile" accept="image/*" class="w-full text-xs">
+                        <label class="block text-xs font-bold text-slate-600 mb-2">Upload QRIS Barcode Pembayaran</label>
+                        <input type="file" id="setQrisFile" accept="image/*" class="w-full text-sm p-3 bg-white border-2 border-slate-200 rounded-2xl">
                     </div>
-                    <button onclick="simpanSettingPayment()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-xl">Simpan Metode Pembayaran</button>
+                    <button onclick="simpanSettingPayment()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg transition active:scale-95">Simpan Metode Pembayaran</button>
                 </div>
 
-                <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
-                    <h4 class="font-bold text-amber-900 text-sm">Pusat Laporan & Report Otomatis (Format Tabel)</h4>
-                    <div class="flex gap-2 flex-wrap">
-                        <button onclick="muatReportTabel('harian')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Harian</button>
-                        <button onclick="muatReportTabel('mingguan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Mingguan</button>
-                        <button onclick="muatReportTabel('bulanan')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Bulanan</button>
-                        <button onclick="muatReportTabel('kategori')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Report Kategori</button>
-                        <button onclick="muatReportTabel('konsumen')" class="bg-amber-600 text-white px-3 py-2 rounded-xl font-bold">Data Konsumen</button>
+                <div class="p-6 bg-amber-50 rounded-3xl border-2 border-amber-200 space-y-4">
+                    <h4 class="font-extrabold text-amber-900 text-base">Pusat Laporan & Report Otomatis (Format Tabel)</h4>
+                    <div class="flex gap-3 flex-wrap">
+                        <button onclick="muatReportTabel('harian')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Harian</button>
+                        <button onclick="muatReportTabel('mingguan')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Mingguan</button>
+                        <button onclick="muatReportTabel('bulanan')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Bulanan</button>
+                        <button onclick="muatReportTabel('kategori')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Kategori</button>
+                        <button onclick="muatReportTabel('konsumen')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Data Konsumen</button>
                     </div>
-                    <div id="containerReportTabel" class="mt-3 p-3 bg-white rounded-xl border overflow-x-auto text-[11px]">
+                    <div id="containerReportTabel" class="mt-4 p-4 bg-white rounded-2xl border-2 border-slate-200 overflow-x-auto text-sm font-medium">
                         <p class="text-slate-400">Pilih salah satu tombol laporan di atas untuk melihat tabel rincian data.</p>
                     </div>
                 </div>
@@ -382,7 +382,7 @@
             document.getElementById('linkOrder').value = targetLink;
             
             document.getElementById('qrcode').innerHTML = "";
-            new QRCode(document.getElementById("qrcode"), { text: targetLink, width: 140, height: 140 });
+            new QRCode(document.getElementById("qrcode"), { text: targetLink, width: 160, height: 160 });
 
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
@@ -412,7 +412,7 @@
                 const tbody = document.getElementById('tabelOrderList');
                 
                 if(orders.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
                     lastOrderCount = 0;
                     return;
                 }
@@ -432,19 +432,19 @@
                     let linkWaUrl = `https://api.whatsapp.com/send?phone=${bersihWA}&text=${pesanWA}`;
 
                     tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-3 text-slate-500">${ord.waktu}</td>
-                            <td class="p-3 font-bold text-slate-900">${ord.nama_pemesan}</td>
-                            <td class="p-3 font-mono">${ord.nomor_wa}</td>
-                            <td class="p-3 font-medium text-slate-700">${ord.detail_pesanan}</td>
-                            <td class="p-3 font-extrabold text-amber-700">${ord.total_harga}</td>
-                            <td class="p-3 font-bold text-indigo-600">${ord.nomor_meja}</td>
-                            <td class="p-3 text-center font-semibold text-emerald-600">${ord.metode_bayar}</td>
-                            <td class="p-3 text-center">
-                                <a href="${linkWaUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm inline-block">Chat WA</a>
+                        <tr class="hover:bg-slate-50/80 transition">
+                            <td class="p-4 text-slate-500 font-medium">${ord.waktu}</td>
+                            <td class="p-4 font-bold text-slate-900">${ord.nama_pemesan}</td>
+                            <td class="p-4 font-mono">${ord.nomor_wa}</td>
+                            <td class="p-4 font-medium text-slate-700">${ord.detail_pesanan}</td>
+                            <td class="p-4 font-extrabold text-amber-700">${ord.total_harga}</td>
+                            <td class="p-4 font-bold text-indigo-600">${ord.nomor_meja}</td>
+                            <td class="p-4 text-center font-bold text-emerald-600">${ord.metode_bayar}</td>
+                            <td class="p-4 text-center">
+                                <a href="${linkWaUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md inline-block transition active:scale-95">Chat WA</a>
                             </td>
-                            <td class="p-3 text-center">
-                                <button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-sm">GPS</button>
+                            <td class="p-4 text-center">
+                                <button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md transition active:scale-95">GPS</button>
                             </td>
                         </tr>
                     `;
@@ -454,43 +454,43 @@
 
         function muatReportTabel(jenis) {
             const container = document.getElementById('containerReportTabel');
-            container.innerHTML = `<p class="text-slate-400 text-center py-2">Memuat data laporan ${jenis} dalam bentuk tabel...</p>`;
+            container.innerHTML = `<p class="text-slate-400 text-center py-4 font-medium">Memuat data laporan ${jenis} dalam bentuk tabel...</p>`;
 
             fetch(`${GAS_URL}?action=getReport&resto=${encodeURIComponent(activeResto)}&jenis=${jenis}`)
             .then(res => res.json())
             .then(resData => {
                 let data = resData.data || [];
                 if(data.length === 0) {
-                    container.innerHTML = `<p class="text-slate-400 text-center py-2">Belum ada data laporan untuk saat ini.</p>`;
+                    container.innerHTML = `<p class="text-slate-400 text-center py-4 font-medium">Belum ada data laporan untuk saat ini.</p>`;
                     return;
                 }
 
                 let html = `
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-100 border-b text-slate-700 font-bold">
-                                <th class="p-2">Waktu</th>
-                                <th class="p-2">Nama Pemesan</th>
-                                <th class="p-2">Nomor WA</th>
-                                <th class="p-2">Detail Pesanan</th>
-                                <th class="p-2">Total Harga</th>
-                                <th class="p-2">Meja</th>
-                                <th class="p-2">Metode</th>
+                            <tr class="bg-slate-100 border-b-2 text-slate-700 font-extrabold">
+                                <th class="p-3">Waktu</th>
+                                <th class="p-3">Nama Pemesan</th>
+                                <th class="p-3">Nomor WA</th>
+                                <th class="p-3">Detail Pesanan</th>
+                                <th class="p-3">Total Harga</th>
+                                <th class="p-3">Meja</th>
+                                <th class="p-3">Metode</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="font-medium">
                 `;
 
                 data.forEach(row => {
                     html += `
                         <tr class="border-b hover:bg-slate-50">
-                            <td class="p-2 text-slate-500">${row.waktu}</td>
-                            <td class="p-2 font-bold">${row.nama_pemesan}</td>
-                            <td class="p-2">${row.nomor_wa}</td>
-                            <td class="p-2">${row.detail_pesanan}</td>
-                            <td class="p-2 font-extrabold text-amber-700">${row.total_harga}</td>
-                            <td class="p-2">${row.nomor_meja}</td>
-                            <td class="p-2 font-semibold text-emerald-600">${row.metode_bayar}</td>
+                            <td class="p-3 text-slate-500">${row.waktu}</td>
+                            <td class="p-3 font-bold text-slate-900">${row.nama_pemesan}</td>
+                            <td class="p-3">${row.nomor_wa}</td>
+                            <td class="p-3">${row.detail_pesanan}</td>
+                            <td class="p-3 font-extrabold text-amber-700">${row.total_harga}</td>
+                            <td class="p-3 font-bold text-indigo-600">${row.nomor_meja}</td>
+                            <td class="p-3 font-bold text-emerald-600">${row.metode_bayar}</td>
                         </tr>
                     `;
                 });
@@ -526,7 +526,7 @@
                 const grid = document.getElementById('gridMenu');
                 let data = resData.data || [];
                 if(data.length === 0) {
-                    grid.innerHTML = `<p class="text-xs text-slate-400">Belum ada menu terdaftar.</p>`;
+                    grid.innerHTML = `<p class="text-sm text-slate-400 font-medium">Belum ada menu terdaftar.</p>`;
                     return;
                 }
                 grid.innerHTML = "";
@@ -544,18 +544,18 @@
                     }
 
                     grid.innerHTML += `
-                        <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between">
+                        <div class="p-5 rounded-3xl border-2 border-slate-200 bg-white shadow-md flex flex-col justify-between hover:border-amber-400 transition">
                             <div>
-                                <img src="${imgSrc}" class="w-full h-32 object-cover rounded-xl mb-3 bg-slate-100" alt="Menu" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c'">
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md border ${badgeColor}">${item.kategori || 'Makanan'}</span>
-                                <h4 class="font-bold text-sm text-slate-900 mt-1">${item.nama_menu}</h4>
-                                <p class="text-xs text-slate-500 mt-1">${item.deskripsi}</p>
+                                <img src="${imgSrc}" class="w-full h-44 object-cover rounded-2xl mb-4 bg-slate-100 shadow-sm" alt="Menu" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c'">
+                                <span class="text-xs font-bold px-3 py-1 rounded-lg border ${badgeColor}">${item.kategori || 'Makanan'}</span>
+                                <h4 class="font-extrabold text-base text-slate-900 mt-2">${item.nama_menu}</h4>
+                                <p class="text-sm text-slate-600 mt-1.5 font-medium leading-relaxed">${item.deskripsi}</p>
                             </div>
-                            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
-                                <span class="font-extrabold text-amber-700 text-sm">Rp ${parseInt(item.harga_jual).toLocaleString()}</span>
-                                <div class="flex gap-1.5">
-                                    <button onclick="bukaFormEdit('${item.id_menu}', '${item.nama_menu}', '${item.kategori}', '${item.deskripsi}', '${item.harga_awal}', '${item.harga_jual}')" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs" title="Edit">✏️</button>
-                                    <button onclick="hapusMenu('${item.id_menu}')" class="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs" title="Hapus">🗑️</button>
+                            <div class="mt-5 pt-4 border-t-2 border-slate-100 flex justify-between items-center">
+                                <span class="font-extrabold text-amber-700 text-base">Rp ${parseInt(item.harga_jual).toLocaleString()}</span>
+                                <div class="flex gap-2">
+                                    <button onclick="bukaFormEdit('${item.id_menu}', '${item.nama_menu}', '${item.kategori}', '${item.deskripsi}', '${item.harga_awal}', '${item.harga_jual}')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-bold shadow-sm transition active:scale-95" title="Edit">✏️ Edit</button>
+                                    <button onclick="hapusMenu('${item.id_menu}')" class="p-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-sm font-bold shadow-sm transition active:scale-95" title="Hapus">🗑️ Hapus</button>
                                 </div>
                             </div>
                         </div>
