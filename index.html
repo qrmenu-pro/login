@@ -76,6 +76,7 @@
             </div>
 
             <div class="flex items-center gap-3">
+                <button onclick="bukaPetaPelanggan()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm px-5 py-3 rounded-2xl border border-indigo-200 font-bold flex items-center gap-2 shadow-sm transition active:scale-95">🗺️ Peta Lokasi Toko</button>
                 <button onclick="bukaModalSetting()" class="bg-slate-100 hover:bg-slate-200 text-sm px-5 py-3 rounded-2xl border border-slate-300 font-bold flex items-center gap-2 shadow-sm transition active:scale-95">⚙️ Pengaturan</button>
                 <button onclick="logoutAdmin()" class="bg-rose-50 hover:bg-rose-100 text-sm px-5 py-3 rounded-2xl border border-rose-200 text-rose-700 font-bold transition active:scale-95">🚪 Keluar</button>
             </div>
@@ -164,26 +165,25 @@
                             <th class="p-4">Nomor Meja</th>
                             <th class="p-4 text-center">Metode Bayar</th>
                             <th class="p-4 text-center">Aksi WA</th>
-                            <th class="p-4 text-center">GPS Tamu</th>
                         </tr>
                     </thead>
                     <tbody id="tabelOrderList" class="divide-y divide-slate-100 font-medium">
-                        <tr><td colspan="9" class="p-6 text-center text-slate-400">Memuat data order masuk...</td></tr>
+                        <tr><td colspan="8" class="p-6 text-center text-slate-400">Memuat data order masuk...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- MODAL PETA KOORDINAT PELANGGAN -->
+    <!-- MODAL PETA LOKASI TOKO (MENYERUPAI SUPER ADMIN) -->
     <div id="modalPetaPelanggan" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-3xl w-full p-8 shadow-2xl space-y-5">
             <div class="flex justify-between items-center border-b pb-4">
-                <h3 id="titlePetaPelanggan" class="text-lg font-extrabold text-slate-900">📍 Titik Koordinat Pemesan</h3>
+                <h3 id="titlePetaPelanggan" class="text-lg font-extrabold text-slate-900">📍 Live Peta Koordinat Toko Anda</h3>
                 <button onclick="tutupPetaPelanggan()" class="text-slate-400 hover:text-slate-700 font-extrabold text-2xl px-3 py-1 bg-slate-100 rounded-xl">✕</button>
             </div>
             <div id="mapCustomer"></div>
-            <p class="text-xs font-semibold text-slate-500 text-center">Titik GPS diambil dari perangkat tamu saat melakukan pemesanan via katalog.</p>
+            <p class="text-xs font-semibold text-slate-500 text-center">Titik GPS diambil secara otomatis dari perangkat toko Anda saat membuka panel admin.</p>
         </div>
     </div>
 
@@ -329,6 +329,7 @@
             return cleaned;
         }
 
+        // SINKRONISASI GEOLOKASI PERSIS SEPERTI SUPER ADMIN
         function kirimSinyalGeolokasiSuperAdmin(restoName) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
@@ -412,7 +413,7 @@
                 const tbody = document.getElementById('tabelOrderList');
                 
                 if(orders.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
                     lastOrderCount = 0;
                     return;
                 }
@@ -425,10 +426,6 @@
 
                 tbody.innerHTML = "";
                 orders.forEach(ord => {
-                    // PERBAIKAN AKURASI: Ambil latitude dan longitude dinamis dari database order
-                    let latTamu = parseFloat(ord.latitude) || -6.9175;
-                    let lonTamu = parseFloat(ord.longitude) || 107.6191;
-                    
                     let bersihWA = formatNomorWA(ord.nomor_wa);
                     let pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto}. Pesanan Anda sedang diproses.`);
                     let linkWaUrl = `https://api.whatsapp.com/send?phone=${bersihWA}&text=${pesanWA}`;
@@ -444,9 +441,6 @@
                             <td class="p-4 text-center font-bold text-emerald-600">${ord.metode_bayar}</td>
                             <td class="p-4 text-center">
                                 <a href="${linkWaUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md inline-block transition active:scale-95">Chat WA</a>
-                            </td>
-                            <td class="p-4 text-center">
-                                <button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md transition active:scale-95">GPS</button>
                             </td>
                         </tr>
                     `;
@@ -502,25 +496,33 @@
             });
         }
 
-        function bukaPetaPelanggan(lat, lon, namaPemesan) {
-            document.getElementById('titlePetaPelanggan').innerText = `📍 Titik GPS Pemesan: ${namaPemesan}`;
+        // FUNGSI PETA LIVE TOKO (SAMA PERSIS DENGAN SUPER ADMIN)
+        function bukaPetaPelanggan() {
+            document.getElementById('titlePetaPelanggan').innerText = `📍 Live Peta Koordinat Toko: ${activeResto}`;
             document.getElementById('modalPetaPelanggan').classList.remove('hidden');
 
-            // PERBAIKAN AKURASI: Pastikan koordinat yang masuk divalidasi dan peta langsung melakukan re-center / setView
-            let latitude = parseFloat(lat) || -6.9175;
-            let longitude = parseFloat(lon) || 107.6191;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
 
-            setTimeout(() => {
-                if (!mapCustomerObj) {
-                    mapCustomerObj = L.map('mapCustomer').setView([latitude, longitude], 17);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapCustomerObj);
-                } else {
-                    mapCustomerObj.invalidateSize();
-                    mapCustomerObj.setView([latitude, longitude], 17);
-                }
-                if (customerMarker) mapCustomerObj.removeLayer(customerMarker);
-                customerMarker = L.marker([latitude, longitude]).addTo(mapCustomerObj).bindPopup(`<b>${namaPemesan}</b>`).openPopup();
-            }, 300);
+                    setTimeout(() => {
+                        if (!mapCustomerObj) {
+                            mapCustomerObj = L.map('mapCustomer').setView([latitude, longitude], 16);
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapCustomerObj);
+                        } else {
+                            mapCustomerObj.invalidateSize();
+                            mapCustomerObj.setView([latitude, longitude], 16);
+                        }
+                        if (customerMarker) mapCustomerObj.removeLayer(customerMarker);
+                        customerMarker = L.marker([latitude, longitude]).addTo(mapCustomerObj).bindPopup(`<b>🏢 ${activeResto}</b><br>Posisi GPS Aktif`).openPopup();
+                    }, 300);
+                }, () => {
+                    alert("Gagal mendeteksi lokasi GPS Anda. Pastikan izin lokasi browser diaktifkan.");
+                }, { enableHighAccuracy: true });
+            } else {
+                alert("Browser Anda tidak mendukungan Geolocation.");
+            }
         }
 
         function tutupPetaPelanggan() { document.getElementById('modalPetaPelanggan').classList.add('hidden'); }
