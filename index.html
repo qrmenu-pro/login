@@ -425,8 +425,10 @@
 
                 tbody.innerHTML = "";
                 orders.forEach(ord => {
-                    let latTamu = -6.9175;
-                    let lonTamu = 107.6191;
+                    // PERBAIKAN AKURASI: Ambil latitude dan longitude dinamis dari database order
+                    let latTamu = parseFloat(ord.latitude) || -6.9175;
+                    let lonTamu = parseFloat(ord.longitude) || 107.6191;
+                    
                     let bersihWA = formatNomorWA(ord.nomor_wa);
                     let pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto}. Pesanan Anda sedang diproses.`);
                     let linkWaUrl = `https://api.whatsapp.com/send?phone=${bersihWA}&text=${pesanWA}`;
@@ -504,16 +506,20 @@
             document.getElementById('titlePetaPelanggan').innerText = `📍 Titik GPS Pemesan: ${namaPemesan}`;
             document.getElementById('modalPetaPelanggan').classList.remove('hidden');
 
+            // PERBAIKAN AKURASI: Pastikan koordinat yang masuk divalidasi dan peta langsung melakukan re-center / setView
+            let latitude = parseFloat(lat) || -6.9175;
+            let longitude = parseFloat(lon) || 107.6191;
+
             setTimeout(() => {
                 if (!mapCustomerObj) {
-                    mapCustomerObj = L.map('mapCustomer').setView([lat, lon], 16);
+                    mapCustomerObj = L.map('mapCustomer').setView([latitude, longitude], 17);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapCustomerObj);
                 } else {
                     mapCustomerObj.invalidateSize();
-                    mapCustomerObj.setView([lat, lon], 16);
+                    mapCustomerObj.setView([latitude, longitude], 17);
                 }
                 if (customerMarker) mapCustomerObj.removeLayer(customerMarker);
-                customerMarker = L.marker([lat, lon]).addTo(mapCustomerObj).bindPopup(`<b>${namaPemesan}</b>`).openPopup();
+                customerMarker = L.marker([latitude, longitude]).addTo(mapCustomerObj).bindPopup(`<b>${namaPemesan}</b>`).openPopup();
             }, 300);
         }
 
