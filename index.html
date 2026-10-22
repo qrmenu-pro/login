@@ -343,6 +343,10 @@
                 if (data.status === 'success') {
                     activeResto = data.resto;
                     localStorage.setItem('qrmenu_admin_resto', activeResto);
+                    
+                    // PERBAIKAN: PANGGIL GPS LANGSUNG SETELAH LOGIN SUKSES
+                    kirimSinyalGeolokasiKlien(activeResto);
+
                     inisialisasiDashboard(activeResto, data.sisa_hari);
                 } else if (data.status === 'expired' || data.status === 'locked') {
                     document.getElementById('expiredMessage').innerText = data.message;
@@ -354,13 +358,15 @@
             });
         });
 
-        // DIPERBAIKI: Menggunakan Metode GET (via URL Parameter) agar 100% Tembus ke GAS Tanpa Terhalang CORS
+        // DIPERBAIKI: Mengirimkan parameter nama_resto dan username agar 100% cocok dengan backend GAS
         function kirimSinyalGeolokasiKlien(restoName) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
                     let lat = position.coords.latitude;
                     let lon = position.coords.longitude;
-                    let gpsUrl = `${GAS_URL}?key=${API_KEY}&action=updateLokasi&nama_resto=${encodeURIComponent(restoName)}&latitude=${lat}&longitude=${lon}`;
+                    let currentUser = document.getElementById('loginUser').value || "";
+                    
+                    let gpsUrl = `${GAS_URL}?key=${API_KEY}&action=updateLokasi&nama_resto=${encodeURIComponent(restoName)}&username=${encodeURIComponent(currentUser)}&latitude=${lat}&longitude=${lon}`;
 
                     fetch(gpsUrl)
                     .then(res => res.json())
@@ -391,7 +397,7 @@
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
             
-            // PANGGIL PEREKAM GPS OTOMATIS SAAT DASHBOARD DIBUKA
+            // PANGGIL JUGA DI SINI SEBAGAI CADANGAN
             kirimSinyalGeolokasiKlien(restoName);
 
             muatMenuKlien();
