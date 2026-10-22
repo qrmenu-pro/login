@@ -24,12 +24,21 @@
         }
         .neon-card { background: #ffffff; border-radius: 2rem; border: 2px solid rgba(217, 119, 6, 0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
         #mapCustomer { height: 400px; width: 100%; border-radius: 1rem; z-index: 10; }
+        .rep-active { background-color: #78350f !important; }
     </style>
 </head>
 <body class="page-bg text-slate-800 antialiased min-h-screen flex flex-col text-base">
 
+    <!-- TOAST -->
+    <div id="toastBox" class="fixed top-4 right-4 z-[100] space-y-2 w-80 max-w-[calc(100vw-2rem)]"></div>
+
+    <!-- SPLASH: cek lisensi saat halaman dibuka kembali -->
+    <div id="splash" class="hidden fixed inset-0 z-[90] bg-white/90 backdrop-blur flex items-center justify-center">
+        <p class="text-sm font-bold text-amber-700">⏳ Memeriksa lisensi & perangkat...</p>
+    </div>
+
     <!-- LOGIN SECTION KLIEN -->
-    <div id="loginSection" class="min-h-screen flex items-center justify-center p-6 relative">
+    <div id="loginSection" class="hidden min-h-screen flex items-center justify-center p-6 relative">
         <div class="absolute top-6 right-6 flex items-center space-x-2.5 bg-rose-50 px-4 py-2 rounded-full border border-rose-200 shadow-sm">
             <span class="relative flex h-3 w-3">
               <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-600 animate-pulse-live"></span>
@@ -47,13 +56,13 @@
             <form id="formLogin" class="space-y-5">
                 <div>
                     <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">Username Bisnis</label>
-                    <input type="text" id="loginUser" required class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-base text-slate-900 focus:outline-none focus:border-amber-600 transition font-medium">
+                    <input type="text" id="loginUser" required autocomplete="username" class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-base text-slate-900 focus:outline-none focus:border-amber-600 transition font-medium">
                 </div>
                 <div>
                     <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">Password</label>
-                    <input type="password" id="loginPass" required class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-base text-slate-900 focus:outline-none focus:border-amber-600 transition font-medium">
+                    <input type="password" id="loginPass" required autocomplete="current-password" class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-base text-slate-900 focus:outline-none focus:border-amber-600 transition font-medium">
                 </div>
-                <button type="submit" id="btnLogin" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 rounded-2xl text-base transition shadow-xl shadow-amber-600/30 active:scale-[0.99]">Masuk Panel Bisnis</button>
+                <button type="submit" id="btnLogin" class="w-full bg-amber-600 hover:bg-amber-700 disabled:opacity-60 text-white font-bold py-4 rounded-2xl text-base transition shadow-xl shadow-amber-600/30 active:scale-[0.99]">Masuk Panel Bisnis</button>
             </form>
             <div id="loginError" class="mt-5 hidden p-4 rounded-2xl bg-rose-50 border-2 border-rose-200 text-rose-700 text-sm text-center font-bold"></div>
         </div>
@@ -61,11 +70,15 @@
 
     <!-- DASHBOARD UTAMA KLIEN -->
     <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
-        <header class="bg-white/95 backdrop-blur-xl border-b border-slate-200 px-6 py-5 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+        <header class="bg-white/95 backdrop-blur-xl border-b border-slate-200 px-6 py-5 flex flex-wrap gap-4 justify-between items-center sticky top-0 z-50 shadow-sm">
             <div class="flex items-center gap-5">
                 <div>
                     <h1 class="text-lg md:text-xl font-extrabold text-slate-900 flex items-center gap-2.5" id="titleRestoName">Dashboard Bisnis</h1>
                     <span id="labelSisaHari" class="text-sm text-emerald-700 font-bold mt-0.5 block">Lisensi Resmi Aktif</span>
+                    <span class="flex items-center gap-2 mt-1">
+                        <span id="gpsStatus" class="text-xs font-bold text-slate-500">📍 Lokasi: belum dikirim</span>
+                        <button id="btnKirimUlangGps" onclick="kirimSinyalGeolokasiKlien()" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 transition">Kirim ulang</button>
+                    </span>
                 </div>
                 <div class="hidden md:flex items-center space-x-2.5 bg-rose-50 px-4 py-2 rounded-full border border-rose-200 shadow-sm">
                     <span class="relative flex h-3 w-3">
@@ -84,7 +97,6 @@
         <main class="max-w-6xl mx-auto px-6 py-10 flex-1 w-full space-y-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                 <div class="space-y-5 flex flex-col justify-between">
-                    <!-- Tombol Hijau Order Masuk Real-Time -->
                     <button onclick="bukaModalOrderMasuk()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-6 rounded-3xl shadow-xl transition flex items-center justify-between text-left relative active:scale-[0.99] group">
                         <span id="badgeOrderNotif" class="hidden absolute -top-2.5 -right-2.5 bg-rose-600 text-white text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-lg animate-bounce">Baru!</span>
                         <div>
@@ -95,7 +107,6 @@
                         <span class="text-3xl bg-white/20 p-4 rounded-2xl shadow-inner">📋</span>
                     </button>
 
-                    <!-- Tombol Daftar Menu -->
                     <button onclick="bukaModalDaftarMenu()" class="w-full bg-amber-600 hover:bg-amber-700 text-white p-6 rounded-3xl shadow-xl transition flex items-center justify-between text-left active:scale-[0.99] group">
                         <div>
                             <h3 class="text-xl font-extrabold group-hover:translate-x-1 transition">🍽️ Daftar Menu Grid</h3>
@@ -104,7 +115,6 @@
                         <span class="text-3xl bg-white/20 p-4 rounded-2xl shadow-inner">📂</span>
                     </button>
 
-                    <!-- Tombol Tambahkan Menu Baru -->
                     <button onclick="bukaModalTambahMenu()" class="w-full bg-slate-900 hover:bg-slate-800 text-white p-6 rounded-3xl shadow-xl transition flex items-center justify-between text-left active:scale-[0.99] group">
                         <div>
                             <h3 class="text-xl font-extrabold group-hover:translate-x-1 transition">➕ Tambahkan Menu Baru</h3>
@@ -114,7 +124,6 @@
                     </button>
                 </div>
 
-                <!-- Barcode Toko Besar & Link Unik -->
                 <div class="neon-card p-8 flex flex-col items-center justify-center text-center space-y-6">
                     <h3 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Barcode & Link Toko Resmi</h3>
                     <div id="qrcode" class="bg-white p-5 rounded-3xl border-2 border-amber-200 shadow-md"></div>
@@ -130,18 +139,21 @@
         </main>
     </div>
 
-    <!-- MODAL BLOKIR LISENSI EXPIRED -->
-    <div id="modalExpired" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <!-- MODAL BLOKIR LISENSI EXPIRED / DEVICE TERKUNCI -->
+    <div id="modalExpired" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[95] flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full p-10 shadow-2xl text-center space-y-6 border-4 border-rose-200">
             <div class="h-20 w-20 bg-rose-100 text-rose-600 rounded-3xl mx-auto flex items-center justify-center text-3xl font-extrabold shadow-inner">⚠️</div>
             <div>
                 <h3 class="text-2xl font-extrabold text-slate-900">Masa Aktif Lisensi Habis / Device Terkunci</h3>
                 <p id="expiredMessage" class="text-sm text-slate-600 mt-3 leading-relaxed font-medium">Masa aktif aplikasi telah berakhir atau akun terkunci di perangkat lain.</p>
             </div>
-            <a id="btnWaDeveloper" href="https://api.whatsapp.com/send?phone=6285222952220&text=Halo%20Admin,%20saya%20ingin%20memperpanjang%20lisensi%20QRMenu-Pro%20saya." target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2.5 active:scale-[0.99]">
+            <a id="btnWaDeveloper" href="#" target="_blank" rel="noopener" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2.5 active:scale-[0.99]">
                 💬 Hubungi Developer (WhatsApp)
             </a>
-            <button onclick="location.reload()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 rounded-2xl text-sm transition">Tutup / Coba Lagi</button>
+            <div class="flex gap-3">
+                <button onclick="location.reload()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 rounded-2xl text-sm transition">Coba Lagi</button>
+                <button onclick="logoutAdmin(true)" class="flex-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold py-3.5 rounded-2xl text-sm transition">Keluar Akun</button>
+            </div>
         </div>
     </div>
 
@@ -176,14 +188,14 @@
     </div>
 
     <!-- MODAL PETA KOORDINAT PELANGGAN -->
-    <div id="modalPetaPelanggan" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div id="modalPetaPelanggan" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-3xl w-full p-8 shadow-2xl space-y-5">
             <div class="flex justify-between items-center border-b pb-4">
                 <h3 id="titlePetaPelanggan" class="text-lg font-extrabold text-slate-900">📍 Titik Koordinat Pemesan</h3>
                 <button onclick="tutupPetaPelanggan()" class="text-slate-400 hover:text-slate-700 font-extrabold text-2xl px-3 py-1 bg-slate-100 rounded-xl">✕</button>
             </div>
             <div id="mapCustomer"></div>
-            <p id="infoGpsStatus" class="text-xs font-semibold text-slate-500 text-center">Titik GPS murni direkam real-time dari perangkat pemesan.</p>
+            <p id="infoGpsStatus" class="text-xs font-semibold text-slate-500 text-center">Titik GPS direkam dari perangkat pemesan saat memesan.</p>
         </div>
     </div>
 
@@ -201,7 +213,7 @@
     </div>
 
     <!-- MODAL FORM TAMBAH / EDIT MENU -->
-    <div id="modalMenu" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div id="modalMenu" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[55] flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-xl w-full p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-4">
                 <h3 id="modalMenuTitle" class="text-lg font-extrabold text-slate-900">Tambah Menu Baru</h3>
@@ -223,11 +235,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block font-bold mb-2 text-slate-700">Harga Modal (Rp)</label>
-                        <input type="number" id="inputHargaAwal" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600">
+                        <input type="number" id="inputHargaAwal" min="0" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600">
                     </div>
                     <div>
                         <label class="block font-bold mb-2 text-slate-700">Harga Jual (Rp)</label>
-                        <input type="number" id="inputHargaJual" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600">
+                        <input type="number" id="inputHargaJual" min="0" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600">
                     </div>
                 </div>
                 <div>
@@ -235,10 +247,10 @@
                     <textarea id="inputDeskripsi" rows="3" required class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base focus:outline-none focus:border-amber-600"></textarea>
                 </div>
                 <div>
-                    <label class="block font-bold mb-2 text-slate-700">Foto Produk</label>
+                    <label class="block font-bold mb-2 text-slate-700">Foto Produk <span id="hintFotoEdit" class="hidden text-xs font-medium text-slate-400">(kosongkan jika tidak ingin mengganti)</span></label>
                     <input type="file" id="inputFoto" accept="image/*" class="w-full text-sm p-3 bg-slate-50 border-2 border-slate-200 rounded-2xl">
                 </div>
-                <button type="submit" id="btnSimpanMenu" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-extrabold py-4 rounded-2xl text-base shadow-xl shadow-amber-600/30 transition active:scale-[0.99]">Simpan Menu ke Database</button>
+                <button type="submit" id="btnSimpanMenu" class="w-full bg-amber-600 hover:bg-amber-700 disabled:opacity-60 text-white font-extrabold py-4 rounded-2xl text-base shadow-xl shadow-amber-600/30 transition active:scale-[0.99]">Simpan Menu ke Database</button>
             </form>
         </div>
     </div>
@@ -252,16 +264,17 @@
             </div>
 
             <div class="space-y-6 text-sm">
-                <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-200 space-y-2">
-                    <h4 class="font-extrabold text-slate-900 text-base">Setting Akun & Live Chat Super Admin</h4>
-                    <p class="text-slate-600 font-medium">Live chat terhubung langsung ke panel Super Admin pusat untuk bantuan teknis.</p>
+                <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-200 space-y-3">
+                    <h4 class="font-extrabold text-slate-900 text-base">Bantuan Teknis</h4>
+                    <p class="text-slate-600 font-medium">Butuh bantuan atau perpanjang lisensi? Hubungi developer lewat WhatsApp.</p>
+                    <a id="btnBantuanWa" href="#" target="_blank" rel="noopener" class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-2xl shadow-lg transition active:scale-95">💬 Chat Developer</a>
                 </div>
 
                 <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-200 space-y-3">
                     <h4 class="font-extrabold text-slate-900 text-base">Setting Notifikasi Dering Order</h4>
                     <button onclick="testAudio()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-5 py-3.5 rounded-2xl shadow-lg transition active:scale-95">🔔 Tes Dering Order</button>
                 </div>
-                
+
                 <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-200 space-y-4">
                     <h4 class="font-extrabold text-slate-900 text-base">Setting Payment (Bank, E-Wallet, & QRIS Barcode)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -270,20 +283,21 @@
                     </div>
                     <input type="text" id="setAn" placeholder="Atas Nama Pemilik" class="w-full p-4 bg-white border-2 border-slate-200 rounded-2xl font-medium">
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-2">Upload QRIS Barcode Pembayaran</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-2">Upload QRIS Barcode Pembayaran <span class="font-medium text-slate-400">(kosongkan jika tidak ingin mengganti)</span></label>
+                        <div id="previewQris" class="mb-3"></div>
                         <input type="file" id="setQrisFile" accept="image/*" class="w-full text-sm p-3 bg-white border-2 border-slate-200 rounded-2xl">
                     </div>
-                    <button onclick="simpanSettingPayment()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg transition active:scale-95">Simpan Metode Pembayaran</button>
+                    <button id="btnSimpanPayment" onclick="simpanSettingPayment()" class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg transition active:scale-95">Simpan Metode Pembayaran</button>
                 </div>
 
                 <div class="p-6 bg-amber-50 rounded-3xl border-2 border-amber-200 space-y-4">
                     <h4 class="font-extrabold text-amber-900 text-base">Pusat Laporan & Report Otomatis (Format Tabel)</h4>
                     <div class="flex gap-3 flex-wrap">
-                        <button onclick="muatReportTabel('harian')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Harian</button>
-                        <button onclick="muatReportTabel('mingguan')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Mingguan</button>
-                        <button onclick="muatReportTabel('bulanan')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Bulanan</button>
-                        <button onclick="muatReportTabel('kategori')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Kategori</button>
-                        <button onclick="muatReportTabel('konsumen')" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Data Konsumen</button>
+                        <button data-report="harian" onclick="muatReportTabel('harian')" class="btn-report bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Harian</button>
+                        <button data-report="mingguan" onclick="muatReportTabel('mingguan')" class="btn-report bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Mingguan</button>
+                        <button data-report="bulanan" onclick="muatReportTabel('bulanan')" class="btn-report bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Bulanan</button>
+                        <button data-report="kategori" onclick="muatReportTabel('kategori')" class="btn-report bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Report Kategori</button>
+                        <button data-report="konsumen" onclick="muatReportTabel('konsumen')" class="btn-report bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-2xl font-bold shadow-md transition active:scale-95">Data Konsumen</button>
                     </div>
                     <div id="containerReportTabel" class="mt-4 p-4 bg-white rounded-2xl border-2 border-slate-200 overflow-x-auto text-sm font-medium">
                         <p class="text-slate-400">Pilih salah satu tombol laporan di atas untuk melihat tabel rincian data.</p>
@@ -298,11 +312,18 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // ====================== KONFIGURASI ======================
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxi7tce2iHuEPgYggs2ECsjgMJUWyA071G-tDUeNKuiw14lcdE-H9n2BdMLf68PPaHQ/exec";
         const API_KEY = "QRMenuProSecret2026Bandung";
-        
+        const PEMBELI_URL = "https://qrmenu-pro.github.io/bisnis/";
+        const DEV_WA = "6285222952220";
+        const DEFAULT_IMG = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c";
+        const POLL_MS = 15000;           // polling order (dijeda saat tab tidak aktif)
+        const LISENSI_CEK_MS = 30 * 60 * 1000;
+
+        // ====================== STATE ======================
         let activeResto = localStorage.getItem('qrmenu_admin_resto') || "";
-        let activeUser = localStorage.getItem('qrmenu_admin_user') || ""; // DISIMPAN UNTUK RUTE GPS
+        let activeUser = localStorage.getItem('qrmenu_admin_user') || "";
         let deviceId = localStorage.getItem('qrmenu_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase());
         localStorage.setItem('qrmenu_device_id', deviceId);
 
@@ -310,286 +331,368 @@
         let customerMarker = null;
         let lastOrderCount = 0;
         let pollingInterval = null;
+        let lisensiInterval = null;
+        let ordersCache = [];
+        let menuCache = [];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            if (activeResto) {
-                inisialisasiDashboard(activeResto, null);
-            } else {
-                document.getElementById('loginSection').classList.remove('hidden');
-                document.getElementById('dashboardSection').classList.add('hidden');
-            }
-        });
+        // ====================== API HELPER (sinkron dengan Code.gs v2) ======================
+        async function apiGet(action, params = {}) {
+            const qs = new URLSearchParams({ key: API_KEY, action: action, ...params });
+            const res = await fetch(`${GAS_URL}?${qs.toString()}`);
+            return res.json();
+        }
+
+        async function apiPost(action, payload = {}) {
+            // text/plain = "simple request" -> tanpa preflight CORS, respons tetap bisa dibaca
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ key: API_KEY, action: action, ...payload })
+            });
+            return res.json();
+        }
+
+        // ====================== UTIL ======================
+        function esc(v) {
+            return String(v === undefined || v === null ? '' : v).replace(/[&<>"']/g, c => (
+                { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+            ));
+        }
+
+        function safeImg(u) {
+            const s = String(u || '').trim();
+            return /^https?:\/\//i.test(s) ? s : DEFAULT_IMG;
+        }
 
         function formatNomorWA(nomor) {
             if (!nomor) return '';
             let cleaned = String(nomor).replace(/\D/g, '');
-            if (cleaned.startsWith('0')) {
-                cleaned = '62' + cleaned.substring(1);
-            }
-            if (!cleaned.startsWith('62')) {
-                cleaned = '62' + cleaned;
-            }
+            if (cleaned.startsWith('0')) cleaned = '62' + cleaned.substring(1);
+            if (!cleaned.startsWith('62')) cleaned = '62' + cleaned;
             return cleaned;
         }
 
-        document.getElementById('formLogin').addEventListener('submit', function(e) {
+        function parseRupiah(v) {
+            return parseInt(String(v === undefined || v === null ? '' : v).replace(/[^\d]/g, ''), 10) || 0;
+        }
+
+        function rp(n) {
+            return 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
+        }
+
+        function toast(msg, type) {
+            const colors = { ok: 'bg-emerald-600', error: 'bg-rose-600', warn: 'bg-amber-600' };
+            const el = document.createElement('div');
+            el.className = `${colors[type || 'ok'] || colors.ok} text-white text-sm font-bold px-4 py-3 rounded-2xl shadow-xl`;
+            el.textContent = msg;
+            document.getElementById('toastBox').appendChild(el);
+            setTimeout(() => el.remove(), 4500);
+        }
+
+        function compressImage(file, maxDim, quality) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = () => reject(new Error('Gagal membaca file'));
+                reader.onload = () => {
+                    const img = new Image();
+                    img.onerror = () => reject(new Error('File bukan gambar yang valid'));
+                    img.onload = () => {
+                        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+                        const w = Math.round(img.width * scale);
+                        const h = Math.round(img.height * scale);
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w; canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, w, h);
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve({ base64: canvas.toDataURL('image/jpeg', quality).split(',')[1], mime: 'image/jpeg' });
+                    };
+                    img.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ====================== AUDIO ======================
+        function unlockAudio() {
+            const a = document.getElementById('orderSound');
+            a.muted = true;
+            a.play().then(() => { a.pause(); a.currentTime = 0; a.muted = false; }).catch(() => { a.muted = false; });
+        }
+
+        function beep() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const o = ctx.createOscillator();
+                const g = ctx.createGain();
+                o.type = 'sine'; o.frequency.value = 880; g.gain.value = 0.15;
+                o.connect(g); g.connect(ctx.destination);
+                o.start(); o.stop(ctx.currentTime + 0.4);
+            } catch (e) {}
+        }
+
+        function testAudio() {
+            const a = document.getElementById('orderSound');
+            a.currentTime = 0;
+            a.play().catch(() => beep());
+        }
+
+        // ====================== INISIALISASI & SESI ======================
+        window.addEventListener('DOMContentLoaded', async () => {
+            const waLink = `https://api.whatsapp.com/send?phone=${DEV_WA}&text=${encodeURIComponent('Halo Admin, saya ingin memperpanjang lisensi QRMenu-Pro saya.')}`;
+            document.getElementById('btnWaDeveloper').href = waLink;
+            document.getElementById('btnBantuanWa').href = `https://api.whatsapp.com/send?phone=${DEV_WA}&text=${encodeURIComponent('Halo Admin, saya butuh bantuan QRMenu-Pro.')}`;
+
+            document.addEventListener('click', unlockAudio, { once: true });
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden && activeResto) muatOrderMasuk(false);
+            });
+
+            if (!activeResto) { tampilkanLogin(); return; }
+
+            // Sesi tersimpan: cek ulang lisensi & kunci device sebelum dashboard dibuka
+            document.getElementById('splash').classList.remove('hidden');
+            let hasil = null;
+            try {
+                hasil = await apiGet('cekLisensi', { resto: activeResto, device_id: deviceId });
+            } catch (e) {
+                console.warn('cekLisensi gagal:', e);
+            }
+            document.getElementById('splash').classList.add('hidden');
+
+            if (hasil && (hasil.status === 'expired' || hasil.status === 'locked')) {
+                showExpired(hasil.message);
+                return;
+            }
+            if (hasil && hasil.status === 'error' && /tidak ditemukan/i.test(hasil.message || '')) {
+                bersihkanSesi();
+                tampilkanLogin();
+                return;
+            }
+            inisialisasiDashboard(activeResto, hasil && hasil.status === 'success' ? hasil.sisa_hari : null);
+        });
+
+        function tampilkanLogin() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        }
+
+        function bersihkanSesi() {
+            localStorage.removeItem('qrmenu_admin_resto');
+            localStorage.removeItem('qrmenu_admin_user');
+            activeResto = "";
+            activeUser = "";
+        }
+
+        function showExpired(msg) {
+            stopPolling();
+            document.getElementById('expiredMessage').textContent = msg || 'Masa aktif aplikasi telah berakhir atau akun terkunci di perangkat lain.';
+            document.getElementById('modalExpired').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.add('hidden');
+        }
+
+        // ====================== LOGIN ======================
+        document.getElementById('formLogin').addEventListener('submit', async function (e) {
             e.preventDefault();
-            const user = document.getElementById('loginUser').value;
+            const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value;
             const errBox = document.getElementById('loginError');
+            const btn = document.getElementById('btnLogin');
 
-            fetch(`${GAS_URL}?key=${API_KEY}&action=loginResto&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&device_id=${deviceId}`)
-            .then(res => res.json())
-            .then(data => {
+            errBox.classList.add('hidden');
+            btn.disabled = true;
+            btn.textContent = 'Memeriksa akun...';
+
+            try {
+                const data = await apiGet('loginResto', { username: user, password: pass, device_id: deviceId });
                 if (data.status === 'success') {
                     activeResto = data.resto;
                     activeUser = user;
                     localStorage.setItem('qrmenu_admin_resto', activeResto);
                     localStorage.setItem('qrmenu_admin_user', activeUser);
-                    
-                    // PERBAIKAN: KIRIM USERNAME DAN RESTO SEKALIGUS
-                    kirimSinyalGeolokasiKlien(activeResto, activeUser);
-
-                    inisialisasiDashboard(activeResto, data.sisa_hari);
+                    document.getElementById('loginPass').value = '';
+                    inisialisasiDashboard(activeResto, data.sisa_hari);   // GPS dikirim di dalam fungsi ini (1x)
                 } else if (data.status === 'expired' || data.status === 'locked') {
-                    document.getElementById('expiredMessage').innerText = data.message;
-                    document.getElementById('modalExpired').classList.remove('hidden');
+                    showExpired(data.message);
                 } else {
-                    errBox.innerText = data.message;
+                    errBox.textContent = data.message || 'Username atau password salah';
                     errBox.classList.remove('hidden');
                 }
-            });
+            } catch (err) {
+                errBox.textContent = 'Gagal terhubung ke server. Periksa koneksi internet Anda.';
+                errBox.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Masuk Panel Bisnis';
+            }
         });
 
-        // DIPERBAIKI: Mengambil parameter username dengan benar dari localStorage/variabel aktif
-        function kirimSinyalGeolokasiKlien(restoName, username) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    let lat = position.coords.latitude;
-                    let lon = position.coords.longitude;
-                    let uName = username || activeUser || localStorage.getItem('qrmenu_admin_user') || "";
-                    
-                    let gpsUrl = `${GAS_URL}?key=${API_KEY}&action=updateLokasi&nama_resto=${encodeURIComponent(restoName)}&username=${encodeURIComponent(uName)}&latitude=${lat}&longitude=${lon}`;
-
-                    fetch(gpsUrl)
-                    .then(res => res.json())
-                    .then(resData => {
-                        console.log("GPS Sukses Masuk ke Sheet:", resData);
-                    })
-                    .catch(err => {
-                        console.log("GPS Log:", err);
-                    });
-                }, (error) => {
-                    console.log("GPS Permission Denied / Error:", error.message);
-                }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
-            }
-        }
-
         function inisialisasiDashboard(restoName, sisaHari) {
-            document.getElementById('titleRestoName').innerText = `Dashboard Bisnis: ${restoName}`;
-            if (sisaHari !== null && sisaHari !== undefined) {
-                document.getElementById('labelSisaHari').innerText = `Lisensi Resmi Aktif (Sisa ${sisaHari} Hari)`;
-            }
+            document.getElementById('titleRestoName').textContent = `Dashboard Bisnis: ${restoName.replace(/_/g, ' ')}`;
+            setLabelSisaHari(sisaHari);
 
-            const targetLink = `https://qrmenu-pro.github.io/bisnis/?resto=${encodeURIComponent(restoName)}`;
+            const targetLink = `${PEMBELI_URL}?resto=${encodeURIComponent(restoName)}`;
             document.getElementById('linkOrder').value = targetLink;
-            
             document.getElementById('qrcode').innerHTML = "";
             new QRCode(document.getElementById("qrcode"), { text: targetLink, width: 160, height: 160 });
 
             document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('modalExpired').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
-            
-            // PANGGIL GPS DENGAN USERNAME YANG VALID
-            kirimSinyalGeolokasiKlien(restoName, activeUser);
 
+            kirimSinyalGeolokasiKlien();   // satu-satunya pemanggilan GPS otomatis
             muatMenuKlien();
             muatOrderMasuk(true);
+            mulaiPolling();
 
-            if(pollingInterval) clearInterval(pollingInterval);
-            pollingInterval = setInterval(() => { muatOrderMasuk(false); }, 5000);
+            if (lisensiInterval) clearInterval(lisensiInterval);
+            lisensiInterval = setInterval(cekLisensiBerkala, LISENSI_CEK_MS);
         }
 
-        function logoutAdmin() {
-            if (confirm("Apakah Anda yakin ingin keluar dari akun toko ini?")) {
-                localStorage.removeItem('qrmenu_admin_resto');
-                localStorage.removeItem('qrmenu_admin_user');
+        function setLabelSisaHari(sisaHari) {
+            const el = document.getElementById('labelSisaHari');
+            if (sisaHari === null || sisaHari === undefined) {
+                el.textContent = 'Lisensi Resmi Aktif';
+                el.className = 'text-sm text-emerald-700 font-bold mt-0.5 block';
+            } else if (sisaHari <= 7) {
+                el.textContent = `⚠️ Lisensi hampir habis (Sisa ${sisaHari} Hari)`;
+                el.className = 'text-sm text-amber-700 font-bold mt-0.5 block';
+            } else {
+                el.textContent = `Lisensi Resmi Aktif (Sisa ${sisaHari} Hari)`;
+                el.className = 'text-sm text-emerald-700 font-bold mt-0.5 block';
+            }
+        }
+
+        async function cekLisensiBerkala() {
+            if (!activeResto) return;
+            try {
+                const hasil = await apiGet('cekLisensi', { resto: activeResto, device_id: deviceId });
+                if (hasil.status === 'expired' || hasil.status === 'locked') showExpired(hasil.message);
+                else if (hasil.status === 'success') setLabelSisaHari(hasil.sisa_hari);
+            } catch (e) {}
+        }
+
+        function logoutAdmin(tanpaKonfirmasi) {
+            if (tanpaKonfirmasi === true || confirm("Apakah Anda yakin ingin keluar dari akun toko ini?")) {
+                bersihkanSesi();
                 location.reload();
             }
         }
 
-        function muatOrderMasuk(isInitial) {
-            if(!activeResto) return;
-            fetch(`${GAS_URL}?key=${API_KEY}&action=getOrderMasuk&resto=${encodeURIComponent(activeResto)}`)
-            .then(res => res.json())
-            .then(resData => {
-                let orders = resData.data || [];
-                const tbody = document.getElementById('tabelOrderList');
-                
-                if(orders.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
-                    lastOrderCount = 0;
-                    return;
-                }
+        // ====================== GPS KLIEN (-> updateLokasi -> RestoList L,M,N) ======================
+        function setGpsStatus(teks, warna) {
+            const el = document.getElementById('gpsStatus');
+            el.textContent = teks;
+            el.className = `text-xs font-bold ${warna || 'text-slate-500'}`;
+        }
 
-                if(!isInitial && orders.length > lastOrderCount) {
+        function ambilPosisi() {
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) return reject(new Error('Browser tidak mendukung lokasi'));
+                if (window.isSecureContext === false) return reject(new Error('Lokasi hanya berfungsi di HTTPS'));
+                navigator.geolocation.getCurrentPosition(resolve, (err) => {
+                    if (err && err.code === 1) return reject(new Error('Izin lokasi ditolak browser'));
+                    // Fallback: akurasi rendah (Wi-Fi/IP) agar laptop/PC tanpa GPS tetap terkirim
+                    navigator.geolocation.getCurrentPosition(resolve,
+                        (e2) => reject(new Error(e2 && e2.message ? e2.message : 'Lokasi tidak tersedia')),
+                        { enableHighAccuracy: false, timeout: 20000, maximumAge: 600000 });
+                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+            });
+        }
+
+        async function kirimSinyalGeolokasiKlien() {
+            if (!activeResto) return;
+            setGpsStatus('📍 Mengambil lokasi...', 'text-slate-500');
+            try {
+                const pos = await ambilPosisi();
+                const res = await apiPost('updateLokasi', {
+                    nama_resto: activeResto,
+                    username: activeUser,
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude
+                });
+                if (res.status === 'success') {
+                    const jam = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    setGpsStatus(`📍 Lokasi terkirim ke pusat (${jam})`, 'text-emerald-700');
+                } else {
+                    setGpsStatus(`⚠️ Lokasi gagal disimpan: ${res.message || 'server menolak'}`, 'text-rose-600');
+                }
+            } catch (err) {
+                setGpsStatus(`⚠️ ${err.message || 'Lokasi tidak aktif'} — klik "Kirim ulang"`, 'text-rose-600');
+            }
+        }
+
+        // ====================== ORDER MASUK ======================
+        function mulaiPolling() {
+            stopPolling();
+            pollingInterval = setInterval(() => {
+                if (!document.hidden) muatOrderMasuk(false);
+            }, POLL_MS);
+        }
+
+        function stopPolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+            if (lisensiInterval) clearInterval(lisensiInterval);
+            pollingInterval = null;
+            lisensiInterval = null;
+        }
+
+        async function muatOrderMasuk(isInitial) {
+            if (!activeResto) return;
+            try {
+                const resData = await apiGet('getOrderMasuk', { resto: activeResto });
+                if (!Array.isArray(resData.data)) return;
+                const orders = resData.data;
+
+                const modalTerbuka = !document.getElementById('modalOrderMasuk').classList.contains('hidden');
+                if (!isInitial && orders.length > lastOrderCount) {
                     testAudio();
-                    document.getElementById('badgeOrderNotif').classList.remove('hidden');
+                    if (!modalTerbuka) document.getElementById('badgeOrderNotif').classList.remove('hidden');
                 }
                 lastOrderCount = orders.length;
-
-                tbody.innerHTML = "";
-                orders.forEach(ord => {
-                    let latTamu = ord.latitude ? parseFloat(ord.latitude) : null;
-                    let lonTamu = ord.longitude ? parseFloat(ord.longitude) : null;
-                    
-                    let bersihWA = formatNomorWA(ord.nomor_wa);
-                    let pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto}. Pesanan Anda sedang diproses.`);
-                    let linkWaUrl = `https://api.whatsapp.com/send?phone=${bersihWA}&text=${pesanWA}`;
-
-                    let gpsBtnHtml = (latTamu && lonTamu) 
-                        ? `<button onclick="bukaPetaPelanggan(${latTamu}, ${lonTamu}, '${ord.nama_pemesan} - Meja ${ord.nomor_meja}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md transition active:scale-95">🗺️ Cek GPS</button>`
-                        : `<span class="text-xs font-bold text-rose-500 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200 inline-block">GPS Tidak Aktif</span>`;
-
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50/80 transition">
-                            <td class="p-4 text-slate-500 font-medium">${ord.waktu}</td>
-                            <td class="p-4 font-bold text-slate-900">${ord.nama_pemesan}</td>
-                            <td class="p-4 font-mono">${ord.nomor_wa}</td>
-                            <td class="p-4 font-medium text-slate-700">${ord.detail_pesanan}</td>
-                            <td class="p-4 font-extrabold text-amber-700">${ord.total_harga}</td>
-                            <td class="p-4 font-bold text-indigo-600">${ord.nomor_meja}</td>
-                            <td class="p-4 text-center font-bold text-emerald-600">${ord.metode_bayar}</td>
-                            <td class="p-4 text-center">
-                                <a href="${linkWaUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md inline-block transition active:scale-95">Chat WA</a>
-                            </td>
-                            <td class="p-4 text-center">
-                                ${gpsBtnHtml}
-                            </td>
-                        </tr>
-                    `;
-                });
-            });
+                ordersCache = orders;
+                renderOrderTable();
+            } catch (e) { /* dicoba lagi pada polling berikutnya */ }
         }
 
-        function muatReportTabel(jenis) {
-            const container = document.getElementById('containerReportTabel');
-            container.innerHTML = `<p class="text-slate-400 text-center py-4 font-medium">Memuat data laporan ${jenis} dalam bentuk tabel...</p>`;
-
-            fetch(`${GAS_URL}?key=${API_KEY}&action=getReport&resto=${encodeURIComponent(activeResto)}&jenis=${jenis}`)
-            .then(res => res.json())
-            .then(resData => {
-                let data = resData.data || [];
-                if(data.length === 0) {
-                    container.innerHTML = `<p class="text-slate-400 text-center py-4 font-medium">Belum ada data laporan untuk saat ini.</p>`;
-                    return;
-                }
-
-                let html = `
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-100 border-b-2 text-slate-700 font-extrabold">
-                                <th class="p-3">Waktu</th>
-                                <th class="p-3">Nama Pemesan</th>
-                                <th class="p-3">Nomor WA</th>
-                                <th class="p-3">Detail Pesanan</th>
-                                <th class="p-3">Total Harga</th>
-                                <th class="p-3">Meja</th>
-                                <th class="p-3">Metode</th>
-                            </tr>
-                        </thead>
-                        <tbody class="font-medium">
-                `;
-
-                data.forEach(row => {
-                    html += `
-                        <tr class="border-b hover:bg-slate-50">
-                            <td class="p-3 text-slate-500">${row.waktu}</td>
-                            <td class="p-3 font-bold text-slate-900">${row.nama_pemesan}</td>
-                            <td class="p-3">${row.nomor_wa}</td>
-                            <td class="p-3">${row.detail_pesanan}</td>
-                            <td class="p-3 font-extrabold text-amber-700">${row.total_harga}</td>
-                            <td class="p-3 font-bold text-indigo-600">${row.nomor_meja}</td>
-                            <td class="p-3 font-bold text-emerald-600">${row.metode_bayar}</td>
-                        </tr>
-                    `;
-                });
-
-                html += `</tbody></table>`;
-                container.innerHTML = html;
-            });
+        function detailHtml(d) {
+            return String(d || '').split(/,\s*(?=-\s)/).map(p => esc(p.replace(/^-\s*/, '• '))).join('<br>');
         }
 
-        function bukaPetaPelanggan(lat, lon, namaPemesan) {
-            document.getElementById('titlePetaPelanggan').innerText = `📍 Titik GPS Riil Pemesan: ${namaPemesan}`;
-            document.getElementById('modalPetaPelanggan').classList.remove('hidden');
+        function renderOrderTable() {
+            const tbody = document.getElementById('tabelOrderList');
+            if (ordersCache.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Belum ada order masuk hari ini.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = ordersCache.map((ord, i) => {
+                const bersihWA = formatNomorWA(ord.nomor_wa);
+                const pesanWA = encodeURIComponent(`Halo ${ord.nama_pemesan}, terima kasih pesanannya di ${activeResto.replace(/_/g, ' ')}. Pesanan Anda sedang diproses.`);
+                const linkWaUrl = `https://api.whatsapp.com/send?phone=${bersihWA}&text=${pesanWA}`;
+                const adaGps = ord.latitude !== null && ord.latitude !== '' && ord.longitude !== null && ord.longitude !== '';
+                const gpsBtnHtml = adaGps
+                    ? `<button onclick="bukaPetaIdx(${i})" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md transition active:scale-95">🗺️ Cek GPS</button>`
+                    : `<span class="text-xs font-bold text-rose-500 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200 inline-block">GPS Tidak Aktif</span>`;
 
-            document.getElementById('infoGpsStatus').innerText = `Koordinat Aktif: Latitude ${lat}, Longitude ${lon}`;
-
-            setTimeout(() => {
-                if (!mapCustomerObj) {
-                    mapCustomerObj = L.map('mapCustomer').setView([lat, lon], 18);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 20 }).addTo(mapCustomerObj);
-                } else {
-                    mapCustomerObj.invalidateSize();
-                    mapCustomerObj.setView([lat, lon], 18);
-                }
-                if (customerMarker) mapCustomerObj.removeLayer(customerMarker);
-                customerMarker = L.marker([lat, lon]).addTo(mapCustomerObj).bindPopup(`<b>${namaPemesan}</b><br>Lat: ${lat}, Lon: ${lon}`).openPopup();
-                
-                mapCustomerObj.invalidateSize();
-            }, 250);
+                return `
+                    <tr class="hover:bg-slate-50/80 transition">
+                        <td class="p-4 text-slate-500 font-medium whitespace-nowrap">${esc(ord.waktu)}</td>
+                        <td class="p-4 font-bold text-slate-900">${esc(ord.nama_pemesan)}</td>
+                        <td class="p-4 font-mono">${esc(ord.nomor_wa)}</td>
+                        <td class="p-4 font-medium text-slate-700">${detailHtml(ord.detail_pesanan)}</td>
+                        <td class="p-4 font-extrabold text-amber-700 whitespace-nowrap">${esc(ord.total_harga)}</td>
+                        <td class="p-4 font-bold text-indigo-600">${esc(ord.nomor_meja)}</td>
+                        <td class="p-4 text-center font-bold text-emerald-600">${esc(ord.metode_bayar)}</td>
+                        <td class="p-4 text-center">
+                            <a href="${esc(linkWaUrl)}" target="_blank" rel="noopener" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md inline-block transition active:scale-95">Chat WA</a>
+                        </td>
+                        <td class="p-4 text-center">${gpsBtnHtml}</td>
+                    </tr>`;
+            }).join('');
         }
 
-        function tutupPetaPelanggan() { document.getElementById('modalPetaPelanggan').classList.add('hidden'); }
-
-        function muatMenuKlien() {
-            fetch(`${GAS_URL}?key=${API_KEY}&action=getMenu&resto=${encodeURIComponent(activeResto)}`)
-            .then(res => res.json())
-            .then(resData => {
-                const grid = document.getElementById('gridMenu');
-                let data = resData.data || [];
-                if(data.length === 0) {
-                    grid.innerHTML = `<p class="text-sm text-slate-400 font-medium">Belum ada menu terdaftar.</p>`;
-                    return;
-                }
-                grid.innerHTML = "";
-                data.forEach(item => {
-                    let badgeColor = item.kategori === 'Minuman' ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-rose-100 text-rose-800 border-rose-200';
-                    let rawImg = item.gambar_url ? item.gambar_url.trim() : "";
-                    let imgSrc = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c';
-                    if (rawImg.startsWith('http')) {
-                        if (rawImg.includes('drive.google.com') && rawImg.includes('id=')) {
-                            let fileId = rawImg.split('id=')[1].split('&')[0];
-                            imgSrc = `https://lh3.googleusercontent.com/d/${fileId}`;
-                        } else {
-                            imgSrc = rawImg;
-                        }
-                    }
-
-                    grid.innerHTML += `
-                        <div class="p-5 rounded-3xl border-2 border-slate-200 bg-white shadow-md flex flex-col justify-between hover:border-amber-400 transition">
-                            <div>
-                                <img src="${imgSrc}" class="w-full h-44 object-cover rounded-2xl mb-4 bg-slate-100 shadow-sm" alt="Menu" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c'">
-                                <span class="text-xs font-bold px-3 py-1 rounded-lg border ${badgeColor}">${item.kategori || 'Makanan'}</span>
-                                <h4 class="font-extrabold text-base text-slate-900 mt-2">${item.nama_menu}</h4>
-                                <p class="text-sm text-slate-600 mt-1.5 font-medium leading-relaxed">${item.deskripsi}</p>
-                            </div>
-                            <div class="mt-5 pt-4 border-t-2 border-slate-100 flex justify-between items-center">
-                                <span class="font-extrabold text-amber-700 text-base">Rp ${parseInt(item.harga_jual).toLocaleString()}</span>
-                                <div class="flex gap-2">
-                                    <button onclick="bukaFormEdit('${item.id_menu}', '${item.nama_menu}', '${item.kategori}', '${item.deskripsi}', '${item.harga_awal}', '${item.harga_jual}')" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-bold shadow-sm transition active:scale-95" title="Edit">✏️ Edit</button>
-                                    <button onclick="hapusMenu('${item.id_menu}')" class="p-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-sm font-bold shadow-sm transition active:scale-95" title="Hapus">🗑️ Hapus</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-            });
-        }
-
-        function bukaModalDaftarMenu() { document.getElementById('modalDaftarMenu').classList.remove('hidden'); muatMenuKlien(); }
-        function tutupModalDaftarMenu() { document.getElementById('modalDaftarMenu').classList.add('hidden'); }
         function bukaModalOrderMasuk() {
             document.getElementById('badgeOrderNotif').classList.add('hidden');
             document.getElementById('modalOrderMasuk').classList.remove('hidden');
@@ -597,137 +700,393 @@
         }
         function tutupModalOrderMasuk() { document.getElementById('modalOrderMasuk').classList.add('hidden'); }
 
+        // ====================== PETA GPS PEMESAN ======================
+        function bukaPetaIdx(i) {
+            const ord = ordersCache[i];
+            if (!ord) return;
+            const lat = parseFloat(ord.latitude);
+            const lon = parseFloat(ord.longitude);
+            if (isNaN(lat) || isNaN(lon)) return;
+            const judul = `${ord.nama_pemesan} - Meja ${ord.nomor_meja}`;
+
+            document.getElementById('titlePetaPelanggan').textContent = `📍 Titik GPS Pemesan: ${judul}`;
+            document.getElementById('infoGpsStatus').textContent = `Koordinat: Latitude ${lat}, Longitude ${lon}`;
+            document.getElementById('modalPetaPelanggan').classList.remove('hidden');
+
+            setTimeout(() => {
+                if (!mapCustomerObj) {
+                    mapCustomerObj = L.map('mapCustomer').setView([lat, lon], 18);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 20, attribution: '&copy; OpenStreetMap contributors' }).addTo(mapCustomerObj);
+                } else {
+                    mapCustomerObj.invalidateSize();
+                    mapCustomerObj.setView([lat, lon], 18);
+                }
+                if (customerMarker) mapCustomerObj.removeLayer(customerMarker);
+
+                const popup = document.createElement('div');
+                const b = document.createElement('b');
+                b.textContent = ord.nama_pemesan;
+                popup.appendChild(b);
+                popup.appendChild(document.createElement('br'));
+                popup.appendChild(document.createTextNode(`Lat: ${lat}, Lon: ${lon}`));
+
+                customerMarker = L.marker([lat, lon]).addTo(mapCustomerObj).bindPopup(popup).openPopup();
+                mapCustomerObj.invalidateSize();
+            }, 250);
+        }
+
+        function tutupPetaPelanggan() { document.getElementById('modalPetaPelanggan').classList.add('hidden'); }
+
+        // ====================== MENU ======================
+        async function muatMenuKlien() {
+            const grid = document.getElementById('gridMenu');
+            try {
+                const resData = await apiGet('getMenu', { resto: activeResto });
+                menuCache = Array.isArray(resData.data) ? resData.data : [];
+            } catch (e) {
+                grid.innerHTML = `<p class="text-sm text-rose-500 font-medium">Gagal memuat menu. Periksa koneksi internet.</p>`;
+                return;
+            }
+
+            if (menuCache.length === 0) {
+                grid.innerHTML = `<p class="text-sm text-slate-400 font-medium">Belum ada menu terdaftar.</p>`;
+                return;
+            }
+
+            grid.innerHTML = menuCache.map(item => {
+                const badgeColor = item.kategori === 'Minuman' ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-rose-100 text-rose-800 border-rose-200';
+                return `
+                    <div class="p-5 rounded-3xl border-2 border-slate-200 bg-white shadow-md flex flex-col justify-between hover:border-amber-400 transition">
+                        <div>
+                            <img src="${esc(safeImg(item.gambar_url))}" class="w-full h-44 object-cover rounded-2xl mb-4 bg-slate-100 shadow-sm" alt="Menu" onerror="this.onerror=null;this.src='${DEFAULT_IMG}'">
+                            <span class="text-xs font-bold px-3 py-1 rounded-lg border ${badgeColor}">${esc(item.kategori || 'Makanan')}</span>
+                            <h4 class="font-extrabold text-base text-slate-900 mt-2">${esc(item.nama_menu)}</h4>
+                            <p class="text-sm text-slate-600 mt-1.5 font-medium leading-relaxed">${esc(item.deskripsi)}</p>
+                        </div>
+                        <div class="mt-5 pt-4 border-t-2 border-slate-100 flex justify-between items-center">
+                            <span class="font-extrabold text-amber-700 text-base">${rp(item.harga_jual)}</span>
+                            <div class="flex gap-2">
+                                <button data-id="${esc(item.id_menu)}" onclick="bukaFormEdit(this.dataset.id)" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-bold shadow-sm transition active:scale-95">✏️ Edit</button>
+                                <button data-id="${esc(item.id_menu)}" onclick="hapusMenu(this.dataset.id)" class="p-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-sm font-bold shadow-sm transition active:scale-95">🗑️ Hapus</button>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function bukaModalDaftarMenu() { document.getElementById('modalDaftarMenu').classList.remove('hidden'); muatMenuKlien(); }
+        function tutupModalDaftarMenu() { document.getElementById('modalDaftarMenu').classList.add('hidden'); }
+
         function bukaModalTambahMenu() {
-            document.getElementById('modalMenuTitle').innerText = "Tambah Menu Baru";
+            document.getElementById('modalMenuTitle').textContent = "Tambah Menu Baru";
             document.getElementById('formMenu').reset();
             document.getElementById('editIdMenu').value = "";
+            document.getElementById('hintFotoEdit').classList.add('hidden');
             document.getElementById('modalMenu').classList.remove('hidden');
         }
         function tutupModalMenu() { document.getElementById('modalMenu').classList.add('hidden'); }
 
-        function bukaFormEdit(id, nama, kat, desk, awal, jual) {
-            document.getElementById('modalMenuTitle').innerText = "Edit Menu Produk";
-            document.getElementById('editIdMenu').value = id;
-            document.getElementById('inputNama').value = nama;
-            document.getElementById('inputKategori').value = kat;
-            document.getElementById('inputDeskripsi').value = desk;
-            document.getElementById('inputHargaAwal').value = awal;
-            document.getElementById('inputHargaJual').value = jual;
-            document.getElementById('modalMenu').classList.add('hidden'); // perbaikan kecil modal
+        function bukaFormEdit(id) {
+            const item = menuCache.find(m => m.id_menu === id);
+            if (!item) { toast('Data menu tidak ditemukan, muat ulang daftar menu.', 'error'); return; }
+            document.getElementById('formMenu').reset();
+            document.getElementById('modalMenuTitle').textContent = "Edit Menu Produk";
+            document.getElementById('editIdMenu').value = item.id_menu;
+            document.getElementById('inputNama').value = item.nama_menu;
+            document.getElementById('inputKategori').value = item.kategori || 'Makanan';
+            document.getElementById('inputDeskripsi').value = item.deskripsi;
+            document.getElementById('inputHargaAwal').value = item.harga_awal;
+            document.getElementById('inputHargaJual').value = item.harga_jual;
+            document.getElementById('hintFotoEdit').classList.remove('hidden');
             document.getElementById('modalMenu').classList.remove('hidden');
         }
 
-        document.getElementById('formMenu').addEventListener('submit', function(e) {
+        document.getElementById('formMenu').addEventListener('submit', async function (e) {
             e.preventDefault();
             const idMenu = document.getElementById('editIdMenu').value;
-            const nama = document.getElementById('inputNama').value;
-            const kategori = document.getElementById('inputKategori').value;
-            const hargaAwal = document.getElementById('inputHargaAwal').value;
-            const hargaJual = document.getElementById('inputHargaJual').value;
-            const deskripsi = document.getElementById('inputDeskripsi').value;
-            const file = document.getElementById('inputFoto').files[0];
             const btn = document.getElementById('btnSimpanMenu');
+            const file = document.getElementById('inputFoto').files[0];
+
+            const payload = {
+                resto: activeResto,
+                id_menu: idMenu,
+                nama_menu: document.getElementById('inputNama').value.trim(),
+                kategori: document.getElementById('inputKategori').value,
+                harga_awal: document.getElementById('inputHargaAwal').value,
+                harga_jual: document.getElementById('inputHargaJual').value,
+                deskripsi: document.getElementById('inputDeskripsi').value.trim()
+            };
 
             btn.disabled = true;
-            btn.innerText = "Menyimpan ke Database...";
-
-            if (file) {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function () {
-                    kirimDataMenu(idMenu ? 'editMenu' : 'tambahMenu', {
-                        key: API_KEY,
-                        id_menu: idMenu, resto: activeResto, nama_menu: nama, kategori: kategori,
-                        harga_awal: hargaAwal, harga_jual: hargaJual, deskripsi: deskripsi,
-                        image_base64: reader.result.split(',')[1], image_mime: file.type
-                    }, btn);
-                };
-            } else {
-                kirimDataMenu(idMenu ? 'editMenu' : 'tambahMenu', {
-                    key: API_KEY,
-                    id_menu: idMenu, resto: activeResto, nama_menu: nama, kategori: kategori,
-                    harga_awal: hargaAwal, harga_jual: hargaJual, deskripsi: deskripsi
-                }, btn);
+            btn.textContent = "Menyimpan ke Database...";
+            try {
+                if (file) {
+                    const img = await compressImage(file, 900, 0.8);
+                    payload.image_base64 = img.base64;
+                    payload.image_mime = img.mime;
+                }
+                const res = await apiPost(idMenu ? 'editMenu' : 'tambahMenu', payload);
+                if (res.status === 'success') {
+                    toast('Menu berhasil disimpan!', 'ok');
+                    if (res.warning) toast(res.warning, 'warn');
+                    tutupModalMenu();
+                    await muatMenuKlien();
+                } else {
+                    toast(res.message || 'Gagal menyimpan menu', 'error');
+                }
+            } catch (err) {
+                toast(err.message || 'Gagal terhubung ke server', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Simpan Menu ke Database";
             }
         });
 
-        function kirimDataMenu(actionType, payload, btn) {
-            payload.action = actionType;
-            fetch(GAS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-            .then(() => {
-                alert("Menu berhasil disimpan!");
-                tutupModalMenu();
-                muatMenuKlien();
-                btn.disabled = false;
-                btn.innerText = "Simpan Menu ke Database";
-            });
-        }
-
-        function hapusMenu(id) {
-            if(confirm("Yakin ingin menghapus menu ini?")) {
-                fetch(GAS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: API_KEY, action: 'hapusMenu', resto: activeResto, id_menu: id }) })
-                .then(() => { muatMenuKlien(); });
+        async function hapusMenu(id) {
+            if (!confirm("Yakin ingin menghapus menu ini?")) return;
+            try {
+                const res = await apiPost('hapusMenu', { resto: activeResto, id_menu: id });
+                if (res.status === 'success') {
+                    toast('Menu dihapus.', 'ok');
+                    await muatMenuKlien();
+                } else {
+                    toast(res.message || 'Gagal menghapus menu', 'error');
+                }
+            } catch (e) {
+                toast('Gagal terhubung ke server', 'error');
             }
         }
 
-        function salinLink() {
-            const copyText = document.getElementById("linkOrder");
-            copyText.select();
-            navigator.clipboard.writeText(copyText.value);
-            alert("Link katalog berhasil disalin!");
+        // ====================== QR & LINK ======================
+        async function salinLink() {
+            const el = document.getElementById("linkOrder");
+            try {
+                await navigator.clipboard.writeText(el.value);
+            } catch (e) {
+                el.select();
+                document.execCommand('copy');
+            }
+            toast('Link katalog berhasil disalin!', 'ok');
         }
 
-        function downloadQR() { alert("QR Code siap diunduh."); }
-        function testAudio() {
-            const audio = document.getElementById('orderSound');
-            audio.play().catch((e) => { console.log("Audio play blocked:", e); });
+        function downloadQR() {
+            const link = document.getElementById('linkOrder').value;
+            if (!link) return;
+            const tmp = document.createElement('div');
+            tmp.style.cssText = 'position:fixed;left:-9999px;top:0';
+            document.body.appendChild(tmp);
+            new QRCode(tmp, { text: link, width: 512, height: 512, correctLevel: QRCode.CorrectLevel.H });
+
+            setTimeout(() => {
+                const src = tmp.querySelector('canvas');
+                let href = null;
+                if (src) {
+                    const out = document.createElement('canvas');
+                    out.width = 592; out.height = 592;               // margin putih 40px agar mudah di-scan
+                    const ctx = out.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, 592, 592);
+                    ctx.drawImage(src, 40, 40, 512, 512);
+                    href = out.toDataURL('image/png');
+                } else {
+                    const img = tmp.querySelector('img');
+                    if (img) href = img.src;
+                }
+                if (href) {
+                    const a = document.createElement('a');
+                    a.href = href;
+                    a.download = `QR-${activeResto}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } else {
+                    toast('QR belum siap, coba lagi.', 'error');
+                }
+                tmp.remove();
+            }, 200);
         }
 
-        function simpanSettingPayment() {
-            const bank = document.getElementById('setBank').value;
-            const norek = document.getElementById('setNorek').value;
-            const an = document.getElementById('setAn').value;
-            const file = document.getElementById('setQrisFile').files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function() {
-                    fetch(GAS_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            key: API_KEY,
-                            action: 'saveSettingPayment',
-                            resto: activeResto,
-                            bank: bank,
-                            norek: norek,
-                            an: an,
-                            qris_base64: reader.result.split(',')[1],
-                            qris_mime: file.type
-                        })
-                    }).then(() => { alert("Metode pembayaran dan QRIS berhasil disimpan!"); });
-                };
-            } else {
-                fetch(GAS_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        key: API_KEY,
-                        action: 'saveSettingPayment',
-                        resto: activeResto,
-                        bank: bank,
-                        norek: norek,
-                        an: an
-                    })
-                }).then(() => { alert("Metode pembayaran berhasil disimpan!"); });
+        // ====================== SETTING PAYMENT ======================
+        async function bukaModalSetting() {
+            document.getElementById('modalSetting').classList.remove('hidden');
+            try {
+                const res = await apiGet('getSettingPayment', { resto: activeResto });
+                const d = res.data || {};
+                document.getElementById('setBank').value = d.bank || '';
+                document.getElementById('setNorek').value = d.norek || '';
+                document.getElementById('setAn').value = d.an || '';
+                const prev = document.getElementById('previewQris');
+                if (d.qris_url) {
+                    prev.innerHTML = `<img src="${esc(safeImg(d.qris_url))}" class="w-28 h-28 object-contain rounded-xl border bg-white p-1" alt="QRIS saat ini">`;
+                } else {
+                    prev.innerHTML = `<p class="text-xs text-slate-400">Belum ada QRIS yang di-upload.</p>`;
+                }
+            } catch (e) {
+                toast('Gagal memuat pengaturan pembayaran', 'error');
             }
         }
-
-        function bukaModalSetting() { document.getElementById('modalSetting').classList.remove('hidden'); }
         function tutupModalSetting() { document.getElementById('modalSetting').classList.add('hidden'); }
+
+        async function simpanSettingPayment() {
+            const btn = document.getElementById('btnSimpanPayment');
+            const file = document.getElementById('setQrisFile').files[0];
+            const payload = {
+                resto: activeResto,
+                bank: document.getElementById('setBank').value.trim(),
+                norek: document.getElementById('setNorek').value.trim(),
+                an: document.getElementById('setAn').value.trim()
+            };
+
+            btn.disabled = true;
+            btn.textContent = 'Menyimpan...';
+            try {
+                if (file) {
+                    const img = await compressImage(file, 1200, 0.92);
+                    payload.qris_base64 = img.base64;
+                    payload.qris_mime = img.mime;
+                }
+                const res = await apiPost('saveSettingPayment', payload);
+                if (res.status === 'success') {
+                    toast('Metode pembayaran berhasil disimpan!', 'ok');
+                    if (res.warning) toast(res.warning, 'warn');
+                    document.getElementById('setQrisFile').value = '';
+                    bukaModalSetting();     // muat ulang tampilan data tersimpan
+                } else {
+                    toast(res.message || 'Gagal menyimpan pengaturan', 'error');
+                }
+            } catch (e) {
+                toast(e.message || 'Gagal terhubung ke server', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Simpan Metode Pembayaran';
+            }
+        }
+
+        // ====================== LAPORAN ======================
+        function tabelHtml(headers, rowsHtml) {
+            return `
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 border-b-2 text-slate-700 font-extrabold">
+                            ${headers.map(h => `<th class="p-3">${h}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody class="font-medium">${rowsHtml}</tbody>
+                </table>`;
+        }
+
+        function ringkasKategori(orders) {
+            const namaKeKat = {};
+            menuCache.forEach(m => { namaKeKat[String(m.nama_menu).trim().toLowerCase()] = m.kategori || 'Makanan'; });
+
+            const perMenu = {};
+            const re = /-\s*(.+?)\s*\((\d+)x\)\s*=\s*Rp\s*([\d.,]+)/g;
+            orders.forEach(o => {
+                const s = String(o.detail_pesanan || '');
+                re.lastIndex = 0;
+                let m;
+                while ((m = re.exec(s)) !== null) {
+                    const nama = m[1].trim();
+                    const qty = parseInt(m[2], 10) || 0;
+                    const sub = parseInt(m[3].replace(/[^\d]/g, ''), 10) || 0;
+                    const kat = namaKeKat[nama.toLowerCase()] || 'Lainnya';
+                    if (!perMenu[nama]) perMenu[nama] = { nama: nama, kategori: kat, qty: 0, omzet: 0 };
+                    perMenu[nama].qty += qty;
+                    perMenu[nama].omzet += sub;
+                }
+            });
+
+            const perKat = {};
+            Object.values(perMenu).forEach(m => {
+                if (!perKat[m.kategori]) perKat[m.kategori] = { kategori: m.kategori, qty: 0, omzet: 0 };
+                perKat[m.kategori].qty += m.qty;
+                perKat[m.kategori].omzet += m.omzet;
+            });
+            return {
+                menu: Object.values(perMenu).sort((a, b) => b.omzet - a.omzet),
+                kategori: Object.values(perKat).sort((a, b) => b.omzet - a.omzet)
+            };
+        }
+
+        async function muatReportTabel(jenis) {
+            const container = document.getElementById('containerReportTabel');
+            document.querySelectorAll('.btn-report').forEach(b => b.classList.toggle('rep-active', b.dataset.report === jenis));
+            container.innerHTML = `<p class="text-slate-400 text-center py-4 font-medium">Memuat laporan ${esc(jenis)}...</p>`;
+
+            try {
+                if (jenis === 'kategori' && menuCache.length === 0) await muatMenuKlien();
+                const resData = await apiGet('getReport', { resto: activeResto, jenis: jenis });
+                const data = Array.isArray(resData.data) ? resData.data : [];
+
+                if (data.length === 0) {
+                    container.innerHTML = `<p class="text-slate-400 text-center py-4 font-medium">Belum ada data laporan untuk periode ini.</p>`;
+                    return;
+                }
+
+                if (jenis === 'kategori') {
+                    const r = ringkasKategori(data);
+                    const totalOmzet = r.kategori.reduce((a, k) => a + k.omzet, 0);
+                    const rowsKat = r.kategori.map(k => `
+                        <tr class="border-b hover:bg-slate-50">
+                            <td class="p-3 font-bold text-slate-900">${esc(k.kategori)}</td>
+                            <td class="p-3">${k.qty}</td>
+                            <td class="p-3 font-extrabold text-amber-700">${rp(k.omzet)}</td>
+                            <td class="p-3">${totalOmzet ? Math.round(k.omzet / totalOmzet * 100) : 0}%</td>
+                        </tr>`).join('');
+                    const rowsMenu = r.menu.map(m => `
+                        <tr class="border-b hover:bg-slate-50">
+                            <td class="p-3 font-bold text-slate-900">${esc(m.nama)}</td>
+                            <td class="p-3">${esc(m.kategori)}</td>
+                            <td class="p-3">${m.qty}</td>
+                            <td class="p-3 font-extrabold text-amber-700">${rp(m.omzet)}</td>
+                        </tr>`).join('');
+                    container.innerHTML = `
+                        <p class="mb-3 text-xs text-slate-500 font-semibold">Dihitung dari seluruh riwayat order (${data.length} order). Total penjualan: <b class="text-amber-700">${rp(totalOmzet)}</b></p>
+                        <h5 class="font-extrabold text-slate-800 mb-2">Per Kategori</h5>
+                        ${tabelHtml(['Kategori', 'Jumlah Item', 'Total Penjualan', 'Porsi'], rowsKat)}
+                        <h5 class="font-extrabold text-slate-800 mt-6 mb-2">Per Menu</h5>
+                        ${tabelHtml(['Menu', 'Kategori', 'Terjual', 'Total Penjualan'], rowsMenu)}`;
+                    return;
+                }
+
+                if (jenis === 'konsumen') {
+                    const rows = data.map(row => {
+                        const wa = formatNomorWA(row.nomor_wa);
+                        const link = `https://api.whatsapp.com/send?phone=${wa}&text=${encodeURIComponent('Halo ' + row.nama_pemesan + ', terima kasih sudah berkunjung ke ' + activeResto.replace(/_/g, ' ') + '.')}`;
+                        return `
+                            <tr class="border-b hover:bg-slate-50">
+                                <td class="p-3 font-bold text-slate-900">${esc(row.nama_pemesan)}</td>
+                                <td class="p-3 font-mono">${esc(row.nomor_wa)}</td>
+                                <td class="p-3 text-indigo-600 font-bold">${esc(row.nomor_meja)}</td>
+                                <td class="p-3 text-slate-500">${esc(row.waktu)}</td>
+                                <td class="p-3 font-extrabold text-amber-700">${esc(row.total_harga)}</td>
+                                <td class="p-3"><a href="${esc(link)}" target="_blank" rel="noopener" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold inline-block">Chat WA</a></td>
+                            </tr>`;
+                    }).join('');
+                    container.innerHTML = `
+                        <p class="mb-3 text-xs text-slate-500 font-semibold">Total konsumen unik: <b class="text-slate-800">${data.length}</b> (berdasarkan nomor WA, menampilkan order terakhir)</p>
+                        ${tabelHtml(['Nama', 'Nomor WA', 'Meja Terakhir', 'Order Terakhir', 'Total Terakhir', 'Aksi'], rows)}`;
+                    return;
+                }
+
+                const totalOmzet = data.reduce((a, row) => a + parseRupiah(row.total_harga), 0);
+                const rows = data.map(row => `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="p-3 text-slate-500 whitespace-nowrap">${esc(row.waktu)}</td>
+                        <td class="p-3 font-bold text-slate-900">${esc(row.nama_pemesan)}</td>
+                        <td class="p-3">${esc(row.nomor_wa)}</td>
+                        <td class="p-3">${detailHtml(row.detail_pesanan)}</td>
+                        <td class="p-3 font-extrabold text-amber-700 whitespace-nowrap">${esc(row.total_harga)}</td>
+                        <td class="p-3 font-bold text-indigo-600">${esc(row.nomor_meja)}</td>
+                        <td class="p-3 font-bold text-emerald-600">${esc(row.metode_bayar)}</td>
+                    </tr>`).join('');
+                container.innerHTML = `
+                    <p class="mb-3 text-xs text-slate-500 font-semibold">${data.length} order • Total penjualan: <b class="text-amber-700">${rp(totalOmzet)}</b></p>
+                    ${tabelHtml(['Waktu', 'Nama Pemesan', 'Nomor WA', 'Detail Pesanan', 'Total Harga', 'Meja', 'Metode'], rows)}`;
+            } catch (e) {
+                container.innerHTML = `<p class="text-rose-500 text-center py-4 font-medium">Gagal memuat laporan. Periksa koneksi internet.</p>`;
+            }
+        }
     </script>
 </body>
 </html>
