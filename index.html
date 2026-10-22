@@ -135,8 +135,8 @@
         <div class="bg-white rounded-3xl max-w-lg w-full p-10 shadow-2xl text-center space-y-6 border-4 border-rose-200">
             <div class="h-20 w-20 bg-rose-100 text-rose-600 rounded-3xl mx-auto flex items-center justify-center text-3xl font-extrabold shadow-inner">⚠️</div>
             <div>
-                <h3 class="text-2xl font-extrabold text-slate-900">Masa Aktif Lisensi Habis</h3>
-                <p id="expiredMessage" class="text-sm text-slate-600 mt-3 leading-relaxed font-medium">Masa aktif aplikasi Anda telah berakhir. Silakan hubungi Developer / Super Admin untuk melakukan perpanjangan lisensi.</p>
+                <h3 class="text-2xl font-extrabold text-slate-900">Masa Aktif Lisensi Habis / Device Terkunci</h3>
+                <p id="expiredMessage" class="text-sm text-slate-600 mt-3 leading-relaxed font-medium">Masa aktif aplikasi telah berakhir atau akun terkunci di perangkat lain.</p>
             </div>
             <a id="btnWaDeveloper" href="https://api.whatsapp.com/send?phone=6285222952220&text=Halo%20Admin,%20saya%20ingin%20memperpanjang%20lisensi%20QRMenu-Pro%20saya." target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2.5 active:scale-[0.99]">
                 💬 Hubungi Developer (WhatsApp)
@@ -299,7 +299,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxi7tce2iHuEPgYggs2ECsjgMJUWyA071G-tDUeNKuiw14lcdE-H9n2BdMLf68PPaHQ/exec";
-        const API_KEY = "QRMenuProSecret2026Bandung"; // Kunci rahasia pengaman API backend GAS
+        const API_KEY = "QRMenuProSecret2026Bandung";
         
         let activeResto = localStorage.getItem('qrmenu_admin_resto') || "";
         let deviceId = localStorage.getItem('qrmenu_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase());
@@ -344,7 +344,7 @@
                     activeResto = data.resto;
                     localStorage.setItem('qrmenu_admin_resto', activeResto);
                     inisialisasiDashboard(activeResto, data.sisa_hari);
-                } else if (data.status === 'expired') {
+                } else if (data.status === 'expired' || data.status === 'locked') {
                     document.getElementById('expiredMessage').innerText = data.message;
                     document.getElementById('modalExpired').classList.remove('hidden');
                 } else {
@@ -353,6 +353,28 @@
                 }
             });
         });
+
+        // FUNGSI BARU: Otomatis Kirim Sinyal GPS Klien ke Kolom M, N, O Spreadsheet
+        function kirimSinyalGeolokasiKlien(restoName) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            key: API_KEY,
+                            action: 'updateLokasi',
+                            nama_resto: restoName,
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        })
+                    }).catch(err => console.log("GPS Sync Error:", err));
+                }, (error) => {
+                    console.log("GPS Permission Denied / Error:", error.message);
+                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+            }
+        }
 
         function inisialisasiDashboard(restoName, sisaHari) {
             document.getElementById('titleRestoName').innerText = `Dashboard Bisnis: ${restoName}`;
@@ -369,6 +391,9 @@
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
             
+            // PANGGIL PEREKAM GPS OTOMATIS SAAT DASHBOARD DIBUKA
+            kirimSinyalGeolokasiKlien(restoName);
+
             muatMenuKlien();
             muatOrderMasuk(true);
 
