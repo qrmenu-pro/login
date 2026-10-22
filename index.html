@@ -354,25 +354,25 @@
             });
         });
 
-        // FUNGSI BARU: Otomatis Kirim Sinyal GPS Klien ke Kolom M, N, O Spreadsheet
+        // DIPERBAIKI: Menggunakan Metode GET (via URL Parameter) agar 100% Tembus ke GAS Tanpa Terhalang CORS
         function kirimSinyalGeolokasiKlien(restoName) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
-                    fetch(GAS_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            key: API_KEY,
-                            action: 'updateLokasi',
-                            nama_resto: restoName,
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude
-                        })
-                    }).catch(err => console.log("GPS Sync Error:", err));
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+                    let gpsUrl = `${GAS_URL}?key=${API_KEY}&action=updateLokasi&nama_resto=${encodeURIComponent(restoName)}&latitude=${lat}&longitude=${lon}`;
+
+                    fetch(gpsUrl)
+                    .then(res => res.json())
+                    .then(resData => {
+                        console.log("GPS Sukses Masuk ke Sheet:", resData);
+                    })
+                    .catch(err => {
+                        console.log("GPS Log:", err);
+                    });
                 }, (error) => {
                     console.log("GPS Permission Denied / Error:", error.message);
-                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+                }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
             }
         }
 
