@@ -302,6 +302,7 @@
         const API_KEY = "QRMenuProSecret2026Bandung";
         
         let activeResto = localStorage.getItem('qrmenu_admin_resto') || "";
+        let activeUser = localStorage.getItem('qrmenu_admin_user') || ""; // DISIMPAN UNTUK RUTE GPS
         let deviceId = localStorage.getItem('qrmenu_device_id') || ('DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase());
         localStorage.setItem('qrmenu_device_id', deviceId);
 
@@ -342,10 +343,12 @@
             .then(data => {
                 if (data.status === 'success') {
                     activeResto = data.resto;
+                    activeUser = user;
                     localStorage.setItem('qrmenu_admin_resto', activeResto);
+                    localStorage.setItem('qrmenu_admin_user', activeUser);
                     
-                    // PERBAIKAN: PANGGIL GPS LANGSUNG SETELAH LOGIN SUKSES
-                    kirimSinyalGeolokasiKlien(activeResto);
+                    // PERBAIKAN: KIRIM USERNAME DAN RESTO SEKALIGUS
+                    kirimSinyalGeolokasiKlien(activeResto, activeUser);
 
                     inisialisasiDashboard(activeResto, data.sisa_hari);
                 } else if (data.status === 'expired' || data.status === 'locked') {
@@ -358,15 +361,15 @@
             });
         });
 
-        // DIPERBAIKI: Mengirimkan parameter nama_resto dan username agar 100% cocok dengan backend GAS
-        function kirimSinyalGeolokasiKlien(restoName) {
+        // DIPERBAIKI: Mengambil parameter username dengan benar dari localStorage/variabel aktif
+        function kirimSinyalGeolokasiKlien(restoName, username) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
                     let lat = position.coords.latitude;
                     let lon = position.coords.longitude;
-                    let currentUser = document.getElementById('loginUser').value || "";
+                    let uName = username || activeUser || localStorage.getItem('qrmenu_admin_user') || "";
                     
-                    let gpsUrl = `${GAS_URL}?key=${API_KEY}&action=updateLokasi&nama_resto=${encodeURIComponent(restoName)}&username=${encodeURIComponent(currentUser)}&latitude=${lat}&longitude=${lon}`;
+                    let gpsUrl = `${GAS_URL}?key=${API_KEY}&action=updateLokasi&nama_resto=${encodeURIComponent(restoName)}&username=${encodeURIComponent(uName)}&latitude=${lat}&longitude=${lon}`;
 
                     fetch(gpsUrl)
                     .then(res => res.json())
@@ -397,8 +400,8 @@
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
             
-            // PANGGIL JUGA DI SINI SEBAGAI CADANGAN
-            kirimSinyalGeolokasiKlien(restoName);
+            // PANGGIL GPS DENGAN USERNAME YANG VALID
+            kirimSinyalGeolokasiKlien(restoName, activeUser);
 
             muatMenuKlien();
             muatOrderMasuk(true);
@@ -410,6 +413,7 @@
         function logoutAdmin() {
             if (confirm("Apakah Anda yakin ingin keluar dari akun toko ini?")) {
                 localStorage.removeItem('qrmenu_admin_resto');
+                localStorage.removeItem('qrmenu_admin_user');
                 location.reload();
             }
         }
@@ -609,6 +613,7 @@
             document.getElementById('inputDeskripsi').value = desk;
             document.getElementById('inputHargaAwal').value = awal;
             document.getElementById('inputHargaJual').value = jual;
+            document.getElementById('modalMenu').classList.add('hidden'); // perbaikan kecil modal
             document.getElementById('modalMenu').classList.remove('hidden');
         }
 
